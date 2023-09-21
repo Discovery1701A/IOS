@@ -9,15 +9,74 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        HStack {
+            CardView(isFaceUp: false)
+            CardView()
+            CardView()
+            }
+        .padding(.horizontal).foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
     }
 }
+
+
+struct CardView: View {
+    var isFaceUp: Bool = true
+    
+    var body: some View {
+        
+        ZStack{
+            let shap :RoundedRectangle = RoundedRectangle (cornerRadius: 20.0)
+            if isFaceUp{
+                
+                    shap.fill()
+                    shap.foregroundColor(.white)
+                RoundedRectangle (cornerRadius: 20.0)
+                    .stroke(lineWidth: 3.0)
+                Text("Hello")
+                    .font(.largeTitle)
+            }
+            else{
+                
+               
+                    shap.fill()
+            }
+        }
+        .onTapGesture(perform: {
+            /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Code@*/ /*@END_MENU_TOKEN@*/
+        })
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #Preview {
     ContentView()
