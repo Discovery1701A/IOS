@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "7AE462E5-6F8D-4938-A79D-F9ED0EF3BECB"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B04EF0D5-366D-4091-B1C9-85C1E54B0804"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Memory/ContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "B04EF0D5-366D-4091-B1C9-85C1E54B0804 - ede112dda157af12"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI._ConditionalContent&lt;SwiftUI.TupleView&lt;(SwiftUI._ShapeView&lt;SwiftUI.RoundedRectangle, SwiftUI.ForegroundStyle&gt;, &lt;&lt;opaque return type of SwiftUI.View.foregroundColor(Swift.Optional&lt;SwiftUI.Color&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.Shape.stroke(lineWidth: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0, SwiftUI.Text)&gt;, SwiftUI._ShapeView&lt;SwiftUI.RoundedRectangle, SwiftUI.ForegroundStyle&gt;&gt; in Memory.CardView.body.getter : some"
+                  moduleName = "Memory"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annarieckmann/Documents/GitHub/IOS/Memory/Memory/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "2096">
+               </Location>
+               <Location
+                  uuid = "B04EF0D5-366D-4091-B1C9-85C1E54B0804 - beab85608b5feff8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI._ConditionalContent&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.Shape.fill(style: SwiftUI.FillStyle) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.foregroundColor(Swift.Optional&lt;SwiftUI.Color&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.Shape.stroke(lineWidth: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0, SwiftUI.Text)&gt;, &lt;&lt;opaque return type of SwiftUI.Shape.fill(style: SwiftUI.FillStyle) -&gt; some&gt;&gt;.0&gt; in Memory.CardView.body.getter : some"
+                  moduleName = "Memory"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annarieckmann/Documents/GitHub/IOS/Memory/Memory/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "952">
+               </Location>
+               <Location
+                  uuid = "B04EF0D5-366D-4091-B1C9-85C1E54B0804 - beab85608b5fd18a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI._ConditionalContent&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.Shape.fill(style: SwiftUI.FillStyle) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.foregroundColor(Swift.Optional&lt;SwiftUI.Color&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.Shape.stroke(lineWidth: CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0, SwiftUI.Text)&gt;, &lt;&lt;opaque return type of SwiftUI.Shape.fill(style: SwiftUI.FillStyle) -&gt; some&gt;&gt;.0&gt; in Memory.CardView.body.getter : some"
+                  moduleName = "Memory"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annarieckmann/Documents/GitHub/IOS/Memory/Memory/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "57"
+                  endingLineNumber = "57"
+                  offsetFromSymbolStart = "952">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

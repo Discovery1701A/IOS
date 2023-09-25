@@ -8,19 +8,51 @@
 import SwiftUI
 
 struct ContentView: View {
+    var emojis :Array<String> = ["😄","🥰","🐶","🦊","🙈","🦄","🐕","🦭"]
+    @State var emojiCount :Int = 2
     var body: some View {
-        HStack {
-            CardView(isFaceUp: false)
-            CardView()
-            CardView()
+        VStack{
+            ScrollView{
+        LazyVGrid(columns: [GridItem(.adaptive (minimum: 65))], content: {
+            
+            ForEach(emojis[0..<emojiCount],id:\.self, content:
+                        {emoji in
+                CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+            })
+        }).foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
+    }
+
+            Spacer()
+            HStack{
+                remove
+                Spacer()
+                add
+                
+            }.font (.largeTitle)
+            .padding(.horizontal)
+        }
+        .padding(.horizontal)
             }
-        .padding(.horizontal).foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
+    var remove: some View {
+        Button(action: {
+            if emojiCount > 1 {
+                emojiCount -= 1}}, label: {
+            Image (systemName: "minus.circle")
+        })
+    }
+    var add: some View {
+        Button(action: {
+            if emojiCount < emojis.count{
+                emojiCount+=1}}, label: {
+            Image (systemName: "plus.circle")
+        })
     }
 }
 
 
 struct CardView: View {
-    var isFaceUp: Bool = true
+    var content : String
+   @State var isFaceUp: Bool = true
     
     var body: some View {
         
@@ -31,8 +63,8 @@ struct CardView: View {
                     shap.fill()
                     shap.foregroundColor(.white)
                 RoundedRectangle (cornerRadius: 20.0)
-                    .stroke(lineWidth: 3.0)
-                Text("Hello")
+                    .strokeBorder(lineWidth: 3.0)
+                Text(content)
                     .font(.largeTitle)
             }
             else{
@@ -41,9 +73,9 @@ struct CardView: View {
                     shap.fill()
             }
         }
-        .onTapGesture(perform: {
-            /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Code@*/ /*@END_MENU_TOKEN@*/
-        })
+        .onTapGesture{
+            isFaceUp = !isFaceUp
+        }
     }
 }
 
