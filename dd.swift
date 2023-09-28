@@ -9,14 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     @State var emojis : [String] = ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐻‍❄️","🐨","🐯","🦁","🐮","🐷"]
-    
     let animals : [String] = ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐻‍❄️","🐨","🐯","🦁","🐮","🐷"]
-    
     let vehicles : [String] = ["🚗","🚕","🚙","🚌","🚎","🚐","🚒","🚑","🚓","🏎️","🛻","🚚","🚛","🚜","🛵","🏍️","🛺"]
     
     let face : [String] = ["😀","😃","😄","😁","😆","🥰","😘","😍","🤪","🫡","🫠","🙄","😲","🤕","🥴"]
 
+    
     var body: some View {
+        
         VStack{
             // Titel
             Text("Memory!")
@@ -40,17 +40,17 @@ struct ContentView: View {
                 smiley
                 Spacer()
                 vehicle
+               
             }.font (.largeTitle)
             .padding(.horizontal)
         }
         .padding(.horizontal)
             }
-    
     var animal: some View  {
         Button(action: {
             emojis = animals // ausgabe Array wird geändert
             emojis.shuffle() //Durchmischer
-            },label: {
+            }, label: {
                 VStack{
                     Image (systemName: "pawprint.circle")
                     Text("Tiere")
@@ -79,21 +79,26 @@ struct ContentView: View {
             }, label: {
                 VStack{
                     Image (systemName: "car.circle")
-                    Text("Auto")
+                    Text("Fahrzeuge")
                         .font(.body)
                 }
         })
     }
+    
+    
 }
+
 
 struct CardView: View {
     var content : String
    @State var isFaceUp: Bool = true
+    
     var body: some View {
+        
         ZStack{
             let shap :RoundedRectangle = RoundedRectangle (cornerRadius: 20.0)
-            
             if isFaceUp{
+                
                     shap.fill()
                     shap.foregroundColor(.white)
                 RoundedRectangle (cornerRadius: 20.0)
@@ -110,39 +115,4 @@ struct CardView: View {
             isFaceUp = !isFaceUp
         }
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#Preview {
-    ContentView()
 }
