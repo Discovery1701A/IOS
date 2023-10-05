@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    var emojis :Array<String> = ["😄","🥰","🐶","🦊","🙈","🦄","🐕","🦭"]
-    @State var emojiCount :Int = 2
     var body: some View {
         VStack{
             ScrollView{
@@ -30,8 +28,6 @@ struct ContentView: View {
 
 
 struct CardView: View {
-    var content : String
-   @State var isFaceUp: Bool = true
     
     var body: some View {
         
@@ -51,9 +47,6 @@ struct CardView: View {
                
                     shap.fill()
             }
-        }
-        .onTapGesture{
-            isFaceUp = !isFaceUp
         }
     }
 }
