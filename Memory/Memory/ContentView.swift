@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var viewModel : EmojiMemoryGame
+    
     var body: some View {
         VStack{
             ScrollView{
         LazyVGrid(columns: [GridItem(.adaptive (minimum: 65))], content: {
             
-            ForEach(emojis[0..<emojiCount],id:\.self, content:
-                        {emoji in
-                CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+            ForEach(viewModel.cards, content:
+                        {card in
+                CardView(card: card).aspectRatio(2/3, contentMode: .fit)
+                    .onTapGesture {
+                        viewModel.choose(card)
+                    }
             })
         }).foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
     }
@@ -28,24 +33,26 @@ struct ContentView: View {
 
 
 struct CardView: View {
+    var card: MemoryGame<String>.Card
     
     var body: some View {
         
         ZStack{
-            let shap :RoundedRectangle = RoundedRectangle (cornerRadius: 20.0)
-            if isFaceUp{
+            let shape :RoundedRectangle = RoundedRectangle (cornerRadius: 20.0)
+            if card.isFaceUp{
                 
-                    shap.fill()
-                    shap.foregroundColor(.white)
+                    shape.fill()
+                    shape.foregroundColor(.white)
                 RoundedRectangle (cornerRadius: 20.0)
                     .strokeBorder(lineWidth: 3.0)
-                Text(content)
+                Text(card.content)
                     .font(.largeTitle)
-            }
-            else{
+            }else if card.isMatched {
+                shape.opacity(0)
+            }else{
                 
                
-                    shap.fill()
+                    shape.fill()
             }
         }
     }
@@ -81,7 +88,8 @@ struct CardView: View {
 
 
 
-
+let game = EmojiMemoryGame() // muss auserhalb sein sonst gibt es einen Error (Ambiguous use of 'init(_:traits:body:)')
 #Preview {
-    ContentView()
+    
+    ContentView(viewModel: game)
 }

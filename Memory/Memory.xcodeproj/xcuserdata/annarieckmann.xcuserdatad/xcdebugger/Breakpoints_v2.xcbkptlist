@@ -14,8 +14,8 @@
             filePath = "Memory/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -78,6 +78,21 @@
                   startingLineNumber = "60"
                   endingLineNumber = "60"
                   offsetFromSymbolStart = "952">
+               </Location>
+               <Location
+                  uuid = "B04EF0D5-366D-4091-B1C9-85C1E54B0804 - ad2811eeda4bf8c5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; SwiftUI._ConditionalContent&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.Shape.fill(style: SwiftUI.FillStyle) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.foregroundColor(Swift.Optional&lt;SwiftUI.Color&gt;) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.InsettableShape.strokeBorder(lineWidth: CoreGraphics.CGFloat, antialiased: Swift.Bool) -&gt; some&gt;&gt;.0, SwiftUI.Text)&gt;, &lt;&lt;opaque return type of SwiftUI.Shape.fill(style: SwiftUI.FillStyle) -&gt; some&gt;&gt;.0&gt; in Memory.CardView.body.getter : some"
+                  moduleName = "Memory"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annarieckmann/Documents/GitHub/IOS/Memory/Memory/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "41"
+                  endingLineNumber = "41"
+                  offsetFromSymbolStart = "732">
                </Location>
             </Locations>
          </BreakpointContent>
