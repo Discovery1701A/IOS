@@ -15,19 +15,25 @@ struct Theme <Cards> {
     var numberOfPairs: Int
     
     func returnCardsForGame() -> [Cards] {
-            let shuffledCards = cardSet.shuffled()
-            var RandomCardsForGame: Array<Cards> = []
+        let shuffledCards = cardSet.shuffled()
+        var RandomCardsForGame: Array<Cards> = []
+        if numberOfPairs < cardSet.count{
             for pairIndex in 0..<numberOfPairs {
                 RandomCardsForGame.append(shuffledCards[pairIndex])
             }
-            return RandomCardsForGame
+        }else{
+            RandomCardsForGame = shuffledCards
         }
+        return RandomCardsForGame
+    }
+    
     init (theme: Theme<Cards>) {
         self.numberOfPairs = theme.numberOfPairs
         self.cardSet = theme.cardSet
         self.themeColor = theme.themeColor
         self.themeName = theme.themeName
     }
+    
     init(cardSet: [Cards], numberOfPairs: Int, themeColor: String, themeName: String) {
          
         self.numberOfPairs = numberOfPairs
