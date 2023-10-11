@@ -10,18 +10,32 @@ struct MemoryGame<CardContent> where CardContent:
 Equatable {
     private (set) var cards: Array <Card>
     private var indexOfTheOneAndOnlyFaceUpCard: Int?
+    private(set) var score: Int = 0
     mutating func choose (card: Card){
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }),
             !cards[chosenIndex].isFaceUp,
            !cards[chosenIndex].isMatched
         {
             if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
+                cards[potentialMatchIndex].alreadySeeCount += 1
+                cards[chosenIndex].alreadySeeCount += 1
                 if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
+                    score += 2
+                }else if cards[chosenIndex].alreadySeeCount > 1 && cards[potentialMatchIndex].alreadySeeCount > 1
+                {
+                    score -= 2
+                
+                    // case where cards mismatch and ONE of the cards has already been seen AT LEAST ONCE
+                } else if cards[chosenIndex].alreadySeeCount > 1 || cards[potentialMatchIndex].alreadySeeCount > 1 {
+                   
+                    score -= 1
                 }
+                
                 indexOfTheOneAndOnlyFaceUpCard = nil
-            } else {
+            } 
+            else {
                 for index in cards.indices {
                     cards[index].isFaceUp = false
                 }
@@ -39,11 +53,14 @@ Equatable {
             cards.append (Card(content: content,id: pairIndex*2))
             cards.append (Card(content: content, id : pairIndex*2+1))
         }
+        cards.shuffle()
+        score = 0
     // add number0fPairsOfCards × 2 cards to cards array
     }
     
     struct Card :Identifiable{
-        var isFaceUp: Bool = true
+        var alreadySeeCount = 0
+        var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent
         var id : Int
@@ -51,4 +68,7 @@ Equatable {
     mutating func shuffle() {
             cards.shuffle()
         }
+    func getScore ()->Int{
+        return self.score
+    }
 }

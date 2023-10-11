@@ -17,7 +17,7 @@ struct Theme <Cards> {
     func returnCardsForGame() -> [Cards] {
         let shuffledCards = cardSet.shuffled()
         var RandomCardsForGame: Array<Cards> = []
-        if numberOfPairs < cardSet.count{
+        if numberOfPairs <= cardSet.count{
             for pairIndex in 0..<numberOfPairs {
                 RandomCardsForGame.append(shuffledCards[pairIndex])
             }

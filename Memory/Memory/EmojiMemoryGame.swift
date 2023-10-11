@@ -20,7 +20,7 @@ class EmojiMemoryGame: ObservableObject {
            let currentTheme = Theme<String>(theme: themes.randomElement()!)
         let uniqueContent = currentTheme.returnCardsForGame()
 
-           model = MemoryGame<String>(numberOfPairsOfCards: currentTheme.numberOfPairs) { pairIndex in
+           model = MemoryGame<String>(numberOfPairsOfCards: currentTheme.returnCardsForGame().count) { pairIndex in
                uniqueContent[pairIndex]
            }
            currentThemeModel = currentTheme
@@ -29,14 +29,13 @@ class EmojiMemoryGame: ObservableObject {
     return model.cards
     }
     func createNewMemoryGame() {
-            let currentTheme = Theme<String>(theme: themes.randomElement()!)
+        let currentTheme = Theme<String>(theme: themes.randomElement()!)
         let uniqueContent = currentTheme.returnCardsForGame()
-
-            model = MemoryGame<String>(numberOfPairsOfCards: currentTheme.numberOfPairs) { pairIndex in
+        model = MemoryGame<String>(numberOfPairsOfCards: currentTheme.returnCardsForGame().count) { pairIndex in
                 uniqueContent[pairIndex]
             }
-            self.shuffle()
-            currentThemeModel = currentTheme
+        self.shuffle()
+        currentThemeModel = currentTheme
            
         }
     // MARK: -Intent(s)
@@ -86,4 +85,7 @@ class EmojiMemoryGame: ObservableObject {
     func shuffle() {
             model.shuffle()
         }
+    func getScore()->Int {
+        return model.getScore()
+    }
 }
