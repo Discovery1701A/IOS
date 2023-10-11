@@ -9,32 +9,32 @@ import Foundation
 struct MemoryGame<CardContent> where CardContent:
 Equatable {
     private (set) var cards: Array <Card>
-    private var indexOfTheOneAndOnlyFaceUpCard: Int?
+    private var index0fTheOneAndOnlyFaceUpCard: Int?
     mutating func choose (card: Card){
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }),
             !cards[chosenIndex].isFaceUp,
            !cards[chosenIndex].isMatched
         {
-            if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
+            if let potentialMatchIndex = index0fTheOneAndOnlyFaceUpCard {
                 if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                 }
-                indexOfTheOneAndOnlyFaceUpCard = nil
+                index0fTheOneAndOnlyFaceUpCard = nil
             } else {
                 for index in cards.indices {
                     cards[index].isFaceUp = false
                 }
-                indexOfTheOneAndOnlyFaceUpCard = chosenIndex
+                index0fTheOneAndOnlyFaceUpCard = chosenIndex
             }
             cards[chosenIndex].isFaceUp.toggle()
             print("\(cards)")
         }
     }
    
-    init (numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
+    init (number0fPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
     cards = Array<Card> ()
-        for pairIndex in 0 ..< numberOfPairsOfCards {
+        for pairIndex in 0 ..< number0fPairsOfCards {
             let content: CardContent = createCardContent (pairIndex)
             cards.append (Card(content: content,id: pairIndex*2))
             cards.append (Card(content: content, id : pairIndex*2+1))
@@ -43,12 +43,9 @@ Equatable {
     }
     
     struct Card :Identifiable{
-        var isFaceUp: Bool = true
+        var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent
         var id : Int
     }
-    mutating func shuffle() {
-            cards.shuffle()
-        }
 }

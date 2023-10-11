@@ -12,8 +12,6 @@ struct ContentView: View {
     
     var body: some View {
         VStack{
-            Text(game.getThemeName())
-                .font(.largeTitle)
             ScrollView{
         LazyVGrid(columns: [GridItem(.adaptive (minimum: 65))], content: {
             
@@ -24,36 +22,15 @@ struct ContentView: View {
                         viewModel.choose(card)
                     }
             })
-        }).foregroundColor(game.getColor())
+        }).foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
     }
-            Spacer()
-            // Buttons
-            HStack{
-                bdscutton
-                Spacer()
-                shuffle
-            }
+
         }
         .padding(.horizontal)
             }
     
-  
-    var bdscutton :some View {
-        Button(action: {
-            game.createNewMemoryGame()}
-                    , label: {
-                            Text("New Game")})
-    }
-    var shuffle: some View {
-        Button(action: {
-            game.shuffle()}
-               , label: {
-            Text("mischen")})
-    }
 }
 
-
-    
 
 struct CardView: View {
     var card: MemoryGame<String>.Card
