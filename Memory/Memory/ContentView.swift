@@ -24,12 +24,12 @@ struct ContentView: View {
             
             ForEach(viewModel.cards, content:
                         {card in
-                CardView(card: card).aspectRatio(2/3, contentMode: .fit)
+                CardView(card: card,color: viewModel.getGroundColor()).aspectRatio(2/3, contentMode: .fit)
                     .onTapGesture {
                         viewModel.choose(card)
                     }
             })
-        }).foregroundColor(viewModel.getColor())
+        }).foregroundColor(viewModel.getCardColor())
     }
             Spacer()
             // Buttons
@@ -48,7 +48,7 @@ struct ContentView: View {
             viewModel.createNewMemoryGame()}
                , label: {
             VStack{
-                Image(systemName: "gamecontroller").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                Image(systemName:  "gamecontroller").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                 Text("New Game")}})
     }
     var shuffle: some View {
@@ -62,11 +62,10 @@ struct ContentView: View {
 }
 
 
-    
 
 struct CardView: View {
     var card: MemoryGame<String>.Card
-    
+    let color: Color
     var body: some View {
         
         ZStack{
@@ -74,7 +73,7 @@ struct CardView: View {
             if card.isFaceUp{
                 
                     shape.fill()
-                    shape.foregroundColor(.white)
+                shape.foregroundColor(color)
                 RoundedRectangle (cornerRadius: 20.0)
                     .strokeBorder(lineWidth: 3.0)
                 Text(card.content)

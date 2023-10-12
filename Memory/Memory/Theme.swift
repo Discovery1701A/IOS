@@ -12,6 +12,7 @@ struct Theme <Cards> {
     let themeName: String
     let cardSet: [Cards]
     let themeColor: String
+    let groundColor: String
     var numberOfPairs: Int
     
     func returnCardsForGame() -> [Cards] {
@@ -32,14 +33,16 @@ struct Theme <Cards> {
         self.cardSet = theme.cardSet
         self.themeColor = theme.themeColor
         self.themeName = theme.themeName
+        self.groundColor = theme.groundColor
     }
     
-    init(cardSet: [Cards], numberOfPairs: Int, themeColor: String, themeName: String) {
+    init(cardSet: [Cards], numberOfPairs: Int, themeColor: String, themeName: String, groundColor: String) {
          
         self.numberOfPairs = numberOfPairs
         self.cardSet = cardSet
         self.themeColor = themeColor
         self.themeName = themeName
+        self.groundColor = groundColor
            
        }
 }

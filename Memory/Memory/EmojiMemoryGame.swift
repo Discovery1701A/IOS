@@ -46,18 +46,40 @@ class EmojiMemoryGame: ObservableObject {
            Theme<String>(cardSet: ["👻","🎃","🕷","🧟‍♂️","🧛🏼‍♀️","☠️","👽","🦹‍♀️","🦇","🌘","⚰️","🔮"],
                          numberOfPairs: 12,
                          themeColor: "orange",
-                         themeName: "Halloween"),
+                         themeName: "Halloween",
+                         groundColor: "black"),
            
            Theme<String>(cardSet: ["🥭","🍒","🍈","🫐","🍇","🍉","🍓","🍊","🍋","🍌","🍐","🍏"],
                          numberOfPairs: 6,
                          themeColor: "red",
-                         themeName: "Obst"),
+                         themeName: "Obst",
+                         groundColor: "green"),
+           
            Theme<String>(cardSet: ["😀","😃","😄","😁","😆","🥰","😘","😍","🤪","🫡","🫠","🙄","😲","🤕","🥴"],
                          numberOfPairs: 40,
                          themeColor: "yellow",
-                         themeName: "Gefühle"),
+                         themeName: "Gefühle",
+                         groundColor: "blue"),
+           
+           Theme<String>(cardSet: ["🐶","🐱","🐭","🐹","🐰","🐨","🐻‍❄️","🐼","🐻","🦊"],
+                         numberOfPairs: 10,
+                         themeColor: "blue",
+                         themeName: "Tiere",
+                         groundColor: "yellow"),
+           
+           Theme<String>(cardSet: ["🥐","🥯","🍞","🥖","🥨","🧀","🥚","🍳","🧈","🥞","🧇","🍖","🍟","🍕","🍔","🥙","🥪","🌭","🌮","🌯","🥘","🥗","🫔","🍝","🥮"],
+                         numberOfPairs: 14,
+                         themeColor: "purple",
+                         themeName: "Essen",
+                        groundColor: "orange"),
+           
+           Theme<String>(cardSet: ["⚽️","🏀","🏈","⚾️","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🏒","🏑"],
+                         numberOfPairs: 17,
+                         themeColor: "gray",
+                         themeName: "Sport",
+                        groundColor: "blue")
            ]
-    func getColor() -> Color {
+    func getCardColor() -> Color {
             switch currentThemeModel.themeColor {
             case "red":
                 return .red
@@ -73,6 +95,30 @@ class EmojiMemoryGame: ObservableObject {
                 return .purple
             case "yellow":
                 return .yellow
+            case "black":
+                return .black
+            default:
+                return .red
+            }
+        }
+    func getGroundColor() -> Color {
+            switch currentThemeModel.groundColor {
+            case "red":
+                return .red
+            case "orange":
+                return .orange
+            case "green":
+                return .green
+            case "blue":
+                return .blue
+            case "gray":
+                return .gray
+            case "purple":
+                return .purple
+            case "yellow":
+                return .yellow
+            case "black":
+                return .black
             default:
                 return .red
             }
