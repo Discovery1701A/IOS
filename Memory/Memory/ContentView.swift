@@ -14,6 +14,7 @@ struct ContentView: View {
         VStack{
             Text(viewModel.getThemeName())
                 .font(.largeTitle)
+            
             HStack{
             Text("Score:")
                 Text (String(viewModel.getScore()))
