@@ -46,14 +46,18 @@ struct ContentView: View {
     var bdscutton :some View {
         Button(action: {
             viewModel.createNewMemoryGame()}
-                    , label: {
-                            Text("New Game")})
+               , label: {
+            VStack{
+                Image(systemName: "gamecontroller").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                Text("New Game")}})
     }
     var shuffle: some View {
         Button(action: {
             viewModel.shuffle()}
                , label: {
-            Text("mischen")})
+            VStack{
+                Image(systemName: "shuffle.circle").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                Text("mischen")}})
     }
 }
 
