@@ -37,12 +37,12 @@ struct Theme <Cards> {
     }
     
     init(cardSet: [Cards], numberOfPairs: Int, themeColor: String, themeName: String, groundColor: String) {
-         
+        
         self.numberOfPairs = numberOfPairs
         self.cardSet = cardSet
         self.themeColor = themeColor
         self.themeName = themeName
         self.groundColor = groundColor
-           
-       }
+        
+    }
 }

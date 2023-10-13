@@ -16,21 +16,21 @@ struct ContentView: View {
                 .font(.largeTitle)
             
             HStack{
-            Text("Score:")
+                Text("Score:")
                 Text (String(viewModel.getScore()))
             }
             ScrollView{
-        LazyVGrid(columns: [GridItem(.adaptive (minimum: 65))], content: {
-            
-            ForEach(viewModel.cards, content:
-                        {card in
-                CardView(card: card,color: viewModel.getGroundColor()).aspectRatio(2/3, contentMode: .fit)
-                    .onTapGesture {
-                        viewModel.choose(card)
-                    }
-            })
-        }).foregroundColor(viewModel.getCardColor())
-    }
+                LazyVGrid(columns: [GridItem(.adaptive (minimum: 65))], content: {
+                    
+                    ForEach(viewModel.cards, content:
+                                {card in
+                        CardView(card: card,color: viewModel.getGroundColor()).aspectRatio(2/3, contentMode: .fit)
+                            .onTapGesture {
+                                viewModel.choose(card)
+                            }
+                    })
+                }).foregroundColor(viewModel.getCardColor())
+            }
             Spacer()
             // Buttons
             HStack{
@@ -40,15 +40,15 @@ struct ContentView: View {
             }
         }
         .padding(.horizontal)
-            }
+    }
     
-  
+    
     var bdscutton :some View {
         Button(action: {
             viewModel.createNewMemoryGame()}
                , label: {
             VStack{
-                Image(systemName:  "gamecontroller").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                Image(systemName:  "gamecontroller").font(.largeTitle)
                 Text("New Game")}})
     }
     var shuffle: some View {
@@ -56,8 +56,8 @@ struct ContentView: View {
             viewModel.shuffle()}
                , label: {
             VStack{
-                Image(systemName: "shuffle.circle").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-                Text("mischen")}})
+                Image(systemName: "shuffle.circle").font(.largeTitle)
+                Text("shuffle")}})
     }
 }
 
@@ -70,20 +70,21 @@ struct CardView: View {
         
         ZStack{
             let shape :RoundedRectangle = RoundedRectangle (cornerRadius: 20.0)
-            if card.isFaceUp{
+            if card.isFaceUp {
                 
-                    shape.fill()
+                shape.fill()
                 shape.foregroundColor(color)
                 RoundedRectangle (cornerRadius: 20.0)
                     .strokeBorder(lineWidth: 3.0)
                 Text(card.content)
                     .font(.largeTitle)
-            }else if card.isMatched {
+            } else if card.isMatched {
                 shape.opacity(0)
-            }else{
+            } else {
+                Text(card.content) //verspringt so nicht mehr
+                .font(.largeTitle)
+                shape.fill()
                 
-               
-                    shape.fill()
             }
         }
     }

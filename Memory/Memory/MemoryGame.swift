@@ -13,7 +13,7 @@ Equatable {
     private(set) var score: Int = 0
     mutating func choose (card: Card){
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }),
-            !cards[chosenIndex].isFaceUp,
+           !cards[chosenIndex].isFaceUp,
            !cards[chosenIndex].isMatched
         {
             if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
@@ -26,10 +26,10 @@ Equatable {
                 }else if cards[chosenIndex].alreadySeeCount > 1 && cards[potentialMatchIndex].alreadySeeCount > 1
                 {
                     score -= 2
-                
+                    
                     // case where cards mismatch and ONE of the cards has already been seen AT LEAST ONCE
                 } else if cards[chosenIndex].alreadySeeCount > 1 || cards[potentialMatchIndex].alreadySeeCount > 1 {
-                   
+                    
                     score -= 1
                 }
                 
@@ -45,9 +45,9 @@ Equatable {
             print("\(cards)")
         }
     }
-   
+    
     init (numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
-    cards = Array<Card> ()
+        cards = Array<Card> ()
         for pairIndex in 0 ..< numberOfPairsOfCards {
             let content: CardContent = createCardContent (pairIndex)
             cards.append (Card(content: content,id: pairIndex*2))
@@ -55,7 +55,7 @@ Equatable {
         }
         cards.shuffle()
         score = 0
-    // add number0fPairsOfCards × 2 cards to cards array
+        // add number0fPairsOfCards × 2 cards to cards array
     }
     
     struct Card :Identifiable{
@@ -66,8 +66,8 @@ Equatable {
         var id : Int
     }
     mutating func shuffle() {
-            cards.shuffle()
-        }
+        cards.shuffle()
+    }
     func getScore ()->Int{
         return self.score
     }
