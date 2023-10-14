@@ -28,6 +28,7 @@ struct ContentView: View {
                             .onTapGesture {
                                 viewModel.choose(card)
                             }
+                            .padding(1) // der Abstand zwischen den Cards
                     })
                 }).foregroundColor(viewModel.getCardColor())
             }
@@ -81,8 +82,7 @@ struct CardView: View {
             } else if card.isMatched {
                 shape.opacity(0)
             } else {
-                Text(card.content) //verspringt so nicht mehr
-                .font(.largeTitle)
+               
                 shape.fill()
                 
             }

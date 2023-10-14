@@ -21,6 +21,7 @@ struct ContentView: View {
                     .onTapGesture {
                         viewModel.choose(card)
                     }
+                    .padding(1) // abstand zwischen den Cardviews
             })
         }).foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
     }
