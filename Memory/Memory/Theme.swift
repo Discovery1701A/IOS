@@ -16,14 +16,14 @@ struct Theme <Cards> {
     var numberOfPairs: Int
     
     func returnCardsForGame() -> [Cards] {
-        let shuffledCards = cardSet.shuffled()
+        let shuffledCards = cardSet.shuffled()  // mischen des Themen Cards Set
         var RandomCardsForGame: Array<Cards> = []
-        if numberOfPairs <= cardSet.count{
+        if numberOfPairs <= cardSet.count{  // neues Array mit sovielen Cards füllen wie numberOfPairs ist
             for pairIndex in 0..<numberOfPairs {
                 RandomCardsForGame.append(shuffledCards[pairIndex])
             }
         }else{
-            RandomCardsForGame = shuffledCards
+            RandomCardsForGame = shuffledCards  // ganzes Array wenn numberOfPairs größer als das eigentliche Array ist
         }
         return RandomCardsForGame
     }

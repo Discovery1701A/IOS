@@ -82,7 +82,7 @@ struct CardView: View {
             } else if card.isMatched {
                 shape.opacity(0)
             } else {
-               
+                
                 shape.fill()
                 
             }

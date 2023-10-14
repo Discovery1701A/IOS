@@ -23,18 +23,17 @@ Equatable {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                     score += 2
-                }else if cards[chosenIndex].alreadySeeCount > 1 && cards[potentialMatchIndex].alreadySeeCount > 1
+                }else if cards[chosenIndex].alreadySeeCount > 1 && cards[potentialMatchIndex].alreadySeeCount > 1  // -2 wenn die karten schon mal beide gesehen wurden
                 {
                     score -= 2
                     
-                    // case where cards mismatch and ONE of the cards has already been seen AT LEAST ONCE
                 } else if cards[chosenIndex].alreadySeeCount > 1 || cards[potentialMatchIndex].alreadySeeCount > 1 {
                     
                     score -= 1
                 }
                 
                 indexOfTheOneAndOnlyFaceUpCard = nil
-            } 
+            }
             else {
                 for index in cards.indices {
                     cards[index].isFaceUp = false
@@ -59,7 +58,7 @@ Equatable {
     }
     
     struct Card :Identifiable{
-        var alreadySeeCount = 0
+        var alreadySeeCount = 0  // Schon mal gesehen
         var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent
