@@ -19,7 +19,7 @@ struct ContentView: View {
             }
     @ViewBuilder
     private func cardView(for card :viewModel.Card)-> some View{
-        if card.isMatched && !card.isFaceUp{
+        if card.isMatched && !card.choosen{
             Rectangle().opacity(0)
         }else{
             CardView(card: card)
@@ -46,9 +46,10 @@ struct CardView: View {
                     shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
                     Text (card.content).font(font (in: geometry.size))
                        
-                //else if card.isMatched {
-                 //   shape.opacity(0)
-               // }
+                if card.choosen {
+                    shape.strokeBorder(lineWidth: 5)
+                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                }
             }
         }
     }
