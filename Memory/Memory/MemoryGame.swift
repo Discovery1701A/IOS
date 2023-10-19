@@ -41,7 +41,7 @@ Equatable {
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
             }
             cards[chosenIndex].isFaceUp.toggle()
-            print("\(cards)")
+           
         }
     }
     
