@@ -19,31 +19,43 @@ Equatable {
         
         
     mutating func choose (card: Card){
-        if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }),
-            !cards[chosenIndex].choosen,
-           !cards[chosenIndex].isMatched
-        {
-            choosenCards.append(cards[chosenIndex])
-          //  if let potentialMatchIndex = index0fTheOneAndOnlyFaceUpCard {
-                //if cards[chosenIndex].content == cards[potentialMatchIndex].content {
-                  //  cards[chosenIndex].isMatched = true
-                   // cards[potentialMatchIndex].isMatched = true
-               // }
-            if choosenCards.count >= 3{
-                choosenCards = []
-                //cards[chosenIndex].choosen = false
-                index0fTheOneAndOnlyFaceUpCard = chosenIndex
-            }
-            if choosenCards.count <= 3{
-                cards[chosenIndex].choosen = true
+        if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }){
+            if !cards[chosenIndex].choosen,
+            !cards[chosenIndex].isMatched
+            {
                 
-            } else {
-                choosenCards = []
-               // cards[chosenIndex].choosen = false
-                index0fTheOneAndOnlyFaceUpCard = chosenIndex
-            }
-            
-           
+                //  if let potentialMatchIndex = index0fTheOneAndOnlyFaceUpCard {
+                //if cards[chosenIndex].content == cards[potentialMatchIndex].content {
+                //  cards[chosenIndex].isMatched = true
+                // cards[potentialMatchIndex].isMatched = true
+                // }
+                if choosenCards.count >= 3{
+                    choosenCards = []
+                    //cards[chosenIndex].choosen = false
+                    index0fTheOneAndOnlyFaceUpCard = chosenIndex
+                }
+                if choosenCards.count < 3{
+                    choosenCards.append(cards[chosenIndex])
+                    cards[chosenIndex].choosen = true
+                    
+                } else {
+                    choosenCards = []
+                    // cards[chosenIndex].choosen = false
+                    index0fTheOneAndOnlyFaceUpCard = chosenIndex
+                }
+                
+                
+                
+            }else {
+                if choosenCards.count < 3{
+                    cards[chosenIndex].choosen = false
+                    choosenCards.forEach { card in
+                        let matchedIndex = choosenCards.firstIndex(of: card)!
+                        choosenCards.remove(at: matchedIndex)
+                    }
+                }
+                    
+                }
         }
         print(choosenCards.count)
     }
