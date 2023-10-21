@@ -6,10 +6,15 @@
 //
 
 import Foundation
-struct SetGame<CardContent> where CardContent:
-Equatable {
+struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes> where CardSymbolShape: Hashable, CardSymbolColor: Hashable, CardSymbolPattern: Hashable{
     private (set) var cards: Array <Card>
     var choosenCards : [Card] = []
+    private(set) var totalNumberOfCards: Int
+    private var initialNumberOfPlayingCards: Int
+    private let createCardSymbol: (Int) -> Card.CardContent
+    private(set) var playingCards: [Card]
+    private(set) var numberOfPlayedCards = 0
+    
     private var index0fTheOneAndOnlyFaceUpCard: Int?{
         get{cards.indices.filter({ cards[$0].choosen }).oneAndOnly
         }
@@ -67,25 +72,42 @@ Equatable {
    // }
     
     
-    init (number0fPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
-        cards = Array<Card> ().shuffled()
-        for trippelIndex in 0 ..< number0fPairsOfCards {
-            let content: CardContent = createCardContent (trippelIndex)
-            cards.append (Card(content: content,id: trippelIndex*3))
-            cards.append (Card(content: content, id : trippelIndex*3+1))
-            cards.append (Card(content: content, id : trippelIndex*3+2))
+    init(initialNumberOfPlayingCards: Int, totalNumberOfCards: Int, createCardContent: @escaping (Int) -> Card.CardContent) {
+            self.initialNumberOfPlayingCards = initialNumberOfPlayingCards
+            self.totalNumberOfCards = totalNumberOfCards
+            self.createCardSymbol = createCardContent
+            self.playingCards = [] // Initialize playingCards here
+            self.cards = [] // Initialize cards array here
+            for _ in 0..<initialNumberOfPlayingCards {
+                let content = createCardContent(numberOfPlayedCards)
+                let newCard = Card(symbol: content, id: numberOfPlayedCards)
+                self.playingCards.append(newCard)
+                self.cards.append(newCard) // Add the new card to the cards array
+                numberOfPlayedCards += 1
+            }
         }
-        cards.shuffle()
-    // add number0fPairsOfCards × 2 cards to cards array
-    }
     
     struct Card :Identifiable, Equatable{
         var choosen: Bool = false
         var isMatched: Bool = false
-        let content: CardContent
+        let symbol: CardContent
         let id : Int
+        struct CardContent {
+            let shape: CardSymbolShape
+            let color: CardSymbolColor
+            let pattern: CardSymbolPattern
+            let numberOfShapes: Int
+        }
+        static func == (lhs: SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes>.Card, rhs: SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes>.Card) -> Bool {
+            lhs.id == rhs.id
+        }
     }
 }
+
+
+
+
+
 extension Array {
     var oneAndOnly: Element? {
         if self.count == 1 {
