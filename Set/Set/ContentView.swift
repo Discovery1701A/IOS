@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var game : viewModel
+    @ObservedObject var game : ViewModel
     var body: some View {
       
         AspectVGrid(items: game.cards,aspectRatio:2/3, content: {card in
@@ -18,7 +18,7 @@ struct ContentView: View {
             .padding(.horizontal)
             }
     @ViewBuilder
-    private func cardView(for card :viewModel.Card)-> some View{
+    private func cardView(for card :ViewModel.Card)-> some View{
         if card.isMatched && !card.choosen{
             Rectangle().opacity(0)
         }else{
@@ -33,7 +33,7 @@ struct ContentView: View {
 
 
 struct CardView: View {
-    let card: viewModel.Card
+    let card: ViewModel.Card
     
     var body: some View {
         GeometryReader { geometry in
@@ -96,7 +96,7 @@ struct CardView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let game = viewModel()
+        let game = ViewModel()
         ContentView(game: game)
     }
 }

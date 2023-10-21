@@ -9,15 +9,15 @@ import SwiftUI
 
 
 
-class viewModel: ObservableObject {
+class ViewModel: ObservableObject {
     typealias Card = SetGame<String>.Card
   private static let emojis :Array<String> = ["😄","🥰","🐶","🦊","🙈","🦄","🐕","🦭"]
     
-   private static func createMemoryGame () -> SetGame<String> {
-        SetGame<String> (number0fPairsOfCards: 4) {pairindex in emojis[pairindex]}
+   private static func createSetGame () -> SetGame<String> {
+        SetGame<String> (number0fPairsOfCards: 8) {pairIndex in emojis[pairIndex]}
     }
     
-   @Published private var model: SetGame<String> = createMemoryGame()
+   @Published private var model: SetGame<String> = createSetGame()
     
     var cards: Array<Card> {
     return model.cards
