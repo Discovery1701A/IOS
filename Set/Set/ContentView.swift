@@ -12,8 +12,7 @@ struct ContentView: View {
     var body: some View {
         VStack{
             AspectVGrid(items: game.cards,aspectRatio:2/3, content: {card in
-                cardView(for: card)
-            })
+                cardView(for: card)})
             .foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
             .padding(.horizontal)
             HStack{
