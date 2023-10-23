@@ -79,18 +79,8 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             self.playingCards = []
             self.cards = []
             
-        for i in 0 ..< 81 {
-            let content = createCardContent(i)
-            let newCard = Card(symbol: content, id: i)
-            self.cards.append(newCard)
-        }
-       // self.cards.shuffle()
-        for i in stride(from: initialNumberOfPlayingCards-1 , through: 0, by: -1)  {
-   
-            self.playingCards.append(self.cards[i])
-            self.cards.remove(at: i)
-            numberOfPlayedCards += 1
-        }
+        newGame()
+        
         }
     mutating func threeNewCards(){
         if cards.count >= 3 && !cards.isEmpty {
@@ -100,11 +90,30 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 self.playingCards.append(self.cards[i])
                 print ("id",self.cards[i].id,"i",i)
                 self.cards.remove(at: i)
-                numberOfPlayedCards += 1
+                self.numberOfPlayedCards += 1
             }
         }
         print(cards.count)
         }
+    mutating func newGame(){
+        self.playingCards = []
+        self.cards = []
+        self.numberOfPlayedCards = 0
+        for i in 0 ..< self.totalNumberOfCards {
+            let content = self.createCardSymbol(i)
+            let newCard = Card(symbol: content, id: i)
+            self.cards.append(newCard)
+        }
+         self.cards.shuffle()
+        for i in stride(from: initialNumberOfPlayingCards-1 , through: 0, by: -1)  {
+            
+            self.playingCards.append(self.cards[i])
+            self.cards.remove(at: i)
+            self.numberOfPlayedCards += 1
+        
+        }
+        
+    }
     
     
     struct Card :Identifiable, Equatable{

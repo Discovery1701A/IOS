@@ -49,6 +49,9 @@ class ViewModel: ObservableObject {
     func threeNewCards(){
         model.threeNewCards()
     }
+    func newGame(){
+        model.newGame()
+    }
     enum ContentShape: CaseIterable {
         case oval
         case diamond

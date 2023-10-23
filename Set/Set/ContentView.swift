@@ -16,8 +16,11 @@ struct ContentView: View {
             })
             .foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
             .padding(.horizontal)
-            Spacer()
-            newCards
+            HStack{
+                newCards
+                Spacer()
+                newGame
+            }.padding(.horizontal)
         }
         
     }
@@ -41,15 +44,33 @@ struct ContentView: View {
                 
             }
                    ,label: {
-                VStack{
+            
                     Text("3 neue Karten")
-                    Text( String( game.allCards.count))
+                 
+                    
+                        .font(.body)
+                
+            })
+            
+        }
+    }
+    var newGame: some View  {
+        
+            Button(action: {
+                
+                game.newGame()
+                
+            }
+                   ,label: {
+                VStack{
+                    Text("Neues Spiel")
+                   
                     
                         .font(.body)
                 }
             })
             
-        }
+        
     }
 }
 
