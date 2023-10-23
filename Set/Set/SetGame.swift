@@ -7,7 +7,7 @@
 
 import Foundation
 struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes> where CardSymbolShape: Hashable, CardSymbolColor: Hashable, CardSymbolPattern: Hashable{
-    private (set) var cards: Array <Card>
+    private (set) var cards: [Card]
     var choosenCards : [Card] = []
     private(set) var totalNumberOfCards: Int
     private var initialNumberOfPlayingCards: Int
@@ -16,17 +16,17 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private(set) var numberOfPlayedCards = 0
     
     private var index0fTheOneAndOnlyFaceUpCard: Int?{
-        get{cards.indices.filter({ cards[$0].choosen }).oneAndOnly
+        get{playingCards.indices.filter({ playingCards[$0].choosen }).oneAndOnly
         }
-        set{cards.indices.forEach{ cards[$0].choosen = ($0 == newValue) }
+        set{playingCards.indices.forEach{ playingCards[$0].choosen = ($0 == newValue) }
         }
     }
         
         
     mutating func choose (card: Card){
-        if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }){
-            if !cards[chosenIndex].choosen,
-            !cards[chosenIndex].isMatched
+        if let chosenIndex = playingCards.firstIndex(where: { $0.id == card.id }){
+            if !playingCards[chosenIndex].choosen,
+            !playingCards[chosenIndex].isMatched
             {
                 
                 //  if let potentialMatchIndex = index0fTheOneAndOnlyFaceUpCard {
@@ -41,7 +41,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 }
                 if choosenCards.count < 3{
                     choosenCards.append(cards[chosenIndex])
-                    cards[chosenIndex].choosen = true
+                    playingCards[chosenIndex].choosen = true
                     
                 } else {
                     choosenCards = []
@@ -53,7 +53,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 
             }else {
                 if choosenCards.count < 3{
-                    cards[chosenIndex].choosen = false
+                    playingCards[chosenIndex].choosen = false
                     choosenCards.forEach { card in
                         let matchedIndex = choosenCards.firstIndex(of: card)!
                         choosenCards.remove(at: matchedIndex)
@@ -76,17 +76,36 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             self.initialNumberOfPlayingCards = initialNumberOfPlayingCards
             self.totalNumberOfCards = totalNumberOfCards
             self.createCardSymbol = createCardContent
-            self.playingCards = [] // Initialize playingCards here
-            self.cards = [] // Initialize cards array here
-            for _ in 0..<initialNumberOfPlayingCards {
-                let content = createCardContent(numberOfPlayedCards)
-                let newCard = Card(symbol: content, id: numberOfPlayedCards)
-                self.playingCards.append(newCard)
-                self.cards.append(newCard) // Add the new card to the cards array
+            self.playingCards = []
+            self.cards = []
+            
+        for i in 0 ..< 81 {
+            let content = createCardContent(i)
+            let newCard = Card(symbol: content, id: i)
+            self.cards.append(newCard)
+        }
+       // self.cards.shuffle()
+        for i in stride(from: initialNumberOfPlayingCards-1 , through: 0, by: -1)  {
+   
+            self.playingCards.append(self.cards[i])
+            self.cards.remove(at: i)
+            numberOfPlayedCards += 1
+        }
+        }
+    mutating func threeNewCards(){
+        if cards.count >= 3 && !cards.isEmpty {
+           
+            for i in stride(from: 3-1, through: 0, by: -1) {
+                
+                self.playingCards.append(self.cards[i])
+                print ("id",self.cards[i].id,"i",i)
+                self.cards.remove(at: i)
                 numberOfPlayedCards += 1
             }
-        
         }
+        print(cards.count)
+        }
+    
     
     struct Card :Identifiable, Equatable{
         var choosen: Bool = false

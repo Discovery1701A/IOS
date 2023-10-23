@@ -32,13 +32,24 @@ struct ContentView: View {
                     game.choose(card)
                 }}
     }
+    @ViewBuilder
     var newCards: some View  {
-        Button(action: {
+        if (game.allCards.count >= 3 && !game.allCards.isEmpty && game.numberOfPlayedCards<81) {
+            Button(action: {
+                
+                game.threeNewCards()
+                
+            }
+                   ,label: {
+                VStack{
+                    Text("3 neue Karten")
+                    Text( String( game.allCards.count))
+                    
+                        .font(.body)
+                }
+            })
             
-        },label: {
-            Text("3 neue Karten")
-                .font(.body)
-        })
+        }
     }
 }
 

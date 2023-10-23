@@ -34,12 +34,20 @@ class ViewModel: ObservableObject {
    @Published private var model: SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> = createSetGame()
     
     var cards: Array<Card> {
+    return model.playingCards
+    }
+    var allCards: Array<Card> {
     return model.cards
     }
-    
+    var numberOfPlayedCards: Int{
+        return model.numberOfPlayedCards
+    }
     // MARK: -Intent(s)
     func choose (_ card: Card){
         model.choose(card: card)
+    }
+    func threeNewCards(){
+        model.threeNewCards()
     }
     enum ContentShape: CaseIterable {
         case oval
