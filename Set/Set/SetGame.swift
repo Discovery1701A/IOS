@@ -85,6 +85,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 self.cards.append(newCard) // Add the new card to the cards array
                 numberOfPlayedCards += 1
             }
+        
         }
     
     struct Card :Identifiable, Equatable{

@@ -10,13 +10,17 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var game : ViewModel
     var body: some View {
-      
-        AspectVGrid(items: game.cards,aspectRatio:2/3, content: {card in
-            cardView(for: card)
-        })
+        VStack{
+            AspectVGrid(items: game.cards,aspectRatio:2/3, content: {card in
+                cardView(for: card)
+            })
             .foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
             .padding(.horizontal)
-            }
+            Spacer()
+            newCards
+        }
+        
+    }
     @ViewBuilder
     private func cardView(for card :ViewModel.Card)-> some View{
         if card.isMatched && !card.choosen{
@@ -27,6 +31,14 @@ struct ContentView: View {
                 .onTapGesture {
                     game.choose(card)
                 }}
+    }
+    var newCards: some View  {
+        Button(action: {
+            
+        },label: {
+            Text("3 neue Karten")
+                .font(.body)
+        })
     }
 }
 
