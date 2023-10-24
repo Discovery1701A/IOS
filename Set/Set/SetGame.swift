@@ -25,6 +25,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         
     mutating func choose (card: Card){
         if let chosenIndex = playingCards.firstIndex(where: { $0.id == card.id }){
+            
             if !playingCards[chosenIndex].choosen,
             !playingCards[chosenIndex].isMatched
             {
@@ -40,9 +41,10 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     index0fTheOneAndOnlyFaceUpCard = chosenIndex
                 }
                 if choosenCards.count < 3{
-                    choosenCards.append(cards[chosenIndex])
-                    playingCards[chosenIndex].choosen = true
                     
+                    choosenCards.append(playingCards[chosenIndex])
+                    playingCards[chosenIndex].choosen = true
+                  
                 } else {
                     choosenCards = []
                     // cards[chosenIndex].choosen = false
