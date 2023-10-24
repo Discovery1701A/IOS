@@ -28,6 +28,10 @@ struct CardView: View {
                     shape.strokeBorder(lineWidth: 5)
                         .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                 }
+                if card.isMatched {
+                    shape.strokeBorder(lineWidth: 5)
+                        .foregroundColor(.green)
+                }
             }
         }
     }

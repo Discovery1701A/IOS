@@ -11,6 +11,7 @@ struct ContentView: View {
     @ObservedObject var game : ViewModel
     var body: some View {
         VStack{
+            Text("Sets " + String(game.score))
             AspectVGrid(items: game.cards,aspectRatio:2/3, content: {card in
                 cardView(for: card)})
             .foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
@@ -26,7 +27,7 @@ struct ContentView: View {
     @ViewBuilder
     private func cardView(for card :ViewModel.Card)-> some View{
         if card.isMatched && !card.choosen{
-            Rectangle().opacity(0)
+            //Rectangle().opacity(0)
         }else{
             CardView(card: card)
                 .padding(4)

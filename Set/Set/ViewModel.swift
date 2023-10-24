@@ -42,6 +42,9 @@ class ViewModel: ObservableObject {
     var numberOfPlayedCards: Int{
         return model.numberOfPlayedCards
     }
+    var score : Int{
+        return model.score
+    }
     // MARK: -Intent(s)
     func choose (_ card: Card){
         model.choose(card: card)

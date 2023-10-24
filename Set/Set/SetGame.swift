@@ -14,6 +14,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private let createCardSymbol: (Int) -> Card.CardContent
     private(set) var playingCards: [Card]
     private(set) var numberOfPlayedCards = 0
+    var score = 0
     
     private var index0fTheOneAndOnlyFaceUpCard: Int?{
         get{playingCards.indices.filter({ playingCards[$0].choosen }).oneAndOnly
@@ -22,7 +23,26 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
     }
         
+    mutating func formSet(by cards: [Card]) -> Bool {
+        var shapes = Set<CardSymbolShape>()
+        var colors = Set<CardSymbolColor>()
+        var patterns = Set<CardSymbolPattern>()
+        var numberOfShapes = Set<Int>()
         
+            cards.forEach { card in
+                shapes.insert(card.symbol.shape)
+                colors.insert(card.symbol.color)
+                patterns.insert(card.symbol.pattern)
+                numberOfShapes.insert(card.symbol.numberOfShapes)
+            }
+            print(shapes.count)
+            if shapes.count == 2 || colors.count == 2 ||
+                patterns.count == 2 || numberOfShapes.count == 2 {
+                return false
+            }
+        
+        return true
+    }
     mutating func choose (card: Card){
         if let chosenIndex = playingCards.firstIndex(where: { $0.id == card.id }){
             
@@ -35,7 +55,10 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 //  cards[chosenIndex].isMatched = true
                 // cards[potentialMatchIndex].isMatched = true
                 // }
+                
+                
                 if choosenCards.count >= 3{
+                   
                     choosenCards = []
                     //cards[chosenIndex].choosen = false
                     index0fTheOneAndOnlyFaceUpCard = chosenIndex
@@ -63,8 +86,25 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 }
                     
                 }
-        }
+                    }
         print(choosenCards.count)
+        if formSet(by: choosenCards) && choosenCards.count == 3{
+            print("sdvdsv")
+            score += 1
+            for i in 0 ..< choosenCards.count{
+                for j in 0 ..< playingCards.count{
+                    if playingCards[j] == choosenCards[i]{
+                        playingCards[j].isMatched = true
+                        if cards.count>0{
+                            playingCards[j] = cards[2-i]
+                            cards.remove(at: 2-i)
+                            numberOfPlayedCards += 1
+                        }
+                    }
+                }
+            }
+        }
+
     }
    // func match (){
       //  if chosenCards.count == 3 {
@@ -98,6 +138,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         print(cards.count)
         }
     mutating func newGame(){
+        self.score = 0
         self.playingCards = []
         self.cards = []
         self.numberOfPlayedCards = 0
