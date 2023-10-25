@@ -28,7 +28,7 @@ self.content = content
                 let width = widthThatFitsWithMin(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio, minWidth: 70)
                 if  widthThatFits(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio) > 70{
                     weisauchnicht(width: width)
-                    Text(String(Int(width)))
+                    //Text(String(Int(width)))
                 }else{
                     ScrollView{
                         weisauchnicht(width: width)
@@ -83,7 +83,7 @@ self.content = content
         for i in stride(from: 11 , through: itemCount-1, by: +3){
         if widthThatFits(itemCount: i, in: size, itemAspectRatio: itemAspectRatio) > minWidth{
             minWidthFit = widthThatFits(itemCount: i, in: size, itemAspectRatio: itemAspectRatio)
-            print("min",minWidthFit)
+           // print("min",minWidthFit)
         }else{
             break
         }

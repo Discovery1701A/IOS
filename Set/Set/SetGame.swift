@@ -35,7 +35,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 patterns.insert(card.symbol.pattern)
                 numberOfShapes.insert(card.symbol.numberOfShapes)
             }
-            print(shapes.count)
+            //print(shapes.count)
             if shapes.count == 2 || colors.count == 2 ||
                 patterns.count == 2 || numberOfShapes.count == 2 {
                 return false
@@ -87,9 +87,9 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     
                 }
                     }
-        print(choosenCards.count)
+        //print(choosenCards.count)
         if formSet(by: choosenCards) && choosenCards.count == 3{
-            print("sdvdsv")
+            //print("sdvdsv")
             score += 1
             for i in 0 ..< choosenCards.count{
                 for j in 0 ..< playingCards.count{
@@ -97,8 +97,10 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                         playingCards[j].isMatched = true
                         if cards.count>0{
                             playingCards[j] = cards[2-i]
-                            cards.remove(at: 2-i)
-                            numberOfPlayedCards += 1
+                            if playingCards.count <= 12{
+                                cards.remove(at: 2-i)
+                                numberOfPlayedCards += 1
+                            }
                         }
                     }
                 }
@@ -130,12 +132,12 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             for i in stride(from: 3-1, through: 0, by: -1) {
                 
                 self.playingCards.append(self.cards[i])
-                print ("id",self.cards[i].id,"i",i)
+                //print ("id",self.cards[i].id,"i",i)
                 self.cards.remove(at: i)
                 self.numberOfPlayedCards += 1
             }
         }
-        print(cards.count)
+       // print(cards.count)
         }
     mutating func newGame(){
         self.score = 0

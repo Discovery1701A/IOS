@@ -11,7 +11,7 @@ struct ContentView: View {
     @ObservedObject var game : ViewModel
     var body: some View {
         VStack{
-            Text("Sets " + String(game.score))
+            Text("Sets: " + String(game.score)).font(.largeTitle).padding()
             AspectVGrid(items: game.cards,aspectRatio:2/3, content: {card in
                 cardView(for: card)})
             .foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
