@@ -23,7 +23,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
     }
         
-    mutating func formSet(by cards: [Card]) -> Bool {
+    mutating func matchingSet(by cards: [Card]) -> Bool {
         var shapes = Set<CardSymbolShape>()
         var colors = Set<CardSymbolColor>()
         var patterns = Set<CardSymbolPattern>()
@@ -43,24 +43,28 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         
         return true
     }
+    mutating func checkForSet() -> Bool {
+            for i in 0..<playingCards.count - 2 {
+                for j in i+1..<playingCards.count - 1 {
+                    for k in j+1..<playingCards.count {
+                        let cardsToCheck = [playingCards[i], playingCards[j], playingCards[k]]
+                        if matchingSet(by: cardsToCheck) {
+                            return true
+                        }
+                    }
+                }
+            }
+            return false
+        }
+    
     mutating func choose (card: Card){
         if let chosenIndex = playingCards.firstIndex(where: { $0.id == card.id }){
             
             if !playingCards[chosenIndex].choosen,
             !playingCards[chosenIndex].isMatched
             {
-                
-                //  if let potentialMatchIndex = index0fTheOneAndOnlyFaceUpCard {
-                //if cards[chosenIndex].content == cards[potentialMatchIndex].content {
-                //  cards[chosenIndex].isMatched = true
-                // cards[potentialMatchIndex].isMatched = true
-                // }
-                
-                
                 if choosenCards.count >= 3{
-                   
                     choosenCards = []
-                    //cards[chosenIndex].choosen = false
                     index0fTheOneAndOnlyFaceUpCard = chosenIndex
                 }
                 if choosenCards.count < 3{
@@ -88,7 +92,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 }
                     }
         //print(choosenCards.count)
-        if formSet(by: choosenCards) && choosenCards.count == 3{
+        if matchingSet(by: choosenCards) && choosenCards.count == 3{
             //print("sdvdsv")
             score += 1
             for i in 0 ..< choosenCards.count{
@@ -108,12 +112,6 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
 
     }
-   // func match (){
-      //  if chosenCards.count == 3 {
-        //    chosenCards.forEach { card in
-                
-         //   }
-   // }
     
     
     init(initialNumberOfPlayingCards: Int, totalNumberOfCards: Int, createCardContent: @escaping (Int) -> Card.CardContent) {

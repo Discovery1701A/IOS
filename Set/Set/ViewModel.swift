@@ -12,21 +12,16 @@ import SwiftUI
 class ViewModel: ObservableObject {
     typealias Card = SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes>.Card
     static var cardContents: [Card.CardContent] = {
-        var contents = [Card.CardContent]()
-
-        
-        for shape in ContentShape.allCases {
-            for color in ContentColor.allCases {
-                for pattern in ContentPattern.allCases {
-                    for numberOfShapes in NumberOfContentShapes.allCases {
-                        contents.append(Card.CardContent( shape: shape, color: color, pattern: pattern, numberOfShapes: numberOfShapes.rawValue))
+        return ContentShape.allCases.flatMap { shape in
+            ContentColor.allCases.flatMap { color in
+                ContentPattern.allCases.flatMap { pattern in
+                    NumberOfContentShapes.allCases.map { numberOfShapes in
+                        Card.CardContent(shape: shape, color: color, pattern: pattern, numberOfShapes: numberOfShapes.rawValue)
                     }
                 }
             }
-        }
-        
-        return contents.shuffled()
-    }()
+        }.shuffled()
+    }() // Closure sollte ja drin sein
     
     private static func createSetGame () -> SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> {
         SetGame(initialNumberOfPlayingCards: 12, totalNumberOfCards: cardContents.count) { cardContents[$0] }
@@ -45,6 +40,9 @@ class ViewModel: ObservableObject {
     var score : Int{
         return model.score
     }
+    func checkForSet() -> Bool{
+        model.checkForSet()
+    }
     // MARK: -Intent(s)
     func choose (_ card: Card){
         model.choose(card: card)
@@ -56,7 +54,7 @@ class ViewModel: ObservableObject {
         model.newGame()
     }
     enum ContentShape: CaseIterable {
-        case oval
+        case bean
         case diamond
         case rect
     }

@@ -11,29 +11,38 @@ struct ContentView: View {
     @ObservedObject var game : ViewModel
     var body: some View {
         VStack{
+            cardView()
+                
+        }
+        
+    }
+    @ViewBuilder
+    private func cardView()-> some View{
+        if game.checkForSet() && game.allCards.count<0{
             Text("Sets: " + String(game.score)).font(.largeTitle).padding()
             AspectVGrid(items: game.cards,aspectRatio:2/3, content: {card in
-                cardView(for: card)})
-            .foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
-            .padding(.horizontal)
+                CardView(card: card)
+                    .padding(4)
+                    .onTapGesture {
+                        game.choose(card)
+                    }}) .foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
+                .padding(.horizontal)
             HStack{
                 newCards
                 Spacer()
                 newGame
             }.padding(.horizontal)
-        }
-        
-    }
-    @ViewBuilder
-    private func cardView(for card :ViewModel.Card)-> some View{
-        if card.isMatched && !card.choosen{
-            //Rectangle().opacity(0)
         }else{
-            CardView(card: card)
-                .padding(4)
-                .onTapGesture {
-                    game.choose(card)
-                }}
+            VStack{
+                Text("Gewonnen!!")
+                
+                Text("Sets: " + String(game.score))
+                
+            }.font(.largeTitle)
+                .fontWeight(/*@START_MENU_TOKEN@*/.heavy/*@END_MENU_TOKEN@*/)
+                .foregroundColor(.red)
+            newGame.padding(.bottom)
+        }
     }
     @ViewBuilder
     var newCards: some View  {

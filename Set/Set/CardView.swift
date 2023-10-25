@@ -50,8 +50,8 @@ struct CardView: View {
     @ViewBuilder
     func createSymbol(for card: ViewModel.Card) -> some View {
         switch card.symbol.shape {
-        case .oval:
-            createSymbolView(of: card.symbol, shape: Ellipse())
+        case .bean:
+            createSymbolView(of: card.symbol, shape: RoundedRectangle (cornerRadius: 180))
         case .rect:
             createSymbolView(of: card.symbol, shape: Rectangle())
         case .diamond:
