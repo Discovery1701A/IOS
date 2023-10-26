@@ -8,13 +8,15 @@
 import Foundation
 struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes> where CardSymbolShape: Hashable, CardSymbolColor: Hashable, CardSymbolPattern: Hashable{
     private (set) var cards: [Card]
-    var choosenCards : [Card] = []
+    private(set) var choosenCards : [Card] = []
     private(set) var totalNumberOfCards: Int
     private var initialNumberOfPlayingCards: Int
     private let createCardSymbol: (Int) -> Card.CardContent
     private(set) var playingCards: [Card]
     private(set) var numberOfPlayedCards = 0
-    var score = 0
+    private(set) var score = 0
+    private(set) var setAvailableInAllCards : Bool = true
+    private(set) var setAvailableInPlayedCards : Bool = true
     
     private var index0fTheOneAndOnlyFaceUpCard: Int?{
         get{playingCards.indices.filter({ playingCards[$0].choosen }).oneAndOnly
@@ -23,7 +25,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
     }
         
-    mutating func matchingSet(by cards: [Card]) -> Bool {
+    public mutating func matchingSet(by cards: [Card]) -> Bool {
         var shapes = Set<CardSymbolShape>()
         var colors = Set<CardSymbolColor>()
         var patterns = Set<CardSymbolPattern>()
@@ -43,11 +45,11 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         
         return true
     }
-    mutating func checkForSet() -> Bool {
-            for i in 0..<playingCards.count - 2 {
-                for j in i+1..<playingCards.count - 1 {
-                    for k in j+1..<playingCards.count {
-                        let cardsToCheck = [playingCards[i], playingCards[j], playingCards[k]]
+   mutating func checkForSet(by cards: [Card] ) -> Bool {
+            for i in 0..<cards.count - 2 {
+                for j in i+1..<cards.count - 1 {
+                    for k in j+1..<cards.count {
+                        let cardsToCheck = [cards[i], cards[j], cards[k]]
                         if matchingSet(by: cardsToCheck) {
                             return true
                         }
@@ -56,7 +58,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             }
             return false
         }
-    
+   
     mutating func choose (card: Card){
         if let chosenIndex = playingCards.firstIndex(where: { $0.id == card.id }){
             
@@ -96,21 +98,30 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             //print("sdvdsv")
             score += 1
             for i in 0 ..< choosenCards.count{
-                for j in 0 ..< playingCards.count{
+                for j in stride(from:playingCards.count-1  , through: 0, by: -1){
                     if playingCards[j] == choosenCards[i]{
                         playingCards[j].isMatched = true
-                        if cards.count>0{
-                            playingCards[j] = cards[2-i]
-                            if playingCards.count <= 12{
+                        if playingCards.count <= 12{
+                            if cards.count>0{
+                                playingCards[j] = cards[2-i]
                                 cards.remove(at: 2-i)
                                 numberOfPlayedCards += 1
                             }
+                        }else if playingCards.count > 12
+                        {
+                            playingCards.remove(at: j)
                         }
                     }
                 }
             }
         }
-
+       
+            setAvailableInAllCards =  checkForSet(by: cards)
+        setAvailableInPlayedCards = checkForSet(by: playingCards)
+        
+            
+        
+        
     }
     
     

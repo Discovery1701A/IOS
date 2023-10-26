@@ -11,6 +11,7 @@ import SwiftUI
 
 class ViewModel: ObservableObject {
     typealias Card = SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes>.Card
+    
     static var cardContents: [Card.CardContent] = {
         return ContentShape.allCases.flatMap { shape in
             ContentColor.allCases.flatMap { color in
@@ -22,37 +23,50 @@ class ViewModel: ObservableObject {
             }
         }.shuffled()
     }() // Closure sollte ja drin sein
-    
+   
     private static func createSetGame () -> SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> {
         SetGame(initialNumberOfPlayingCards: 12, totalNumberOfCards: cardContents.count) { cardContents[$0] }
     }
+    
    @Published private var model: SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> = createSetGame()
     
     var cards: Array<Card> {
     return model.playingCards
     }
+    
     var allCards: Array<Card> {
     return model.cards
     }
+    
     var numberOfPlayedCards: Int{
         return model.numberOfPlayedCards
     }
+    
     var score : Int{
         return model.score
     }
-    func checkForSet() -> Bool{
-        model.checkForSet()
+    
+    var setAvailableInAllCards : Bool{
+        return model.setAvailableInAllCards
     }
+    
+    var setAvailableInPlayedCards : Bool{
+        return model.setAvailableInPlayedCards
+    }
+  
     // MARK: -Intent(s)
     func choose (_ card: Card){
         model.choose(card: card)
     }
+    
     func threeNewCards(){
         model.threeNewCards()
     }
+    
     func newGame(){
         model.newGame()
     }
+    
     enum ContentShape: CaseIterable {
         case bean
         case diamond
@@ -89,3 +103,4 @@ class ViewModel: ObservableObject {
     }
     
 }
+
