@@ -14,7 +14,6 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
     var content: (Item) -> ItemView
     
     
-    
     init (items: [Item], aspectRatio: CGFloat, @ViewBuilder content: @escaping (Item) -> ItemView) {
         self.items = items
         self.aspectRatio = aspectRatio
@@ -29,12 +28,9 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
                 
                 ScrollView{
                     weisauchnicht(width: width)
-                    
                 }
                 
-                Text(String(Int(width)))
-                
-                Spacer(minLength: 0)
+                //Text(String(Int(width)))
             }
         }
     }
@@ -43,7 +39,6 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
         LazyVGrid(columns: [adaptiveGridItem(width: width)],spacing: 0) {
             ForEach(items) { item in
                 content (item) .aspectRatio(aspectRatio, contentMode: .fit)
-                
             }
         }
     }
@@ -69,17 +64,20 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
             columnCount += 1
             rowCount = (itemCount + (columnCount - 1)) / columnCount
         }
+        
         while columnCount < itemCount
                 if columnCount > itemCount {
             columnCount = itemCount
         }
-        
+    
         return floor(size.width / CGFloat (columnCount) )
     }
     
     private func widthThatFitsWithMin(itemCount: Int, in size: CGSize, itemAspectRatio: CGFloat, minWidth: CGFloat) -> CGFloat {
         var minWidthFit : CGFloat = minWidth
+        
         for i in stride(from: 2 , through: itemCount-1, by: +3){
+            
             if widthThatFits(itemCount: i, in: size, itemAspectRatio: itemAspectRatio) > minWidth {
                 minWidthFit = widthThatFits(itemCount: i, in: size, itemAspectRatio: itemAspectRatio)
                 // print("min",minWidthFit)
@@ -87,11 +85,7 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
                 break
             }
         }
-        return floor(minWidthFit)
         
+        return floor(minWidthFit)
     }
 }
-
-
-
-

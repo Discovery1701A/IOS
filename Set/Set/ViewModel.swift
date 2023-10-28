@@ -8,15 +8,16 @@
 import SwiftUI
 
 
-
 class ViewModel: ObservableObject {
+    
     typealias Card = SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes>.Card
     
     static var cardContents: [Card.CardContent] = {
+        // geht alle möglichkeiten durch wegen enum und transformiert zu einem Array [1,0:]
         return ContentShape.allCases.flatMap { shape in
             ContentColor.allCases.flatMap { color in
                 ContentPattern.allCases.flatMap { pattern in
-                    NumberOfContentShapes.allCases.map { numberOfShapes in
+                    NumberOfContentShapes.allCases.compactMap { numberOfShapes in
                         Card.CardContent(shape: shape, color: color, pattern: pattern, numberOfShapes: numberOfShapes.rawValue)
                     }
                 }
@@ -55,6 +56,7 @@ class ViewModel: ObservableObject {
     }
     
     // MARK: -Intent(s)
+    
     func choose (_ card: Card){
         model.choose(card: card)
     }
@@ -101,8 +103,4 @@ class ViewModel: ObservableObject {
         case two = 2
         case three = 3
     }
-    
 }
-
-
-
