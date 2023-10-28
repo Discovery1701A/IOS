@@ -26,16 +26,13 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
             VStack{
                 
                 let width = widthThatFitsWithMin(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio, minWidth: 70)
-                if  widthThatFits(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio) > 70{
+                
+                ScrollView{
                     weisauchnicht(width: width)
-                    //Text(String(Int(width)))
-                }else{
-                    ScrollView{
-                        weisauchnicht(width: width)
-                        
-                    }
-                    Text(String(Int(width)))
+                    
                 }
+                
+                Text(String(Int(width)))
                 
                 Spacer(minLength: 0)
             }
@@ -71,9 +68,9 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
             
             columnCount += 1
             rowCount = (itemCount + (columnCount - 1)) / columnCount
-        } 
+        }
         while columnCount < itemCount
-        if columnCount > itemCount {
+                if columnCount > itemCount {
             columnCount = itemCount
         }
         
@@ -82,7 +79,7 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
     
     private func widthThatFitsWithMin(itemCount: Int, in size: CGSize, itemAspectRatio: CGFloat, minWidth: CGFloat) -> CGFloat {
         var minWidthFit : CGFloat = minWidth
-        for i in stride(from: 11 , through: itemCount-1, by: +3){
+        for i in stride(from: 2 , through: itemCount-1, by: +3){
             if widthThatFits(itemCount: i, in: size, itemAspectRatio: itemAspectRatio) > minWidth {
                 minWidthFit = widthThatFits(itemCount: i, in: size, itemAspectRatio: itemAspectRatio)
                 // print("min",minWidthFit)
@@ -94,5 +91,7 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
         
     }
 }
+
+
 
 

@@ -29,3 +29,4 @@ struct Diamond: Shape {
         return p
     }
 }
+

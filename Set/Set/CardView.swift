@@ -13,25 +13,26 @@ struct CardView: View {
         GeometryReader { geometry in
             ZStack{
                 let shape :RoundedRectangle = RoundedRectangle (cornerRadius: DrawingConstants.cornerRadius)
-               
-                    
-                    shape.fill()
-                    shape.foregroundColor(.white)
-                    shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
+                
+              
+                shape.fill()
+                shape.foregroundColor(.white)
+                shape.strokeBorder(lineWidth: geometry.size.width/DrawingConstants.lineWidthDiv)
                 VStack {
                     ForEach(0..<card.symbol.numberOfShapes, id: \.self) { _ in
-                        createSymbol(for: card)
+                        createSymbol(for: card, geometry: geometry)
                     }
                 }.padding()
-                       
+                
                 if card.choosen {
-                    shape.strokeBorder(lineWidth: 5)
+                    shape.strokeBorder(lineWidth: geometry.size.width/DrawingConstants.strokeDiv)
                         .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                 }
                 if card.isMatched {
-                    shape.strokeBorder(lineWidth: 5)
+                    shape.strokeBorder(lineWidth:geometry.size.width/DrawingConstants.strokeDiv)
                         .foregroundColor(.green)
                 }
+                    
             }
         }
     }
@@ -44,22 +45,24 @@ struct CardView: View {
         static let symbolOpacitytransperenty: Double = 0.3
         static let symbolCornerRadius: CGFloat = 50
         static let cornerRadius: CGFloat = 20
-        static let lineWidth: CGFloat = 3
+        static let lineWidthDiv: CGFloat = 40
+        
         static let fontScale: CGFloat = 0.8
+        static let strokeDiv: CGFloat = 35.0
     }
     @ViewBuilder
-    func createSymbol(for card: ViewModel.Card) -> some View {
+    func createSymbol(for card: ViewModel.Card, geometry: GeometryProxy) -> some View {
         switch card.symbol.shape {
         case .bean:
-            createSymbolView(of: card.symbol, shape: RoundedRectangle (cornerRadius: 180))
+            createSymbolView(of: card.symbol, shape: RoundedRectangle (cornerRadius: 180),geometry:geometry)
         case .rect:
-            createSymbolView(of: card.symbol, shape: Rectangle())
+            createSymbolView(of: card.symbol, shape: Rectangle(),geometry:geometry)
         case .diamond:
-            createSymbolView(of: card.symbol, shape: Diamond())
+            createSymbolView(of: card.symbol, shape: Diamond(),geometry:geometry)
         }
     }
     @ViewBuilder
-    private func createSymbolView<SymbolShape>(of symbol: ViewModel.Card.CardContent, shape: SymbolShape) -> some View where SymbolShape: Shape {
+    private func createSymbolView<SymbolShape>(of symbol: ViewModel.Card.CardContent, shape: SymbolShape, geometry: GeometryProxy) -> some View where SymbolShape: Shape {
         
         switch symbol.pattern {
         case .filled:
@@ -67,11 +70,13 @@ struct CardView: View {
         case .transpery:
             
             shape.aspectRatio(DrawingConstants.symbolAspectRatio, contentMode: .fit).opacity(DrawingConstants.symbolOpacitytransperenty)
-                .overlay(shape.stroke(lineWidth: DrawingConstants.lineWidth)).foregroundColor(symbol.color.getColor())
+                .overlay(shape.stroke(lineWidth:geometry.size.width/DrawingConstants.lineWidthDiv)).foregroundColor(symbol.color.getColor())
             
         case .halftransperyt:
-            shape.stroke(lineWidth: DrawingConstants.lineWidth).foregroundColor(symbol.color.getColor())
+            shape.stroke(lineWidth: geometry.size.width/DrawingConstants.lineWidthDiv).foregroundColor(symbol.color.getColor())
                 .aspectRatio(DrawingConstants.symbolAspectRatio, contentMode: .fit).opacity(DrawingConstants.symbolOpacity)
         }
     }
 }
+
+

@@ -23,19 +23,19 @@ class ViewModel: ObservableObject {
             }
         }.shuffled()
     }() // Closure sollte ja drin sein
-   
+    
     private static func createSetGame () -> SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> {
         SetGame(initialNumberOfPlayingCards: 12, totalNumberOfCards: cardContents.count) { cardContents[$0] }
     }
     
-   @Published private var model: SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> = createSetGame()
+    @Published private var model: SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes> = createSetGame()
     
     var cards: Array<Card> {
-    return model.playingCards
+        return model.playingCards
     }
     
     var allCards: Array<Card> {
-    return model.cards
+        return model.cards
     }
     
     var numberOfPlayedCards: Int{
@@ -53,7 +53,7 @@ class ViewModel: ObservableObject {
     var setAvailableInPlayedCards : Bool{
         return model.setAvailableInPlayedCards
     }
-  
+    
     // MARK: -Intent(s)
     func choose (_ card: Card){
         model.choose(card: card)
@@ -103,4 +103,6 @@ class ViewModel: ObservableObject {
     }
     
 }
+
+
 

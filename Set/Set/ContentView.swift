@@ -12,13 +12,13 @@ struct ContentView: View {
     var body: some View {
         VStack{
             cardView()
-                
+            
         }
         
     }
     @ViewBuilder
     private func cardView()-> some View{
-        if  game.setAvailableInPlayedCards && game.allCards.count>0{
+        if  game.setAvailableInPlayedCards || game.setAvailableInAllCards{
             Text("Sets: " + String(game.score)).font(.largeTitle).padding()
             AspectVGrid(items: game.cards,aspectRatio:2/3, content: {card in
                 CardView(card: card)
@@ -26,7 +26,7 @@ struct ContentView: View {
                     .onTapGesture {
                         game.choose(card)
                     }}) .foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
-                
+            
             HStack{
                 newCards
                 Spacer()
@@ -42,9 +42,9 @@ struct ContentView: View {
                 newGame.foregroundColor(.blue)
             }
             .font(.largeTitle)
-                .fontWeight(/*@START_MENU_TOKEN@*/.heavy/*@END_MENU_TOKEN@*/)
-                .foregroundColor(.red)
-                
+            .fontWeight(/*@START_MENU_TOKEN@*/.heavy/*@END_MENU_TOKEN@*/)
+            .foregroundColor(.red)
+            
             
         }
     }
@@ -57,11 +57,11 @@ struct ContentView: View {
                 
             }
                    ,label: {
-            
-                    Text("3 neue Karten")
-                 
-                    
-                        .font(.body)
+                
+                Text("3 neue Karten")
+                
+                
+                    .font(.body)
                 
             })
             
@@ -69,23 +69,35 @@ struct ContentView: View {
     }
     var newGame: some View  {
         
-            Button(action: {
-                
-                game.newGame()
-                
-            }
-                   ,label: {
-                VStack{
-                    Text("Neues Spiel")
-                   
-                    
-                        .font(.body)
-                }
-            })
+        Button(action: {
             
+            game.newGame()
+            
+        }
+               ,label: {
+            VStack{
+                Text("Neues Spiel")
+                
+                
+                    .font(.body)
+            }
+        })
+        
         
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
