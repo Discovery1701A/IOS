@@ -69,6 +69,11 @@ class ViewModel: ObservableObject {
         model.newGame()
     }
     
+    func cheat(){
+        model.cheat()
+    }
+    
+    
     enum ContentShape: CaseIterable {
         case bean
         case diamond

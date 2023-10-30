@@ -12,6 +12,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private let createCardSymbol: (Int) -> Card.CardContent
     private(set) var cards: [Card]
     private(set) var choosenCards : [Card] = []
+    private(set) var potentialSet  : [Card] = []
     private(set) var totalNumberOfCards: Int
     private(set) var initialNumberOfPlayingCards: Int
     private(set) var playingCards: [Card]
@@ -63,8 +64,8 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             for i in 0..<cards.count - 2 {
                 for j in i+1..<cards.count - 1 {
                     for k in j+1..<cards.count {
-                        let cardsToCheck = [cards[i], cards[j], cards[k]]
-                        if matchingSet(by: cardsToCheck) {
+                        self.potentialSet = [cards[i], cards[j], cards[k]]
+                        if matchingSet(by: self.potentialSet) {
                             return true
                         }
                     }
@@ -76,27 +77,27 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     
     mutating func choose (card: Card){
         if let chosenIndex = self.playingCards.firstIndex(where: { $0.id == card.id }){
-            
-            if !self.playingCards[chosenIndex].choosen,
-               !self.playingCards[chosenIndex].isMatched
-            {
-                if matchingSet(by: self.choosenCards) && self.choosenCards.count == 3{
-                    for j in stride(from:self.playingCards.count-1  , through: 0, by: -1){
-                        if self.playingCards[j].isMatched == true{
-                            for i in 0 ..< self.choosenCards.count{
-                                if self.playingCards.count <= 12 && self.cards.count>0{
-                                    self.playingCards[j] = cards[2-i]
-                                    self.cards.remove(at: 2-i)
-                                    self.numberOfPlayedCards += 1
-                                    
-                                }else if self.playingCards.count > 12 || self.cards.count <= 0
-                                {
-                                    self.playingCards.remove(at: j)
-                                }
+            if matchingSet(by: self.choosenCards) && self.choosenCards.count == 3{
+                for j in stride(from:self.playingCards.count-1  , through: 0, by: -1){
+                    if self.playingCards[j].isMatched == true {
+                        for i in 0 ..< self.choosenCards.count{
+                            if self.playingCards.count <= 12 && self.cards.count>0{
+                                self.playingCards[j] = cards[2-i]
+                                self.cards.remove(at: 2-i)
+                                self.numberOfPlayedCards += 1
+                                
+                            } else if self.playingCards.count > 12 || self.cards.count <= 0
+                            {
+                                self.playingCards.remove(at: j)
                             }
                         }
                     }
                 }
+            }
+            if !self.playingCards[chosenIndex].choosen,
+               !self.playingCards[chosenIndex].isMatched
+            {
+                
                 if self.choosenCards.count >= 3{
                     self.choosenCards = []
                     self.index0fTheCard = chosenIndex
@@ -154,6 +155,24 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
         // print(cards.count)
     }
+    
+    mutating func cheat(){
+        if checkForSet(by: playingCards){
+            for i in 0 ..< self.potentialSet.count{
+                for j in stride(from:self.playingCards.count-1  , through: 0, by: -1){
+                    if self.playingCards[j] == self.potentialSet[i]{
+                        self.playingCards[j].isMaybeASet = true
+                    }
+                }
+            }
+        }else {
+            for j in 0 ..< self.playingCards.count{
+                self.playingCards[j].isMaybeASet = false
+            }
+        }
+    }
+    
+    
     mutating func newGame(){
         self.score = 0
         self.playingCards = []
@@ -181,6 +200,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     struct Card :Identifiable, Equatable{
         var choosen: Bool = false
         var isMatched: Bool = false
+        var isMaybeASet : Bool = false
         let symbol: CardContent
         let id : Int
         struct CardContent {

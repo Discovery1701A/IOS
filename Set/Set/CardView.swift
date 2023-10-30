@@ -18,6 +18,9 @@ struct CardView: View {
             
                 shape.fill()
                 shape.foregroundColor(.white)
+                if card.isMaybeASet{
+                    shape.foregroundColor(.gray)
+                }
                 shape.strokeBorder(lineWidth: geometry.size.width/DrawingConstants.lineWidthDiv)
                 VStack {
                     ForEach(0..<card.symbol.numberOfShapes, id: \.self) { _ in

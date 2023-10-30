@@ -31,6 +31,8 @@ struct ContentView: View {
             HStack{
                 newCards
                 Spacer()
+                cheat
+                Spacer()
                 newGame
             }.padding(.horizontal)
             
@@ -70,6 +72,18 @@ struct ContentView: View {
             ,label: {
             VStack{
                 Text("Neues Spiel").font(.body)
+            }
+        })
+    }
+    
+    var cheat: some View  {
+        
+        Button(action: {
+            game.cheat()
+        }
+            ,label: {
+            VStack{
+                Text("Hilfe").font(.body)
             }
         })
     }
