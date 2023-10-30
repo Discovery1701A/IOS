@@ -35,7 +35,7 @@ struct ContentView: View {
                 Spacer()
                 newGame
             }.padding(.horizontal)
-            Text(String(game.cards.count))
+           // Text(String(game.cards.count))
         } else {
             VStack{
                 Spacer()
@@ -54,14 +54,21 @@ struct ContentView: View {
     @ViewBuilder
     var newCards: some View  {
         
-        if (game.allCards.count >= 3 && !game.allCards.isEmpty && game.numberOfPlayedCards<81) {
-            Button(action: {
+        
+        Button(action: {
+            if (game.allCards.count >= 3 && !game.allCards.isEmpty && game.numberOfPlayedCards<81) {
                 game.threeNewCards()
             }
-                ,label: {
-                Text("3 neue Karten").font(.body)
-            })
         }
+                ,label: {
+            
+            if !(game.allCards.count >= 3 && !game.allCards.isEmpty && game.numberOfPlayedCards<81) {
+                Text("3 neue Karten").font(.body).foregroundColor(.gray)
+            }else{
+                Text("3 neue Karten")
+            }
+            })
+        
     }
     
     var newGame: some View  {
