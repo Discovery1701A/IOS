@@ -15,10 +15,7 @@ Equatable {
         set{cards.indices.forEach{ cards[$0].isFaceUp = ($0 == newValue) }
         }
     }
-    
-    mutating func shuffle(){
-        cards.shuffle()
-    }
+        
         
     mutating func choose (card: Card){
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }),
@@ -47,7 +44,6 @@ Equatable {
             cards.append (Card(content: content,id: pairIndex*2))
             cards.append (Card(content: content, id : pairIndex*2+1))
         }
-        cards.shuffle()
     // add number0fPairsOfCards × 2 cards to cards array
     }
     

@@ -6,7 +6,9 @@
 //
 
 import Foundation
+
 struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes> where CardSymbolShape: Hashable, CardSymbolColor: Hashable, CardSymbolPattern: Hashable{
+    
     private let createCardSymbol: (Int) -> Card.CardContent
     private(set) var cards: [Card]
     private(set) var choosenCards : [Card] = []
@@ -78,10 +80,28 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             if !self.playingCards[chosenIndex].choosen,
                !self.playingCards[chosenIndex].isMatched
             {
+                if matchingSet(by: self.choosenCards) && self.choosenCards.count == 3{
+                    for j in stride(from:self.playingCards.count-1  , through: 0, by: -1){
+                        if self.playingCards[j].isMatched == true{
+                            for i in 0 ..< self.choosenCards.count{
+                                if self.playingCards.count <= 12 && self.cards.count>0{
+                                    self.playingCards[j] = cards[2-i]
+                                    self.cards.remove(at: 2-i)
+                                    self.numberOfPlayedCards += 1
+                                    
+                                }else if self.playingCards.count > 12 || self.cards.count <= 0
+                                {
+                                    self.playingCards.remove(at: j)
+                                }
+                            }
+                        }
+                    }
+                }
                 if self.choosenCards.count >= 3{
                     self.choosenCards = []
                     self.index0fTheCard = chosenIndex
                 }
+               
                 if self.choosenCards.count < 3{
                     
                     self.choosenCards.append(self.playingCards[chosenIndex])
@@ -92,7 +112,6 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     // cards[chosenIndex].choosen = false
                     self.index0fTheCard = chosenIndex
                 }
-              
             } else {
                 if self.choosenCards.count < 3{
                     self.playingCards[chosenIndex].choosen = false
@@ -113,19 +132,12 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 for j in stride(from:self.playingCards.count-1  , through: 0, by: -1){
                     if self.playingCards[j] == self.choosenCards[i]{
                         self.playingCards[j].isMatched = true
-                        if self.playingCards.count <= 12 && self.cards.count>0{
-                            self.playingCards[j] = cards[2-i]
-                            self.cards.remove(at: 2-i)
-                            self.numberOfPlayedCards += 1
-                            
-                        }else if self.playingCards.count > 12 || self.cards.count <= 0
-                        {
-                            self.playingCards.remove(at: j)
-                        }
+                       
                     }
                 }
             }
         }
+        
         self.setAvailableInAllCards =  checkForSet(by: self.cards + self.playingCards)
         self.setAvailableInPlayedCards = checkForSet(by: self.playingCards)
     }
