@@ -46,6 +46,9 @@ class ViewModel: ObservableObject {
     var score : Int{
         return model.score
     }
+    var haveMatch: Bool{
+        return model.haveMatch
+    }
     
     var setAvailableInAllCards : Bool{
         return model.setAvailableInAllCards
@@ -56,6 +59,10 @@ class ViewModel: ObservableObject {
     }
     
     // MARK: -Intent(s)
+    
+    func remove (){
+        model.remove()
+    }
     
     func choose (_ card: Card){
         model.choose(card: card)

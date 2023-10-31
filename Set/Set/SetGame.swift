@@ -20,6 +20,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private(set) var score = 0
     private(set) var setAvailableInAllCards : Bool = true
     private(set) var setAvailableInPlayedCards : Bool = true
+    private(set) var haveMatch : Bool = false
     
     private var index0fTheCard: Int?{
         get{playingCards.indices.filter({ playingCards[$0].choosen }).oneAndOnly
@@ -74,34 +75,46 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
         return false
     }
-    
-    mutating func choose (card: Card){
-        if let chosenIndex = self.playingCards.firstIndex(where: { $0.id == card.id }){
-            if matchingSet(by: self.choosenCards) && self.choosenCards.count == 3{ 
-                for i in 0 ..< self.choosenCards.count{
-                    for j in stride(from:self.playingCards.count-1  , through: 0, by: -1){
-                        if self.playingCards[j].isMatched{
-                            if self.playingCards.count <= 12 && self.cards.count>0{
-                                self.playingCards[j] = cards[2-i]
-                                self.cards.remove(at: 2-i)
-                                self.numberOfPlayedCards += 1
-                                
-                            } else if self.playingCards.count > 12 || self.cards.count <= 0
-                            {
-                                self.playingCards.remove(at: j)
-                            }
+    mutating func remove() -> Bool{
+        if matchingSet(by: self.choosenCards) && self.choosenCards.count == 3{
+            for i in 0 ..< self.choosenCards.count{
+                for j in stride(from:self.playingCards.count-1  , through: 0, by: -1){
+                    if self.playingCards[j].isMatched{
+                        if self.playingCards.count <= 12 && self.cards.count>0{
+                            self.playingCards[j] = cards[2-i]
+                            self.cards.remove(at: 2-i)
+                            self.numberOfPlayedCards += 1
+                            
+                        } else if self.playingCards.count > 12 || self.cards.count <= 0
+                        {
+                            self.playingCards.remove(at: j)
                         }
                     }
                 }
-                choosenCards = []
             }
+            choosenCards = []
+            self.haveMatch = false
+            return true
+        }
+        return false
+    }
+    
+    mutating func choose (card: Card){
+        if let chosenIndex = self.playingCards.firstIndex(where: { $0.id == card.id }){
+           
             
-            else if !self.playingCards[chosenIndex].choosen,
+            if !remove() && !self.playingCards[chosenIndex].choosen,
                !self.playingCards[chosenIndex].isMatched
             {
                 
                 if self.choosenCards.count >= 3{
                     self.choosenCards = []
+                    for j in 0 ..< self.playingCards.count{
+                        if self.playingCards[j].choosen{
+                            self.playingCards[j].notMatched = false
+                        }
+                    }
+                    self.haveMatch = false
                     self.index0fTheCard = chosenIndex
                 }
                
@@ -131,14 +144,19 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         if matchingSet(by: self.choosenCards) && self.choosenCards.count == 3{
             //print("sdvdsv")
             self.score += 1
-            for i in 0 ..< self.choosenCards.count{
-                for j in stride(from:self.playingCards.count-1  , through: 0, by: -1){
-                    if self.playingCards[j] == self.choosenCards[i]{
+            
+            for j in 0 ..< self.playingCards.count{
+                    if self.playingCards[j].choosen{
                         self.playingCards[j].isMatched = true
-                       
-                    }
                 }
             }
+            self.haveMatch = true
+        }else if  !matchingSet(by: self.choosenCards) && self.choosenCards.count == 3{
+            for j in 0 ..< self.playingCards.count{
+                if self.playingCards[j].choosen{
+                    self.playingCards[j].notMatched = true
+            }
+        }
         }
         
         self.setAvailableInAllCards =  checkForSet(by: self.cards + self.playingCards)
@@ -202,6 +220,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     struct Card :Identifiable, Equatable{
         var choosen: Bool = false
         var isMatched: Bool = false
+        var notMatched: Bool = false
         var isMaybeASet : Bool = false
         let symbol: CardContent
         let id : Int

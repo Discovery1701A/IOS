@@ -35,7 +35,7 @@ struct ContentView: View {
                 Spacer()
                 newGame
             }.padding(.horizontal)
-           // Text(String(game.cards.count))
+//            Text(String(game.cards.count))
         } else {
             VStack{
                 Spacer()
@@ -57,7 +57,11 @@ struct ContentView: View {
         
         Button(action: {
             if (game.allCards.count >= 3 && !game.allCards.isEmpty && game.numberOfPlayedCards<81) {
-                game.threeNewCards()
+                if game.haveMatch{
+                    game.remove()
+                }else{
+                    game.threeNewCards()
+                }
             }
         }
                 ,label: {

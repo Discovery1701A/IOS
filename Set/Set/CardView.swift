@@ -37,6 +37,10 @@ struct CardView: View {
                     shape.strokeBorder(lineWidth:geometry.size.width/DrawingConstants.strokeDiv)
                         .foregroundColor(.green)
                 }
+                if card.notMatched {
+                    shape.strokeBorder(lineWidth:geometry.size.width/DrawingConstants.strokeDiv)
+                        .foregroundColor(.red)
+                }
             }
         }
     }
