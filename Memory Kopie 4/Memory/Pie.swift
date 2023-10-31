@@ -13,6 +13,8 @@ struct Pie: Shape {
     var endAngle: Angle
     var clockwise = false
     
+    
+    
     // AnimatablePair is a generic type so we need to specify the "don't care"
     var animatableData: AnimatablePair<Double, Double> {
         get {
@@ -27,7 +29,7 @@ struct Pie: Shape {
     func path(in rect: CGRect) -> Path {
         
         let center = CGPoint(x: rect.midX, y: rect.midY)
-        let radius = min(rect.width, rect.height)
+        let radius = min(rect.width, rect.height)/2
         let start = CGPoint(
             x: center.x + radius * CGFloat(cos(startAngle.radians)),
             y: center.y + radius * CGFloat(sin(startAngle.radians))
@@ -44,13 +46,7 @@ struct Pie: Shape {
             endAngle: endAngle,
             clockwise: !clockwise
         )
-        
         p.addLine(to: center)
-        
-        
-        
         return p
     }
-    
-    
 }
