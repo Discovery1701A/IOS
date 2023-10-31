@@ -75,7 +75,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
         return false
     }
-    mutating func remove() -> Bool{
+    mutating func remove() {
         if matchingSet(by: self.choosenCards) && self.choosenCards.count == 3{
             for i in 0 ..< self.choosenCards.count{
                 for j in stride(from:self.playingCards.count-1  , through: 0, by: -1){
@@ -94,16 +94,16 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             }
             choosenCards = []
             self.haveMatch = false
-            return true
+           
         }
-        return false
+    
     }
     
     mutating func choose (card: Card){
         if let chosenIndex = self.playingCards.firstIndex(where: { $0.id == card.id }){
            
             
-            if !remove() && !self.playingCards[chosenIndex].choosen,
+            if !self.haveMatch && !self.playingCards[chosenIndex].choosen,
                !self.playingCards[chosenIndex].isMatched
             {
                 
@@ -136,8 +136,10 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                         self.choosenCards.remove(at: matchedIndex)
                     }
                 }
-                
+                remove()
             }
+           
+            
         }
         
         //print(choosenCards.count)
