@@ -35,7 +35,7 @@ struct ContentView: View {
                 Spacer()
                 newGame
             }.padding(.horizontal)
-//            Text(String(game.cards.count))
+            Text(String(game.allCards.count))
         } else {
             VStack{
                 Spacer()
