@@ -86,7 +86,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                                 self.playingCards[j] = cards[i]
                                 self.cards.remove(at: i)
                                 self.numberOfPlayedCards += 1
-                                print("conut" + String(cards.count))
+                               // print("conut" + String(cards.count))
                                 
                             }
                         } else if self.playingCards.count > 12 || self.cards.count <= 0

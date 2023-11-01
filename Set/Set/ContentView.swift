@@ -21,11 +21,16 @@ struct ContentView: View {
             
             Text("Sets: " + String(game.score)).font(.largeTitle).padding()
             AspectVGrid(items: game.cards,aspectRatio:2/3, content: {card in
+              
+                    
                 CardView(card: card)
-                    .padding(4)
-                    .onTapGesture {
-                        game.choose(card)
-                    }
+                            .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
+                            .padding(4)
+                            .onTapGesture {
+                                withAnimation(.linear(duration: 1)) {
+                                    game.choose(card)
+                                }
+                            }
             }).foregroundColor(/*@START_MENU_TOKEN@*/.orange/*@END_MENU_TOKEN@*/)
             
             HStack{
@@ -35,7 +40,7 @@ struct ContentView: View {
                 Spacer()
                 newGame
             }.padding(.horizontal)
-            Text(String(game.allCards.count))
+            //Text(String(game.allCards.count))
         } else {
             VStack{
                 Spacer()
@@ -64,14 +69,14 @@ struct ContentView: View {
                 }
             }
         }
-                ,label: {
+               ,label: {
             
             if !(game.allCards.count >= 3 && !game.allCards.isEmpty && game.numberOfPlayedCards<81) {
                 Text("3 neue Karten").font(.body).foregroundColor(.gray)
             }else{
                 Text("3 neue Karten")
             }
-            })
+        })
         
     }
     
@@ -80,7 +85,7 @@ struct ContentView: View {
         Button(action: {
             game.newGame()
         }
-            ,label: {
+               ,label: {
             VStack{
                 Text("Neues Spiel").font(.body)
             }
@@ -92,7 +97,7 @@ struct ContentView: View {
         Button(action: {
             game.cheat()
         }
-            ,label: {
+               ,label: {
             VStack{
                 Text("Hilfe").font(.body)
             }
