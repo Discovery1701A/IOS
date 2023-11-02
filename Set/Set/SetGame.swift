@@ -105,12 +105,16 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     
     mutating func choose (card: Card){
         if let chosenIndex = self.playingCards.firstIndex(where: { $0.id == card.id }){
-           
-            
-            if !self.haveMatch && !self.playingCards[chosenIndex].choosen,
+           if self.haveMatch  ,!self.playingCards[chosenIndex].choosen,!self.playingCards[chosenIndex].isMatched
+            {
+               remove()
+               
+           }
+            if !self.haveMatch &&
+                        !self.playingCards[chosenIndex].choosen,
                !self.playingCards[chosenIndex].isMatched
             {
-                
+              
                 if self.choosenCards.count >= 3{
                     self.choosenCards = []
                     for j in 0 ..< self.playingCards.count{
@@ -142,7 +146,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 }
                 remove()
             }
-           
+          
             
         }
         

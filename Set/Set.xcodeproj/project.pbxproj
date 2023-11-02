@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		581DB6772AF3D96C00FBE939 /* Squiggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DB6762AF3D96C00FBE939 /* Squiggle.swift */; };
 		583E1CBB2AE17E3D004C0F33 /* SetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583E1CBA2AE17E3D004C0F33 /* SetApp.swift */; };
 		583E1CBD2AE17E3D004C0F33 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583E1CBC2AE17E3D004C0F33 /* ContentView.swift */; };
 		583E1CBF2AE17E3F004C0F33 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 583E1CBE2AE17E3F004C0F33 /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		581DB6762AF3D96C00FBE939 /* Squiggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Squiggle.swift; sourceTree = "<group>"; };
 		583E1CB72AE17E3D004C0F33 /* Set.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Set.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		583E1CBA2AE17E3D004C0F33 /* SetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetApp.swift; sourceTree = "<group>"; };
 		583E1CBC2AE17E3D004C0F33 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 			children = (
 				583E1CBA2AE17E3D004C0F33 /* SetApp.swift */,
 				58EE10602AE3DEFF00D4CBF3 /* Diamond.swift */,
+				581DB6762AF3D96C00FBE939 /* Squiggle.swift */,
 				583E1CCC2AE18148004C0F33 /* AspectVGrid.swift */,
 				583E1CCA2AE17FB3004C0F33 /* SetGame.swift */,
 				583E1CC82AE17F20004C0F33 /* ViewModel.swift */,
@@ -154,6 +157,7 @@
 			files = (
 				58EE10632AE3E4DA00D4CBF3 /* CardView.swift in Sources */,
 				58EE10612AE3DEFF00D4CBF3 /* Diamond.swift in Sources */,
+				581DB6772AF3D96C00FBE939 /* Squiggle.swift in Sources */,
 				583E1CBD2AE17E3D004C0F33 /* ContentView.swift in Sources */,
 				583E1CC92AE17F20004C0F33 /* ViewModel.swift in Sources */,
 				583E1CBB2AE17E3D004C0F33 /* SetApp.swift in Sources */,
