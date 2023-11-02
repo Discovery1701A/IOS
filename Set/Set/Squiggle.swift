@@ -13,28 +13,29 @@ struct Squiggle: Shape {
 
         path.move(to: CGPoint(x: rect.midX - 50, y: rect.midY))
 
-                let controlPoint1 = CGPoint(x: rect.midX - 25, y: rect.midY - 50)
-                let controlPoint2 = CGPoint(x: rect.midX, y: rect.midY + 25)
-                let endPoint1 = CGPoint(x: rect.midX + 25, y: rect.midY - 50)
-
-                let controlPoint3 = CGPoint(x: rect.midX + 50, y: rect.midY - 25)
-                let controlPoint4 = CGPoint(x: rect.midX, y: rect.midY + 50)
-                let endPoint2 = CGPoint(x: rect.midX - 25, y: rect.midY + 50)
-
-                let controlPoint5 = CGPoint(x: rect.midX - 50, y: rect.midY + 25)
-                let controlPoint6 = CGPoint(x: rect.midX, y: rect.midY - 50)
-                let endPoint3 = CGPoint(x: rect.midX + 25, y: rect.midY + 50)
-
-                let controlPoint7 = CGPoint(x: rect.midX + 50, y: rect.midY - 25)
-                let controlPoint8 = CGPoint(x: rect.midX, y: rect.midY + 25)
-                let endPoint4 = CGPoint(x: rect.midX - 25, y: rect.midY - 50)
-
-                path.addCurve(to: endPoint1, control1: controlPoint1, control2: controlPoint2)
-                path.addCurve(to: endPoint2, control1: controlPoint3, control2: controlPoint4)
-                path.addCurve(to: endPoint3, control1: controlPoint5, control2: controlPoint6)
-                path.addCurve(to: endPoint4, control1: controlPoint7, control2: controlPoint8)
-
-        
+        let midX = rect.midX
+                let midY = rect.midY
+                
+                path.move(to: CGPoint(x: midX + 52.0, y: midY - 13.0))
+                path.addCurve(to: CGPoint(x: midX + 11.0, y: midY + 25.0),
+                              control1: CGPoint(x: midX + 60.4, y: midY + 7.9),
+                              control2: CGPoint(x: midX + 37.7, y: midY + 31.8))
+                path.addCurve(to: CGPoint(x: midX - 25.0, y: midY + 24.0),
+                              control1: CGPoint(x: midX - 0.7, y: midY + 22.3),
+                              control2: CGPoint(x: midX - 10.8, y: midY + 13.0))
+                path.addCurve(to: CGPoint(x: midX - 47.0, y: midY + 11.0),
+                              control1: CGPoint(x: midX - 42.4, y: midY + 36.6),
+                              control2: CGPoint(x: midX - 46.6, y: midY + 29.3))
+                path.addCurve(to: CGPoint(x: midX - 16.0, y: midY - 17.0),
+                              control1: CGPoint(x: midX - 47.4, y: midY - 7.0),
+                              control2: CGPoint(x: midX - 32.9, y: midY - 19.3))
+                path.addCurve(to: CGPoint(x: midX + 37.0, y: midY - 15.0),
+                              control1: CGPoint(x: midX + 7.2, y: midY - 13.8),
+                              control2: CGPoint(x: midX + 9.9, y: midY + 2.5))
+                path.addCurve(to: CGPoint(x: midX + 52.0, y: midY - 13.0),
+                              control1: CGPoint(x: midX + 43.3, y: midY - 19.0),
+                              control2: CGPoint(x: midX + 48.9, y: midY - 22.1))
+                
 
         let pathRect = path.boundingRect
         path = path.offsetBy(dx: rect.minX - pathRect.minX, dy: rect.minY - pathRect.minY)
@@ -45,6 +46,6 @@ struct Squiggle: Shape {
         
         
         return path
-          //  .offsetBy(dx: rect.minX - path.boundingRect.minX, dy: rect.midY - path.boundingRect.midY)
+            //.offsetBy(dx: rect.minX - path.boundingRect.minX, dy: rect.midY - path.boundingRect.midY)
     }
 }

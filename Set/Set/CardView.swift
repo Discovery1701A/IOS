@@ -69,7 +69,7 @@ struct CardView: View {
             createSymbolView(of: card.symbol, shape: RoundedRectangle (cornerRadius: 180),geometry:geometry)
         
         case .rect:
-            createSymbolView(of: card.symbol, shape: Rectangle(),geometry:geometry)
+            createSymbolView(of: card.symbol, shape: Squiggle(),geometry:geometry)
         
         case .diamond:
             createSymbolView(of: card.symbol, shape: Diamond(),geometry:geometry)
