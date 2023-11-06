@@ -175,7 +175,9 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         if cards.count >= 3 && !cards.isEmpty {
             
             for i in stride(from: 3-1, through: 0, by: -1) {
+              
                 self.playingCards.append(self.cards[i])
+                
                 //print ("id",self.cards[i].id,"i",i)
                 self.cards.remove(at: i)
                 self.numberOfPlayedCards += 1
@@ -200,6 +202,11 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         }
     }
     
+    mutating func deal(){
+        for i in 0 ..< self.playingCards.count{
+            self.playingCards[i].isFaceUp = true
+        }
+    }
     
     mutating func newGame(){
         self.score = 0
@@ -217,7 +224,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         
         self.cards.shuffle()
         for i in stride(from: initialNumberOfPlayingCards-1 , through: 0, by: -1)  {
-            
+          
             self.playingCards.append(self.cards[i])
             self.cards.remove(at: i)
             self.numberOfPlayedCards += 1
@@ -230,6 +237,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         var isMatched: Bool = false
         var notMatched: Bool = false
         var isMaybeASet : Bool = false
+        var isFaceUp : Bool = false
         let symbol: CardContent
         let id : Int
         struct CardContent {

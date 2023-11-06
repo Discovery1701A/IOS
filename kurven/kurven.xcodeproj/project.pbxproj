@@ -7,36 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		581DB6772AF3D96C00FBE939 /* Squiggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DB6762AF3D96C00FBE939 /* Squiggle.swift */; };
-		582ABBF92AF9379600CE6CEC /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 582ABBF82AF9379600CE6CEC /* Cardify.swift */; };
-		583E1CBB2AE17E3D004C0F33 /* SetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583E1CBA2AE17E3D004C0F33 /* SetApp.swift */; };
-		583E1CBD2AE17E3D004C0F33 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583E1CBC2AE17E3D004C0F33 /* ContentView.swift */; };
-		583E1CBF2AE17E3F004C0F33 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 583E1CBE2AE17E3F004C0F33 /* Assets.xcassets */; };
-		583E1CC22AE17E3F004C0F33 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 583E1CC12AE17E3F004C0F33 /* Preview Assets.xcassets */; };
-		583E1CC92AE17F20004C0F33 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583E1CC82AE17F20004C0F33 /* ViewModel.swift */; };
-		583E1CCB2AE17FB3004C0F33 /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583E1CCA2AE17FB3004C0F33 /* SetGame.swift */; };
-		583E1CCD2AE18148004C0F33 /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583E1CCC2AE18148004C0F33 /* AspectVGrid.swift */; };
-		58EE10612AE3DEFF00D4CBF3 /* Diamond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58EE10602AE3DEFF00D4CBF3 /* Diamond.swift */; };
-		58EE10632AE3E4DA00D4CBF3 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58EE10622AE3E4DA00D4CBF3 /* CardView.swift */; };
+		581DB6852AF40B7300FBE939 /* kurvenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DB6842AF40B7300FBE939 /* kurvenApp.swift */; };
+		581DB6872AF40B7300FBE939 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581DB6862AF40B7300FBE939 /* ContentView.swift */; };
+		581DB6892AF40B7800FBE939 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 581DB6882AF40B7800FBE939 /* Assets.xcassets */; };
+		581DB68D2AF40B7800FBE939 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 581DB68C2AF40B7800FBE939 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		581DB6762AF3D96C00FBE939 /* Squiggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Squiggle.swift; sourceTree = "<group>"; };
-		582ABBF82AF9379600CE6CEC /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
-		583E1CB72AE17E3D004C0F33 /* Set.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Set.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		583E1CBA2AE17E3D004C0F33 /* SetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetApp.swift; sourceTree = "<group>"; };
-		583E1CBC2AE17E3D004C0F33 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		583E1CBE2AE17E3F004C0F33 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		583E1CC12AE17E3F004C0F33 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		583E1CC82AE17F20004C0F33 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		583E1CCA2AE17FB3004C0F33 /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
-		583E1CCC2AE18148004C0F33 /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
-		58EE10602AE3DEFF00D4CBF3 /* Diamond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diamond.swift; sourceTree = "<group>"; };
-		58EE10622AE3E4DA00D4CBF3 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		581DB6812AF40B7300FBE939 /* kurven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kurven.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		581DB6842AF40B7300FBE939 /* kurvenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kurvenApp.swift; sourceTree = "<group>"; };
+		581DB6862AF40B7300FBE939 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		581DB6882AF40B7800FBE939 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		581DB68A2AF40B7800FBE939 /* kurven.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = kurven.entitlements; sourceTree = "<group>"; };
+		581DB68C2AF40B7800FBE939 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		583E1CB42AE17E3D004C0F33 /* Frameworks */ = {
+		581DB67E2AF40B7300FBE939 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -46,44 +33,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		583E1CAE2AE17E3D004C0F33 = {
+		581DB6782AF40B7300FBE939 = {
 			isa = PBXGroup;
 			children = (
-				583E1CB92AE17E3D004C0F33 /* Set */,
-				583E1CB82AE17E3D004C0F33 /* Products */,
+				581DB6832AF40B7300FBE939 /* kurven */,
+				581DB6822AF40B7300FBE939 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		583E1CB82AE17E3D004C0F33 /* Products */ = {
+		581DB6822AF40B7300FBE939 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				583E1CB72AE17E3D004C0F33 /* Set.app */,
+				581DB6812AF40B7300FBE939 /* kurven.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		583E1CB92AE17E3D004C0F33 /* Set */ = {
+		581DB6832AF40B7300FBE939 /* kurven */ = {
 			isa = PBXGroup;
 			children = (
-				583E1CBA2AE17E3D004C0F33 /* SetApp.swift */,
-				58EE10602AE3DEFF00D4CBF3 /* Diamond.swift */,
-				581DB6762AF3D96C00FBE939 /* Squiggle.swift */,
-				583E1CCC2AE18148004C0F33 /* AspectVGrid.swift */,
-				583E1CCA2AE17FB3004C0F33 /* SetGame.swift */,
-				583E1CC82AE17F20004C0F33 /* ViewModel.swift */,
-				583E1CBC2AE17E3D004C0F33 /* ContentView.swift */,
-				58EE10622AE3E4DA00D4CBF3 /* CardView.swift */,
-				582ABBF82AF9379600CE6CEC /* Cardify.swift */,
-				583E1CBE2AE17E3F004C0F33 /* Assets.xcassets */,
-				583E1CC02AE17E3F004C0F33 /* Preview Content */,
+				581DB6842AF40B7300FBE939 /* kurvenApp.swift */,
+				581DB6862AF40B7300FBE939 /* ContentView.swift */,
+				581DB6882AF40B7800FBE939 /* Assets.xcassets */,
+				581DB68A2AF40B7800FBE939 /* kurven.entitlements */,
+				581DB68B2AF40B7800FBE939 /* Preview Content */,
 			);
-			path = Set;
+			path = kurven;
 			sourceTree = "<group>";
 		};
-		583E1CC02AE17E3F004C0F33 /* Preview Content */ = {
+		581DB68B2AF40B7800FBE939 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				583E1CC12AE17E3F004C0F33 /* Preview Assets.xcassets */,
+				581DB68C2AF40B7800FBE939 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -91,39 +72,39 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		583E1CB62AE17E3D004C0F33 /* Set */ = {
+		581DB6802AF40B7300FBE939 /* kurven */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 583E1CC52AE17E3F004C0F33 /* Build configuration list for PBXNativeTarget "Set" */;
+			buildConfigurationList = 581DB6902AF40B7800FBE939 /* Build configuration list for PBXNativeTarget "kurven" */;
 			buildPhases = (
-				583E1CB32AE17E3D004C0F33 /* Sources */,
-				583E1CB42AE17E3D004C0F33 /* Frameworks */,
-				583E1CB52AE17E3D004C0F33 /* Resources */,
+				581DB67D2AF40B7300FBE939 /* Sources */,
+				581DB67E2AF40B7300FBE939 /* Frameworks */,
+				581DB67F2AF40B7300FBE939 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Set;
-			productName = Set;
-			productReference = 583E1CB72AE17E3D004C0F33 /* Set.app */;
+			name = kurven;
+			productName = kurven;
+			productReference = 581DB6812AF40B7300FBE939 /* kurven.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		583E1CAF2AE17E3D004C0F33 /* Project object */ = {
+		581DB6792AF40B7300FBE939 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
-					583E1CB62AE17E3D004C0F33 = {
-						CreatedOnToolsVersion = 15.0;
+					581DB6802AF40B7300FBE939 = {
+						CreatedOnToolsVersion = 15.0.1;
 					};
 				};
 			};
-			buildConfigurationList = 583E1CB22AE17E3D004C0F33 /* Build configuration list for PBXProject "Set" */;
+			buildConfigurationList = 581DB67C2AF40B7300FBE939 /* Build configuration list for PBXProject "kurven" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -131,49 +112,42 @@
 				en,
 				Base,
 			);
-			mainGroup = 583E1CAE2AE17E3D004C0F33;
-			productRefGroup = 583E1CB82AE17E3D004C0F33 /* Products */;
+			mainGroup = 581DB6782AF40B7300FBE939;
+			productRefGroup = 581DB6822AF40B7300FBE939 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				583E1CB62AE17E3D004C0F33 /* Set */,
+				581DB6802AF40B7300FBE939 /* kurven */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		583E1CB52AE17E3D004C0F33 /* Resources */ = {
+		581DB67F2AF40B7300FBE939 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				583E1CC22AE17E3F004C0F33 /* Preview Assets.xcassets in Resources */,
-				583E1CBF2AE17E3F004C0F33 /* Assets.xcassets in Resources */,
+				581DB68D2AF40B7800FBE939 /* Preview Assets.xcassets in Resources */,
+				581DB6892AF40B7800FBE939 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		583E1CB32AE17E3D004C0F33 /* Sources */ = {
+		581DB67D2AF40B7300FBE939 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				58EE10632AE3E4DA00D4CBF3 /* CardView.swift in Sources */,
-				58EE10612AE3DEFF00D4CBF3 /* Diamond.swift in Sources */,
-				581DB6772AF3D96C00FBE939 /* Squiggle.swift in Sources */,
-				582ABBF92AF9379600CE6CEC /* Cardify.swift in Sources */,
-				583E1CBD2AE17E3D004C0F33 /* ContentView.swift in Sources */,
-				583E1CC92AE17F20004C0F33 /* ViewModel.swift in Sources */,
-				583E1CBB2AE17E3D004C0F33 /* SetApp.swift in Sources */,
-				583E1CCD2AE18148004C0F33 /* AspectVGrid.swift in Sources */,
-				583E1CCB2AE17FB3004C0F33 /* SetGame.swift in Sources */,
+				581DB6872AF40B7300FBE939 /* ContentView.swift in Sources */,
+				581DB6852AF40B7300FBE939 /* kurvenApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		583E1CC32AE17E3F004C0F33 /* Debug */ = {
+		581DB68E2AF40B7800FBE939 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -225,18 +199,16 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		583E1CC42AE17E3F004C0F33 /* Release */ = {
+		581DB68F2AF40B7800FBE939 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -282,68 +254,79 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		583E1CC62AE17E3F004C0F33 /* Debug */ = {
+		581DB6912AF40B7800FBE939 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = kurven/kurven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Set/Preview Content\"";
-				DEVELOPMENT_TEAM = LB8DN5BW2U;
+				DEVELOPMENT_ASSET_PATHS = "\"kurven/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Discovery.SetGame;
+				PRODUCT_BUNDLE_IDENTIFIER = Discovery.kurven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		583E1CC72AE17E3F004C0F33 /* Release */ = {
+		581DB6922AF40B7800FBE939 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = kurven/kurven.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Set/Preview Content\"";
-				DEVELOPMENT_TEAM = LB8DN5BW2U;
+				DEVELOPMENT_ASSET_PATHS = "\"kurven/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Discovery.SetGame;
+				PRODUCT_BUNDLE_IDENTIFIER = Discovery.kurven;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -353,25 +336,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		583E1CB22AE17E3D004C0F33 /* Build configuration list for PBXProject "Set" */ = {
+		581DB67C2AF40B7300FBE939 /* Build configuration list for PBXProject "kurven" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				583E1CC32AE17E3F004C0F33 /* Debug */,
-				583E1CC42AE17E3F004C0F33 /* Release */,
+				581DB68E2AF40B7800FBE939 /* Debug */,
+				581DB68F2AF40B7800FBE939 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		583E1CC52AE17E3F004C0F33 /* Build configuration list for PBXNativeTarget "Set" */ = {
+		581DB6902AF40B7800FBE939 /* Build configuration list for PBXNativeTarget "kurven" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				583E1CC62AE17E3F004C0F33 /* Debug */,
-				583E1CC72AE17E3F004C0F33 /* Release */,
+				581DB6912AF40B7800FBE939 /* Debug */,
+				581DB6922AF40B7800FBE939 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 583E1CAF2AE17E3D004C0F33 /* Project object */;
+	rootObject = 581DB6792AF40B7300FBE939 /* Project object */;
 }

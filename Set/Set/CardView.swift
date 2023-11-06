@@ -42,7 +42,7 @@ struct CardView: View {
                     shape.strokeBorder(lineWidth:geometry.size.width/DrawingConstants.strokeDiv)
                         .foregroundColor(.red)
                 }
-            }
+            }.cardify(isFaceUp: card.isFaceUp)
         }
     }
     
