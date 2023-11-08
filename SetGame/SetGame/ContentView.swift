@@ -26,6 +26,8 @@ struct ContentView: View {
             AspectVGrid(items: game.cards,aspectRatio:2/3, content: {card in
                 
                 CardView(card: card)
+                    .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
+                    .padding(4)
                     .onTapGesture {
                         withAnimation(.linear(duration: 1)) {
                             game.choose(card)
@@ -42,7 +44,7 @@ struct ContentView: View {
                 newGame
             }
             .padding(.horizontal)
-            Text(String(game.allCards.count))
+           // Text(String(game.allCards.count))
         } else {
             VStack{
                 Spacer()
