@@ -44,6 +44,8 @@ struct Squiggle: Shape {
         let transform = CGAffineTransform(scaleX: scale, y: scale)
         path = path.applying(transform)
         
+        
         return path
+        //.offsetBy(dx: rect.minX - path.boundingRect.minX, dy: rect.midY - path.boundingRect.midY)
     }
 }

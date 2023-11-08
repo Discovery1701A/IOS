@@ -8,6 +8,7 @@
 import Foundation
 
 struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShapes> where CardSymbolShape: Hashable, CardSymbolColor: Hashable, CardSymbolPattern: Hashable{
+    
     private let createCardSymbol: (Int) -> Card.CardContent
     private(set) var cards: [Card]
     private(set) var choosenCards : [Card] = []
@@ -24,6 +25,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private var index0fTheCard: Int?{
         get{playingCards.indices.filter({ playingCards[$0].choosen }).oneAndOnly
         }
+        
         set{playingCards.indices.forEach{ playingCards[$0].choosen = ($0 == newValue) }
         }
     }
@@ -44,7 +46,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         var numberOfShapes = Set<Int>()
         
         cards.forEach { card in
-            shapes.insert(card.symbol.shape) // wird nur hinzugefügt wenn nicht vorhanden
+            shapes.insert(card.symbol.shape)
             colors.insert(card.symbol.color)
             patterns.insert(card.symbol.pattern)
             numberOfShapes.insert(card.symbol.numberOfShapes)
@@ -81,6 +83,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     if self.playingCards[j].isMatched{
                         if self.choosenCards[i] == self.playingCards[j]{
                             if self.playingCards.count <= 12 && self.cards.count>0{
+                                
                                 self.playingCards[j] = cards[i]
                                 self.cards.remove(at: i)
                                 self.numberOfPlayedCards += 1
@@ -103,10 +106,12 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
             if self.haveMatch  ,!self.playingCards[chosenIndex].choosen,!self.playingCards[chosenIndex].isMatched
             {
                 remove()
+                
             }
             if !self.haveMatch && !self.playingCards[chosenIndex].choosen,
                !self.playingCards[chosenIndex].isMatched
             {
+                
                 if self.choosenCards.count >= 3{
                     self.choosenCards = []
                     for j in 0 ..< self.playingCards.count{
@@ -117,7 +122,9 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     self.haveMatch = false
                     self.index0fTheCard = chosenIndex
                 }
+                
                 if self.choosenCards.count < 3{
+                    
                     self.choosenCards.append(self.playingCards[chosenIndex])
                     self.playingCards[chosenIndex].choosen = true
                     
@@ -136,12 +143,15 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 }
                 remove()
             }
+            
+            
         }
         
         //print(choosenCards.count)
         if matchingSet(by: self.choosenCards) && self.choosenCards.count == 3{
             //print("sdvdsv")
             self.score += 1
+            
             for j in 0 ..< self.playingCards.count{
                 if self.playingCards[j].choosen{
                     self.playingCards[j].isMatched = true
@@ -155,31 +165,21 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                 }
             }
         }
+        
         self.setAvailableInAllCards =  checkForSet(by: self.cards + self.playingCards)
         self.setAvailableInPlayedCards = checkForSet(by: self.playingCards)
     }
     
     mutating func threeNewCards(){
         if cards.count >= 3 && !cards.isEmpty {
-            if self.haveMatch {
-                for i in stride(from:2  , through: 0, by: -1){
-                    for j in stride(from:self.playingCards.count-1  , through: 0, by: -1){
-                            if self.choosenCards[i] == self.playingCards[j]{
-                                self.playingCards[j] = cards[i]
-                                self.cards.remove(at: i)
-                                self.numberOfPlayedCards += 1
-                                // print("conut" + String(cards.count))
-                        }
-                    }
-                }
-                self.haveMatch = false
-            } else {
-                for i in stride(from: 3-1, through: 0, by: -1) {
-                    self.playingCards.append(self.cards[i])
-                    //print ("id",self.cards[i].id,"i",i)
-                    self.cards.remove(at: i)
-                    self.numberOfPlayedCards += 1
-                }
+            
+            for i in stride(from: 3-1, through: 0, by: -1) {
+              
+                self.playingCards.append(self.cards[i])
+                
+                //print ("id",self.cards[i].id,"i",i)
+                self.cards.remove(at: i)
+                self.numberOfPlayedCards += 1
             }
         }
         // print(cards.count)
@@ -194,10 +194,16 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     }
                 }
             }
-        } else {
+        }else {
             for j in 0 ..< self.playingCards.count{
                 self.playingCards[j].isMaybeASet = false
             }
+        }
+    }
+    
+    mutating func deal(){
+        for i in 0 ..< self.playingCards.count{
+            self.playingCards[i].isFaceUp = true
         }
     }
     
@@ -217,20 +223,22 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         
         self.cards.shuffle()
         for i in stride(from: initialNumberOfPlayingCards-1 , through: 0, by: -1)  {
+          
             self.playingCards.append(self.cards[i])
             self.cards.remove(at: i)
             self.numberOfPlayedCards += 1
         }
     }
     
+    
     struct Card :Identifiable, Equatable{
         var choosen: Bool = false
         var isMatched: Bool = false
         var notMatched: Bool = false
         var isMaybeASet : Bool = false
+        var isFaceUp : Bool = false
         let symbol: CardContent
         let id : Int
-        
         struct CardContent {
             let shape: CardSymbolShape
             let color: CardSymbolColor

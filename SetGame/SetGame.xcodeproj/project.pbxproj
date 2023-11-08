@@ -11,7 +11,6 @@
 		58A097992AF9668A0075578C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A097982AF9668A0075578C /* ContentView.swift */; };
 		58A0979B2AF9668B0075578C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58A0979A2AF9668B0075578C /* Assets.xcassets */; };
 		58A0979F2AF9668B0075578C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58A0979E2AF9668B0075578C /* Preview Assets.xcassets */; };
-		58A097A62AF967060075578C /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A097A52AF967060075578C /* Cardify.swift */; };
 		58A097A82AF967180075578C /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A097A72AF967180075578C /* AspectVGrid.swift */; };
 		58A097AA2AF967220075578C /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A097A92AF967220075578C /* CardView.swift */; };
 		58A097AC2AF9672B0075578C /* Diamond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A097AB2AF9672B0075578C /* Diamond.swift */; };
@@ -27,7 +26,6 @@
 		58A0979A2AF9668B0075578C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		58A0979C2AF9668B0075578C /* SetGame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SetGame.entitlements; sourceTree = "<group>"; };
 		58A0979E2AF9668B0075578C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		58A097A52AF967060075578C /* Cardify.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
 		58A097A72AF967180075578C /* AspectVGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
 		58A097A92AF967220075578C /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		58A097AB2AF9672B0075578C /* Diamond.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diamond.swift; sourceTree = "<group>"; };
@@ -74,7 +72,6 @@
 				58A097AD2AF9673A0075578C /* SetGame.swift */,
 				58A097AB2AF9672B0075578C /* Diamond.swift */,
 				58A097A92AF967220075578C /* CardView.swift */,
-				58A097A52AF967060075578C /* Cardify.swift */,
 				58A0979A2AF9668B0075578C /* Assets.xcassets */,
 				58A0979C2AF9668B0075578C /* SetGame.entitlements */,
 				58A0979D2AF9668B0075578C /* Preview Content */,
@@ -164,7 +161,6 @@
 				58A097B22AF967470075578C /* ViewModel.swift in Sources */,
 				58A097A82AF967180075578C /* AspectVGrid.swift in Sources */,
 				58A097B02AF967420075578C /* Squiggle.swift in Sources */,
-				58A097A62AF967060075578C /* Cardify.swift in Sources */,
 				58A097992AF9668A0075578C /* ContentView.swift in Sources */,
 				58A097972AF9668A0075578C /* SetGameApp.swift in Sources */,
 				58A097AA2AF967220075578C /* CardView.swift in Sources */,

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 class ViewModel: ObservableObject {
     
     typealias Card = SetGame<ContentShape, ContentColor, ContentPattern, NumberOfContentShapes>.Card
@@ -62,6 +63,9 @@ class ViewModel: ObservableObject {
     func remove (){
         model.remove()
     }
+//    func deal (){
+//        model.deal()
+//    }
     
     func choose (_ card: Card){
         model.choose(card: card)

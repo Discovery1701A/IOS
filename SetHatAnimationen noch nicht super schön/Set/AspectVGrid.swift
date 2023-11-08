@@ -13,6 +13,7 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
     var aspectRatio: CGFloat
     var content: (Item) -> ItemView
     
+    
     init (items: [Item], aspectRatio: CGFloat, @ViewBuilder content: @escaping (Item) -> ItemView) {
         self.items = items
         self.aspectRatio = aspectRatio
@@ -26,21 +27,22 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
                 let width = widthThatFitsWithMin(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio, minWidth: 70)
                 
                 ScrollView{
-                    grid(width: width)
+                    weisauchnicht(width: width)
                 }
+                
                 //Text(String(Int(width)))
             }
         }
     }
-    
     @ViewBuilder
-    func grid(width : CGFloat)-> some View{
+    func weisauchnicht(width : CGFloat)-> some View{
         LazyVGrid(columns: [adaptiveGridItem(width: width)],spacing: 0) {
             ForEach(items) { item in
                 content (item) .aspectRatio(aspectRatio, contentMode: .fit)
             }
         }
     }
+    
     
     private func adaptiveGridItem(width : CGFloat)-> GridItem{
         var gridItem = GridItem(.adaptive(minimum: width))
@@ -58,13 +60,16 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
             if CGFloat (rowCount) * itemHeight < size.height {
                 break
             }
+            
             columnCount += 1
             rowCount = (itemCount + (columnCount - 1)) / columnCount
         }
+        
         while columnCount < itemCount
                 if columnCount > itemCount {
             columnCount = itemCount
         }
+    
         return floor(size.width / CGFloat (columnCount) )
     }
     
@@ -72,13 +77,15 @@ struct AspectVGrid<Item, ItemView>: View where ItemView: View, Item: Identifiabl
         var minWidthFit : CGFloat = minWidth
         
         for i in stride(from: 2 , through: itemCount-1, by: +3){
+            
             if widthThatFits(itemCount: i, in: size, itemAspectRatio: itemAspectRatio) > minWidth {
                 minWidthFit = widthThatFits(itemCount: i, in: size, itemAspectRatio: itemAspectRatio)
                 // print("min",minWidthFit)
-            } else {
+            }else{
                 break
             }
         }
+        
         return floor(minWidthFit)
     }
 }

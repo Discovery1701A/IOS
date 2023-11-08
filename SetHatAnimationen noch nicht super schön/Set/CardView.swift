@@ -26,23 +26,24 @@ struct CardView: View {
                     ForEach(0..<card.symbol.numberOfShapes, id: \.self) { _ in
                         createSymbol(for: card, geometry: geometry)
                     }
-                }
-                .padding()
+                }.padding()
                 
                 if card.choosen {
                     shape.strokeBorder(lineWidth: geometry.size.width/DrawingConstants.strokeDiv)
                         .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                 }
+                
                 if card.isMatched {
                     shape.strokeBorder(lineWidth:geometry.size.width/DrawingConstants.strokeDiv)
                         .foregroundColor(.green)
-                    
+                        
                 }
                 if card.notMatched {
                     shape.strokeBorder(lineWidth:geometry.size.width/DrawingConstants.strokeDiv)
                         .foregroundColor(.red)
                 }
             }
+//            .cardify(isFaceUp: card.isFaceUp)
         }
     }
     
@@ -64,13 +65,13 @@ struct CardView: View {
     @ViewBuilder
     func createSymbol(for card: ViewModel.Card, geometry: GeometryProxy) -> some View {
         switch card.symbol.shape {
-            
+        
         case .bean:
             createSymbolView(of: card.symbol, shape: RoundedRectangle (cornerRadius: 180),geometry:geometry)
-            
+        
         case .rect:
             createSymbolView(of: card.symbol, shape: Squiggle(),geometry:geometry)
-            
+        
         case .diamond:
             createSymbolView(of: card.symbol, shape: Diamond(),geometry:geometry)
         }
@@ -82,7 +83,7 @@ struct CardView: View {
         switch symbol.pattern {
         case .filled:
             shape.fill().foregroundColor(symbol.color.getColor()).aspectRatio(DrawingConstants.symbolAspectRatio, contentMode: .fit)
-            
+        
         case .transpery:
             shape.aspectRatio(DrawingConstants.symbolAspectRatio, contentMode: .fit).opacity(DrawingConstants.symbolOpacitytransperenty)
                 .overlay(shape.stroke(lineWidth:geometry.size.width/DrawingConstants.lineWidthDiv)).foregroundColor(symbol.color.getColor())
