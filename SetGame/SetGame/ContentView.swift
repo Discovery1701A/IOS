@@ -16,7 +16,7 @@ struct ContentView: View {
     
     private func deal (_ card: ViewModel.Card){
         dealt.insert(card.id)
-        game.deal()
+        
     }
     
     private func isUndealt (_ card: ViewModel.Card) -> Bool{
@@ -142,6 +142,14 @@ struct ContentView: View {
                     game.remove()
                 }else{
                     game.threeNewCards()
+                    for card in game.cards {
+                        withAnimation(dealAnimation(for: card)) {
+                            
+                            deal(card)
+                            game.deal()
+                           
+                        }
+                    }
                 }
             }
         }
