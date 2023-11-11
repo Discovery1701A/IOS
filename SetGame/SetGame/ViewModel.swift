@@ -37,6 +37,9 @@ class ViewModel: ObservableObject {
     var allCards: Array<Card> {
         return model.cards
     }
+    var doneCards: Array<Card> {
+        return model.doneCards
+    }
     
     var numberOfPlayedCards: Int{
         return model.numberOfPlayedCards
@@ -77,6 +80,10 @@ class ViewModel: ObservableObject {
     
     func cheat(){
         model.cheat()
+    }
+    
+    func deal (id : Int){
+        model.deal(id: id)
     }
     
     

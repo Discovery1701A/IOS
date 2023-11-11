@@ -17,6 +17,7 @@
 		58A097AE2AF9673A0075578C /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A097AD2AF9673A0075578C /* SetGame.swift */; };
 		58A097B02AF967420075578C /* Squiggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A097AF2AF967420075578C /* Squiggle.swift */; };
 		58A097B22AF967470075578C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A097B12AF967470075578C /* ViewModel.swift */; };
+		58B2E4B82AFCEB1200F47D80 /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B2E4B72AFCEB1200F47D80 /* Cardify.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		58A097AD2AF9673A0075578C /* SetGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
 		58A097AF2AF967420075578C /* Squiggle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Squiggle.swift; sourceTree = "<group>"; };
 		58A097B12AF967470075578C /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		58B2E4B72AFCEB1200F47D80 /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				58A097AF2AF967420075578C /* Squiggle.swift */,
 				58A097B12AF967470075578C /* ViewModel.swift */,
 				58A097AD2AF9673A0075578C /* SetGame.swift */,
+				58B2E4B72AFCEB1200F47D80 /* Cardify.swift */,
 				58A097AB2AF9672B0075578C /* Diamond.swift */,
 				58A097A92AF967220075578C /* CardView.swift */,
 				58A0979A2AF9668B0075578C /* Assets.xcassets */,
@@ -160,6 +163,7 @@
 				58A097AC2AF9672B0075578C /* Diamond.swift in Sources */,
 				58A097B22AF967470075578C /* ViewModel.swift in Sources */,
 				58A097A82AF967180075578C /* AspectVGrid.swift in Sources */,
+				58B2E4B82AFCEB1200F47D80 /* Cardify.swift in Sources */,
 				58A097B02AF967420075578C /* Squiggle.swift in Sources */,
 				58A097992AF9668A0075578C /* ContentView.swift in Sources */,
 				58A097972AF9668A0075578C /* SetGameApp.swift in Sources */,

@@ -36,7 +36,7 @@ struct Squiggle: Shape {
                       control1: CGPoint(x: midX + 43.3, y: midY - 19.0),
                       control2: CGPoint(x: midX + 48.9, y: midY - 22.1))
         
-        
+        // punkte aus dem internet gesucht 
         let pathRect = path.boundingRect
         path = path.offsetBy(dx: rect.minX - pathRect.minX, dy: rect.minY - pathRect.minY)
         

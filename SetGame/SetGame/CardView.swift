@@ -15,34 +15,39 @@ struct CardView: View {
         GeometryReader { geometry in
             ZStack{
                 let shape :RoundedRectangle = RoundedRectangle (cornerRadius: DrawingConstants.cornerRadius)
-            
-                shape.fill()
-                shape.foregroundColor(.white)
-                if card.isMaybeASet{
-                    shape.foregroundColor(.gray)
-                }
-                shape.strokeBorder(lineWidth: geometry.size.width/DrawingConstants.lineWidthDiv)
-                VStack {
-                    ForEach(0..<card.symbol.numberOfShapes, id: \.self) { _ in
-                        createSymbol(for: card, geometry: geometry)
+                if card.isFaceUp{
+                    shape.fill()
+                    shape.foregroundColor(.white)
+                    if card.isMaybeASet{
+                        shape.foregroundColor(.gray)
                     }
-                }
-                .padding()
-                
-                if card.choosen {
-                    shape.strokeBorder(lineWidth: geometry.size.width/DrawingConstants.strokeDiv)
-                        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                }
-                if card.isMatched {
-                    shape.strokeBorder(lineWidth:geometry.size.width/DrawingConstants.strokeDiv)
-                        .foregroundColor(.green)
+                    shape.strokeBorder(lineWidth: geometry.size.width/DrawingConstants.lineWidthDiv)
+                    VStack {
+                        ForEach(0..<card.symbol.numberOfShapes, id: \.self) { _ in
+                            createSymbol(for: card, geometry: geometry)
+                        }
+                    }
+                    .padding()
                     
-                }
-                if card.notMatched {
-                    shape.strokeBorder(lineWidth:geometry.size.width/DrawingConstants.strokeDiv)
-                        .foregroundColor(.red)
+                    if card.choosen {
+                        shape.strokeBorder(lineWidth: geometry.size.width/DrawingConstants.strokeDiv)
+                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                    }
+                    if card.isMatched {
+                        shape.strokeBorder(lineWidth:geometry.size.width/DrawingConstants.strokeDiv)
+                            .foregroundColor(.green)
+                        
+                    }
+                    if card.notMatched {
+                        shape.strokeBorder(lineWidth:geometry.size.width/DrawingConstants.strokeDiv)
+                            .foregroundColor(.red)
+                    }
+                } else {
+                    shape.fill()
+                    shape.foregroundColor(.orange)
                 }
             }
+           // .cardify(isFaceUp: card.isFaceUp)
         }
     }
     

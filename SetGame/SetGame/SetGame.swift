@@ -12,6 +12,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     private(set) var cards: [Card]
     private(set) var choosenCards : [Card] = []
     private(set) var potentialSet  : [Card] = []
+    private(set) var doneCards: [Card]
     private(set) var totalNumberOfCards: Int
     private(set) var initialNumberOfPlayingCards: Int
     private(set) var playingCards: [Card]
@@ -34,6 +35,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         self.createCardSymbol = createCardContent
         self.playingCards = []
         self.cards = []
+        self.doneCards = []
         newGame()
     }
     
@@ -81,6 +83,8 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                     if self.playingCards[j].isMatched{
                         if self.choosenCards[i] == self.playingCards[j]{
                             if self.playingCards.count <= 12 && self.cards.count>0{
+                                self.doneCards.append(self.playingCards[j])
+                                print(String(self.doneCards.count))
                                 self.playingCards[j] = cards[i]
                                 self.cards.remove(at: i)
                                 self.numberOfPlayedCards += 1
@@ -88,6 +92,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
                             }
                         } else if self.playingCards.count > 12 || self.cards.count <= 0
                         {
+                            self.doneCards.append(self.playingCards[j])
                             self.playingCards.remove(at: j)
                         }
                     }
@@ -159,6 +164,14 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         self.setAvailableInPlayedCards = checkForSet(by: self.playingCards)
     }
     
+    mutating func deal(id : Int){
+        for i in 0 ..< playingCards.count{
+            if playingCards[i].id == id {
+                playingCards[i].isFaceUp = true
+            }
+        }
+    }
+    
     mutating func threeNewCards(){
         if cards.count >= 3 && !cards.isEmpty {
             if self.haveMatch {
@@ -204,6 +217,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
     mutating func newGame(){
         self.score = 0
         self.playingCards = []
+        self.doneCards = []
         self.cards = []
         self.numberOfPlayedCards = 0
         self.setAvailableInAllCards = true
@@ -228,6 +242,7 @@ struct SetGame<CardSymbolShape, CardSymbolColor, CardSymbolPattern, NumberOfShap
         var isMatched: Bool = false
         var notMatched: Bool = false
         var isMaybeASet : Bool = false
+        var isFaceUp : Bool = false
         let symbol: CardContent
         let id : Int
         
