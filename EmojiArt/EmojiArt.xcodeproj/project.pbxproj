@@ -14,6 +14,7 @@
 		58B2E4D52B02210800F47D80 /* EmojiArtModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B2E4D42B02210700F47D80 /* EmojiArtModel.swift */; };
 		58B2E4D72B0223BE00F47D80 /* EmojiArtModel.Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B2E4D62B0223BE00F47D80 /* EmojiArtModel.Background.swift */; };
 		58B2E4D92B02274600F47D80 /* EmojiArtDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B2E4D82B02274600F47D80 /* EmojiArtDocument.swift */; };
+		58B2E4DB2B022B2100F47D80 /* UnityExtenxion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B2E4DA2B022B2100F47D80 /* UnityExtenxion.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		58B2E4D42B02210700F47D80 /* EmojiArtModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiArtModel.swift; sourceTree = "<group>"; };
 		58B2E4D62B0223BE00F47D80 /* EmojiArtModel.Background.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiArtModel.Background.swift; sourceTree = "<group>"; };
 		58B2E4D82B02274600F47D80 /* EmojiArtDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiArtDocument.swift; sourceTree = "<group>"; };
+		58B2E4DA2B022B2100F47D80 /* UnityExtenxion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnityExtenxion.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,7 @@
 				58B2E4C72B0220DE00F47D80 /* ContentView.swift */,
 				58B2E4D42B02210700F47D80 /* EmojiArtModel.swift */,
 				58B2E4D82B02274600F47D80 /* EmojiArtDocument.swift */,
+				58B2E4DA2B022B2100F47D80 /* UnityExtenxion.swift */,
 				58B2E4D62B0223BE00F47D80 /* EmojiArtModel.Background.swift */,
 				58B2E4C92B0220E100F47D80 /* Assets.xcassets */,
 				58B2E4CB2B0220E100F47D80 /* EmojiArt.entitlements */,
@@ -150,6 +153,7 @@
 			files = (
 				58B2E4C82B0220DE00F47D80 /* ContentView.swift in Sources */,
 				58B2E4C62B0220DE00F47D80 /* EmojiArtApp.swift in Sources */,
+				58B2E4DB2B022B2100F47D80 /* UnityExtenxion.swift in Sources */,
 				58B2E4D92B02274600F47D80 /* EmojiArtDocument.swift in Sources */,
 				58B2E4D52B02210800F47D80 /* EmojiArtModel.swift in Sources */,
 				58B2E4D72B0223BE00F47D80 /* EmojiArtModel.Background.swift in Sources */,
