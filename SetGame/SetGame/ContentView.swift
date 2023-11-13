@@ -58,8 +58,23 @@ struct ContentView: View {
                         .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
                         //.padding(4)
                         .onTapGesture {
-                            withAnimation(.linear(duration: 1)) {
-                                game.choose(card)
+                            
+                                if game.haveMatch{
+                                    withAnimation(.linear(duration: 1)) {
+                                        game.choose(card)
+                                    }
+                                    for card in game.cards.filter(isUndealt) {
+                                        withAnimation(dealAnimation(for: card)) {
+                                            
+                                            deal(card)
+                                            game.deal(id: card.id)
+                                        }
+                                    }
+                                    } else {
+                                        withAnimation(.linear(duration: 1)) {
+                                        game.choose(card)
+                                            
+                                    }
                             }
                         }
                 }
@@ -103,16 +118,15 @@ struct ContentView: View {
                                     
                                     CardView(card: playcard)
                                         .matchedGeometryEffect(id: playcard.id, in: dealingNamespace)
-                                        .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .identity))
+                                      //  .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .identity))
                                     
                                         .zIndex(zIndex(of: playcard))
                                        // .cardify(isFaceUp: playcard.isFaceUp)
                                     
                                 }
-                                    ForEach(game.allCards.filter(isUndealt)) { card in
+                                    ForEach(game.allCards) { card in
                                        
                                             CardView(card: card)
-                                            
                                         
                                     }
                                 }
