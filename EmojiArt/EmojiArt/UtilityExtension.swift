@@ -1,9 +1,9 @@
-
-//UtilityExtensions.swift
-//EmojiArt
-//Created
-//by CS193p Instructor on 4/26/21.
-//Copyright • 2021 Stanford University. All rights reserved.
+//  UtilityExtensions.swift
+//  EmojiArt
+//
+//  Created by CS193p Instructor on 4/26/21.
+//  Copyright © 2021 Stanford University. All rights reserved.
+//
 
 import SwiftUI
 
@@ -17,7 +17,7 @@ import SwiftUI
 
 extension Collection where Element: Identifiable {
     func index(matching element: Element) -> Self.Index? {
-        firstIndex { $0.id == element.id }
+        firstIndex(where: { $0.id == element.id })
     }
 }
 
@@ -69,12 +69,19 @@ extension Set where Element: Identifiable {
     }
 }
 
-extension Set where Element == Int {
-    mutating func toggleMembership(of element: Element) {
-        if self.contains(element) {
-            remove(element)
-        } else {
-            insert(element)
+// some extensions to String and Character
+// to help us with managing our Strings of emojis
+// we want them to be "emoji only"
+// (thus isEmoji below)
+// and we don't want them to have repeated emojis
+// (thus withoutDuplicateCharacters below)
+
+extension String {
+    var removingDuplicateCharacters: String {
+        reduce(into: "") { sofar, element in
+            if !sofar.contains(element) {
+                sofar.append(element)
+            }
         }
     }
 }
@@ -170,8 +177,35 @@ extension CGSize {
     }
 }
 
+// add RawRepresentable protocol conformance to CGSize and CGFloat
+// so that they can be used with @SceneStorage
+// we do this by first providing default implementations of rawValue and init(rawValue:)
+//   in RawRepresentable when the thing in question is Codable (which both CGFloat and CGSize are)
+// then all it takes to make something that is Codable be RawRepresentable is to declare it to be so
+// (it will then get the default implementions needed to be a RawRepresentable)
+
+extension RawRepresentable where Self: Codable {
+    public var rawValue: String {
+        if let json = try? JSONEncoder().encode(self), let string = String(data: json, encoding: .utf8) {
+            return string
+        } else {
+            return ""
+        }
+    }
+    public init?(rawValue: String) {
+        if let value = try? JSONDecoder().decode(Self.self, from: Data(rawValue.utf8)) {
+            self = value
+        } else {
+            return nil
+        }
+    }
+}
+
+extension CGSize: RawRepresentable { }
+extension CGFloat: RawRepresentable { }
+
 // convenience functions for [NSItemProvider] (i.e. array of NSItemProvider)
-// makes the code for loading objects from the providers a bit simpler
+// makes the code for  loading objects from the providers a bit simpler
 // NSItemProvider is a holdover from the Objective-C (i.e. pre-Swift) world
 // you can tell by its very name (starts with NS)
 // so unfortunately, dealing with this API is a little bit crufty

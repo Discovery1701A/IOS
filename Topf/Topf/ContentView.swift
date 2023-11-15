@@ -1,8 +1,8 @@
 //
 //  ContentView.swift
-//  EmojiArt
+//  Topf
 //
-//  Created by Anna Rieckmann on 13.11.23.
+//  Created by Anna Rieckmann on 14.11.23.
 //
 
 import SwiftUI
