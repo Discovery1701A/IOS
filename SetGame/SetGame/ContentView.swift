@@ -25,8 +25,23 @@ struct ContentView: View {
         
         private func dealAnimation(for card: ViewModel.Card) -> Animation {
             var delay = 0.0
-            if let index = game.cards.firstIndex(where: { $0.id == card.id }) {
-                delay = Double (index) * (CardConstands.totalDealDuration/Double(game.cards.count))
+            if game.numberOfPlayedCards <= 12{
+                if let index = game.cards.firstIndex(where: { $0.id == card.id }) {
+                    delay = Double (index) * (CardConstands.totalDealDuration/Double(game.cards.count))
+                    print(String(game.cards.count))
+                    print(String(index))
+                    print(String(delay))
+                }
+                } else {
+                    
+                        delay = Double (3-game.cards.filter(isUndealt).count) * (CardConstands.totalDealDuration/Double(game.cards.count))
+                        print(String(game.cards.count))
+                        print(String(3-game.cards.filter(isUndealt).count ))
+                        print(String(delay))
+                    
+                
+
+                
             }
             return Animation.easeInOut (duration: CardConstands.dealDuration).delay(delay)
         }
@@ -137,10 +152,19 @@ struct ContentView: View {
                 .foregroundColor(CardConstands.color)
                 .onTapGesture {
                     if (game.allCards.count >= 3 && !game.allCards.isEmpty && game.numberOfPlayedCards < 81) &&  !(game.cards.filter(isUndealt).count == 12) {
-                        game.threeNewCards()
+                        withAnimation(.linear(duration: 1)) {
+                            game.threeNewCards()
+                        }
                     }
+//                    for i in (game.numberOfPlayedCards-game.cards.filter(isUndealt).count)..<game.numberOfPlayedCards{
+//                        withAnimation(dealAnimation(for: game.cards[i])) {
+//                            
+//                            deal(game.cards[i])
+//                            game.deal(id: game.cards[i].id)
+//                        }
+//                    }
                     for card in game.cards.filter(isUndealt) {
-                        withAnimation(dealAnimation(for: card)) {
+                        withAnimation(dealAnimation(for: card).delay(0.25)) {
                             
                             deal(card)
                             game.deal(id: card.id)
@@ -167,7 +191,9 @@ struct ContentView: View {
         Button(action: {
             withAnimation(.linear(duration: 1)) {
                 if (game.allCards.count >= 3 && !game.allCards.isEmpty && game.numberOfPlayedCards < 81) {
-                    game.threeNewCards()
+                  
+                        game.threeNewCards()
+                    
                 }
             }
         }
