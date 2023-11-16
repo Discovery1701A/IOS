@@ -71,11 +71,14 @@ struct ContentView: View {
                         .transition(AnyTransition.asymmetric(insertion: .identity, removal: .scale))
                         .zIndex(zIndex(of: card))
                         .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
+                        .colorMultiply(card.notMatched ? Color.red : Color.white )
+                        
+                        
                         //.padding(4)
                         .onTapGesture {
                             
                                 if game.haveMatch{
-                                    withAnimation(.linear(duration: 1)) {
+                                    withAnimation(.linear(duration: 1).repeatForever(autoreverses: false)){
                                         game.choose(card)
                                     }
                                     for card in game.cards.filter(isUndealt) {
@@ -152,7 +155,7 @@ struct ContentView: View {
                 .foregroundColor(CardConstands.color)
                 .onTapGesture {
                     if (game.allCards.count >= 3 && !game.allCards.isEmpty && game.numberOfPlayedCards < 81) &&  !(game.cards.filter(isUndealt).count == 12) {
-                        withAnimation(.linear(duration: 1)) {
+                        withAnimation(.easeInOut(duration: 2).delay(0.25)) {
                             game.threeNewCards()
                         }
                     }
@@ -164,7 +167,7 @@ struct ContentView: View {
 //                        }
 //                    }
                     for card in game.cards.filter(isUndealt) {
-                        withAnimation(dealAnimation(for: card).delay(0.25)) {
+                        withAnimation(dealAnimation(for: card).delay(0.50)) {
                             
                             deal(card)
                             game.deal(id: card.id)
