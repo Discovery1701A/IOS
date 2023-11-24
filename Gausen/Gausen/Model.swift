@@ -7,23 +7,21 @@
 
 import Foundation
 
-struct Model  {
+struct Model {
     private(set) var rowCount : Int
     private(set) var matrix : [[Field]]
-    
-    
-    init(rowCount: Int){
+    init(rowCount: Int) {
         self.rowCount = rowCount
         self.matrix = []
         generatMatrix()
     }
     
-    mutating func generatMatrix(){
+    mutating func generatMatrix() {
         self.matrix = []
        var id : Int = 0
-        for i in 0 ..< self.rowCount{
+        for i in 0 ..< self.rowCount {
             self.matrix.append([])
-            for j in 0 ..< self.rowCount{
+            for j in 0 ..< self.rowCount {
                 id += 1
                 if j == i {
                     self.matrix[i].append(Field(content: 1, id: id ))
@@ -38,7 +36,7 @@ struct Model  {
         }
     }
     
-    struct Field :Identifiable, Hashable{
+    struct Field :Identifiable, Hashable {
         let content: Int
         let id : Int
         init(content: Int, id: Int) {
