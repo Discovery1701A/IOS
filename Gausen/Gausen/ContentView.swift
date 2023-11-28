@@ -31,11 +31,12 @@ struct FieldView: View {
         GeometryReader { geometry in
             ZStack {
                 let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-                
+            
                 shape.fill()
                 shape.foregroundColor(.white)
                 shape.strokeBorder(lineWidth: geometry.size.width / DrawingConstants.lineWidthDiv)
                 Text(String(field.content)).font(font(in: geometry.size))
+                
             }
         }
     }
