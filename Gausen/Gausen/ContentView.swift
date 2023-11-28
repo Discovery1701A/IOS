@@ -19,8 +19,36 @@ struct ContentView: View {
                 }
             }
             .padding()
-            
+            HStack {
+                mischen
+                neu
+                splate
+            }
         }
+    }
+    @ViewBuilder
+    var mischen: some View {
+        Button(action: {
+            modelView.mixMatrix(howMany: 20, range: 3)
+        }, label: {
+            Text("mischen")
+        })
+    }
+    @ViewBuilder
+    var splate: some View {
+        Button(action: {
+            modelView.columnSwitch(column1: 0, column2: 1)
+        }, label: {
+            Text("spalte")
+        })
+    }
+    @ViewBuilder
+    var neu: some View {
+        Button(action: {
+            modelView.newMatrix()
+        }, label: {
+            Text("neu")
+        })
     }
 }
 
@@ -33,7 +61,7 @@ struct FieldView: View {
                 let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
             
                 shape.fill()
-                shape.foregroundColor(.white)
+                shape.foregroundColor(.orange)
                 shape.strokeBorder(lineWidth: geometry.size.width / DrawingConstants.lineWidthDiv)
                 Text(String(field.content)).font(font(in: geometry.size))
                 

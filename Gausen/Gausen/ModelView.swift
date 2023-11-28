@@ -26,4 +26,16 @@ class ViewModel: ObservableObject {
    func rowSwitch(row1 : Int, row2 : Int) {
         model.rowSwitch(row1: row1, row2: row2)
     }
+    
+    func columnSwitch(column1 : Int, column2 : Int) {
+        model.columnSwitch(column1: column1, column2: column2)
+    }
+    
+    func mixMatrix(howMany : Int, range : Int) {
+        model.mixMatrix(howMany: howMany, range: range)
+    }
+    
+    func newMatrix() {
+        model.generatMatrix()
+    }
 }

@@ -33,34 +33,92 @@ struct Model {
         }
     }
     
-    mutating func scaleRow(faktor : Int, row : Int) {
-        for i in 0 ..< self.matrix[row].count {
-            self.matrix[row][i].content *= faktor
-        }
-    }
-    
-    mutating func addScaleRow(faktor : Int, row1 : Int, row2 : Int) {
-        for i in 0 ..< self.matrix[row1].count {
-            self.matrix[row2][i].content += self.matrix[row1][i].content * faktor
+    mutating func scaleRow(faktor : Int, row : Int, multi : Bool) {
+        if controllScale(row: row, faktor: faktor, multi : multi) {
+            for i in 0 ..< self.matrix[row].count {
+                if multi == true || faktor < 0 {
+                    self.matrix[row][i].content *= faktor
+//                    print(self.matrix[row][i].content)
+                } else {
+                    self.matrix[row][i].content /= faktor
+//                    print(self.matrix[row][i].content)
+                }
+            }
+            if faktor == 0 {
+                print(0)
+            }
         }
     }
    
+    mutating func addScaleRow(faktor : Int, row1 : Int, row2 : Int, multi : Bool) {
+        if controllScale(row: row1, faktor: faktor, multi : multi) {
+            for i in 0 ..< self.matrix[row1].count {
+                if multi == true || faktor <= 0 {
+                    self.matrix[row2][i].content += self.matrix[row1][i].content * faktor
+//                    print(self.matrix[row2][i].content)
+                } else {
+                    self.matrix[row2][i].content += self.matrix[row1][i].content / faktor
+//                    print(self.matrix[row2][i].content)
+                }
+        }
+            if faktor == 0 {
+                print(0)
+            }
+    }
+}
+
+    func controllScale(row : Int, faktor : Int, multi : Bool) -> Bool {
+        if faktor != 0 {
+            for i in 0 ..< self.matrix[row].count {
+                
+                if multi == true || faktor <= 0 {
+                    if !(type(of: self.matrix[row][i].content * faktor) == Int.self) {
+                        return false
+                    }
+                } else {
+//                    print(self.matrix[row][i].content / faktor, multi)
+                    if !(type(of: self.matrix[row][i].content / faktor) == Int.self) {
+                        
+                        return false
+                    }
+                }
+            }
+            return true
+        }
+        return false
+    }
+   
     mutating func mixMatrix(howMany : Int, range : Int) {
-        for _ in 0 ..< howMany {
-            if Bool.random() == true {
-                addScaleRow(faktor: Int.random(in: (range * -1)..<range), row1: Int.random(in: 0..<self.matrix.count), row2: Int.random(in: 0..<self.matrix.count))
-                continue
-            } else if Bool.random() == true {
-                scaleRow(faktor : Int.random(in: (range * -1)..<range), row : Int.random(in: 0..<self.matrix.count))
-                continue
-            } else if Bool.random() == true {
+        
+        for i in 0 ..< howMany {
+                    
+                    if Bool.random() == true {
+                        addScaleRow(faktor: Int.random(in: (-range)..<(range - 1)), row1: Int.random(in: 0..<self.matrix.count), row2: Int.random(in: 0..<self.matrix.count), multi: Bool.random())
+//                        print(i)
+                      //  continue
+                    } else if Bool.random() == true {
+                            scaleRow(faktor : Int.random(in: (-range)..<(range - 1)), row : Int.random(in: 0..<self.matrix.count), multi: Bool.random())
+                            //  continue
+                        
+                    } else if Bool.random() == true {
+                        
+                        columnSwitch(column1: Int.random(in: 0..<self.matrix.count), column2:Int.random(in: 0..<self.matrix.count))
+                      //  continue
+                    } else {
+                        rowSwitch(row1: Int.random(in: 0..<self.matrix.count), row2: Int.random(in: 0..<self.matrix.count))
+                    }
             
-            columnSwitch(column1: Int.random(in: 0..<self.matrix.count), column2:Int.random(in: 0..<self.matrix.count))
-            continue
-            } else {
-                rowSwitch(row1: Int.random(in: 0..<self.matrix.count), row2: Int.random(in: 0..<self.matrix.count))
+        }
+    }
+    mutating func vergleichen(is value : Int) -> Bool {
+        for i in 0 ..< self.rowCount {
+            for j in 0 ..< self.rowCount {
+                if self.matrix[i][j].content == value {
+                    return true
+                }
             }
         }
+        return false
     }
    
     mutating func generatMatrix() {
@@ -82,7 +140,7 @@ struct Model {
         for row in matrix {
            // print(row)
         }
-        mixMatrix(howMany: 20, range: 5)
+       // mixMatrix(howMany: 5, range: 3)
     }
     
     struct Field :Identifiable, Hashable {
