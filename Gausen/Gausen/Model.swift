@@ -38,10 +38,10 @@ struct Model {
             for i in 0 ..< self.matrix[row].count {
                 if multi == true || faktor < 0 {
                     self.matrix[row][i].content *= faktor
-//                    print(self.matrix[row][i].content)
+                    print(self.matrix[row][i].content)
                 } else {
                     self.matrix[row][i].content /= faktor
-//                    print(self.matrix[row][i].content)
+                    print(self.matrix[row][i].content)
                 }
             }
             if faktor == 0 {

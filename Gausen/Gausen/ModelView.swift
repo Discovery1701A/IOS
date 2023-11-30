@@ -34,6 +34,13 @@ class ViewModel: ObservableObject {
     func mixMatrix(howMany : Int, range : Int) {
         model.mixMatrix(howMany: howMany, range: range)
     }
+    func addScaleRow(faktor: Int, row1: Int, row2: Int, multi: Bool) {
+        model.addScaleRow(faktor: faktor, row1: row1, row2: row2, multi: multi)
+    }
+    
+    func scaleRow(faktor: Int, row: Int, multi: Bool) {
+        model.scaleRow(faktor: faktor, row: row, multi: multi)
+    }
     
     func newMatrix() {
         model.generatMatrix()
