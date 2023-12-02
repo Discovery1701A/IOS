@@ -11,36 +11,74 @@ struct ContentView: View {
     @ObservedObject var modelView: ViewModel
     @State private var faktor = 1.0
     @State private var isEditing = false
-    @State private var selectedRows: Set<Int> = []
-    @State private var selectedColumns: Set<Int> = []
+    @State private var selectedRows: [Int] = []
+    @State private var selectedColumns: [Int] = []
 
     var body: some View {
-            VStack {
-                HStack {
-                    Spacer()
-                    // Auswahlansicht für Reihen
-                    SelectionView(items: Array(0..<modelView.matrix.count), selectedItems: $selectedColumns, axis: .horizontal)
-                }
+        VStack {
+            HStack {
+                Spacer()
+                // Auswahlansicht für Reihen
+                SelectionView(items: Array(0..<modelView.matrix.count), selectedItems: $selectedColumns, axis: .horizontal)
+            }
+            .padding()
 
-                ForEach(0..<modelView.matrix.count, id: \.self) { row in
-                    HStack {
-                        // Auswahlansicht für Spalten
-                        SelectionView(items: [row], selectedItems: $selectedRows, axis: .vertical).padding()
-                        
-                        ForEach(0..<modelView.matrix[row].count, id: \.self) { column in
+            ForEach(0..<modelView.matrix.count, id: \.self) { row in
+                HStack {
+                    // Auswahlansicht für Spalten
+                    SelectionView(items: [row], selectedItems: $selectedRows, axis: .vertical)
+                        .padding()
+
+                    ForEach(0..<modelView.matrix[row].count, id: \.self) { column in
+                        VStack {
+                            Spacer()
                             FieldView(field: modelView.matrix[row][column])
                                 .onTapGesture {
                                     // Hier kannst du die Logik für das Tippen auf ein Feld implementieren
                                 }
                                 .border(selectedRows.contains(row) || selectedColumns.contains(column) ? Color.red : Color.clear, width: 2)
                         }
+                        .overlay(
+                            Rectangle()
+                                .fill(Color.blue.opacity(0.5))
+                                
+                                .gesture(
+                                    DragGesture()
+                                        .onChanged { value in
+                                            handleDragChanged(value: value, column: column)
+                                        }
+                                        .onEnded { _ in
+                                            handleDragEnded()
+                                        }
+                                )
+                        )
                     }
                 }
-                .padding()
-
-                controller()
             }
+            .padding()
+
+            controller()
         }
+    }
+
+    func handleDragChanged(value: DragGesture.Value, column: Int) {
+        let translation = value.translation.width
+        let columnWidth = UIScreen.main.bounds.width / CGFloat(modelView.matrix.first?.count ?? 1)
+
+        var draggedColumnIndex = Int((value.startLocation.x + translation) / columnWidth)
+
+        // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
+//        draggedColumnIndex = max(0, min(draggedColumnIndex, modelView.matrix.first?.count ?? 0))
+        print(draggedColumnIndex, modelView.matrix.first?.count, value.startLocation.x / columnWidth)
+        if draggedColumnIndex != modelView.draggedColumn {
+            modelView.columnSwitch(column1: modelView.draggedColumn ?? 0, column2: draggedColumnIndex)
+            modelView.draggedColumn = draggedColumnIndex
+        }
+    }
+
+    func handleDragEnded() {
+        modelView.draggedColumn = nil
+    }
 
     @ViewBuilder
     func controller() -> some View {
@@ -54,7 +92,7 @@ struct ContentView: View {
             .padding()
 
             HStack {
-                slider(from: -2, to: 2, for: $faktor, name: "faktor")
+                slider(from: -10, to: 10, for: $faktor, name: "faktor")
             }
         }
     }
@@ -160,7 +198,7 @@ struct ContentView: View {
 
 struct SelectionView: View {
     var items: [Int]
-    @Binding var selectedItems: Set<Int>
+    @Binding var selectedItems: [Int]
     var axis: Axis
 
     var body: some View {
@@ -179,6 +217,7 @@ struct SelectionView: View {
             } else {
                 HStack {
                     ForEach(items, id: \.self) { item in
+                        Spacer()
                         Button(action: {
                             toggleSelection(item: item)
                         }, label: {
@@ -187,6 +226,7 @@ struct SelectionView: View {
                                 .background(selectedItems.contains(item) ? Color.blue : Color.clear)
                                 .cornerRadius(5)
                         })
+                        
                     }
                 }
             }
@@ -196,9 +236,13 @@ struct SelectionView: View {
 
     private func toggleSelection(item: Int) {
         if selectedItems.contains(item) {
-            selectedItems.remove(item)
+            for i in 0 ..< selectedItems.count {
+                if selectedItems[i] == item {
+                    selectedItems.remove(at: i)
+                }
+            }
         } else {
-            selectedItems.insert(item)
+            selectedItems.append(item)
         }
     }
 }
