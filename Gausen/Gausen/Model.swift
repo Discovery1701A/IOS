@@ -57,11 +57,13 @@ struct Model {
     mutating func addScaleRow(faktor : Int, row1 : Int, row2 : Int, multi : Bool) {
         if controllScale(row: row1, faktor: faktor, multi : multi) {
             for i in 0 ..< self.matrix[row1].count {
-                if multi == true || faktor <= 0 {
+                if multi == true{
                     self.matrix[row2][i].content += self.matrix[row1][i].content * faktor
+                    self.matrix[row1][i].notDiv = false
 //                    print(self.matrix[row2][i].content)
                 } else {
                     self.matrix[row2][i].content += self.matrix[row1][i].content / faktor
+                    self.matrix[row1][i].notDiv = false
 //                    print(self.matrix[row2][i].content)
                 }
         }
@@ -71,18 +73,19 @@ struct Model {
     }
 }
 
-    func controllScale(row : Int, faktor : Int, multi : Bool) -> Bool {
+    mutating func controllScale(row : Int, faktor : Int, multi : Bool) -> Bool {
         if faktor != 0 {
             for i in 0 ..< self.matrix[row].count {
                 
                 if multi == true || faktor <= 0 {
                     if !(type(of: self.matrix[row][i].content * faktor) == Int.self) {
+                        self.matrix[row][i].notDiv = true
                         return false
                     }
                 } else {
 //                    print(self.matrix[row][i].content / faktor, multi)
                     if !(type(of: self.matrix[row][i].content / faktor) == Int.self) {
-                        
+                        self.matrix[row][i].notDiv = true
                         return false
                     }
                 }
@@ -94,7 +97,7 @@ struct Model {
    
     mutating func mixMatrix(howMany : Int, range : Int) {
         
-        for i in 0 ..< howMany {
+        for _ in 0 ..< howMany {
                     
                     if Bool.random() == true {
                         addScaleRow(faktor: Int.random(in: (-range)..<(range - 1)), row1: Int.random(in: 0..<self.matrix.count), row2: Int.random(in: 0..<self.matrix.count), multi: Bool.random())
@@ -114,13 +117,9 @@ struct Model {
             
         }
     }
-    mutating func vergleichen(is value : Int) -> Bool {
-        for i in 0 ..< self.rowCount {
-            for j in 0 ..< self.rowCount {
-                if self.matrix[i][j].content == value {
-                    return true
-                }
-            }
+    mutating func vergleichen(is value: Int) -> Bool {
+        for i in 0 ..< self.rowCount where self.matrix[i][i].content == value {
+            return true
         }
         return false
     }
@@ -141,18 +140,20 @@ struct Model {
                 }
             }
         }
-        for row in matrix {
+//        for row in matrix {
            // print(row)
-        }
+//        }
        // mixMatrix(howMany: 5, range: 3)
     }
     
     struct Field :Identifiable, Hashable {
         var content: Int
-        let id : Int
+        let id: Int
+        var notDiv = false
         init(content: Int, id: Int) {
             self.content = content
             self.id = id
+            
         }
     }
 }

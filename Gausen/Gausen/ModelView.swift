@@ -44,6 +44,10 @@ class ViewModel: ObservableObject {
         model.scaleRow(faktor: faktor, row: row, multi: multi)
     }
     
+    func controllScale(row : Int, faktor : Int, multi : Bool) -> Bool {
+        model.controllScale(row : row, faktor : faktor, multi : multi) 
+    }
+    
     func newMatrix() {
         model.generatMatrix()
     }

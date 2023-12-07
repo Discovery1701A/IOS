@@ -77,28 +77,12 @@ struct ContentView: View {
         }
         // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
         draggedColumnIndex = max(0, min(draggedColumnIndex, modelView.matrix.first?.count ?? 0))
-        print(column, draggedColumnIndex, Int(value.startLocation.x + translation), value.startLocation.x, modelView.draggedColumn, Int(columnWidth), translation)
+//        print(column, draggedColumnIndex, Int(value.startLocation.x + translation), value.startLocation.x, modelView.draggedColumn, Int(columnWidth), translation)
         if draggedColumnIndex != modelView.draggedColumn {
             modelView.columnSwitch(column1: modelView.draggedColumn ?? column, column2: draggedColumnIndex)
             modelView.draggedColumn = draggedColumnIndex
         }
     }
-//    func handleDragChanged(value: DragGesture.Value, row: Int, size: CGSize) {
-//        let translation = value.translation.height
-//        let rowHeight = size.height // CGFloat(modelView.matrix.first?.count ?? 1)
-//        var draggedRowIndex = Int((value.startLocation.x + translation) / rowHeight)
-//        // schieben ins negative
-//        if translation < 0 {
-//               draggedRowIndex = row - Int((value.startLocation.x - translation) / rowHeight )
-//        }
-//        // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
-//        draggedRowIndex = max(0, min(draggedRowIndex, modelView.matrix.first?.count ?? 0))
-////        print(column, draggedColumnIndex, Int(value.startLocation.x + translation), value.startLocation.x, modelView.draggedColumn, Int(columnWidth), translation)
-//        if draggedRowIndex != modelView.draggedColumn {
-//            modelView.rowSwitch(row1: modelView.draggedRow ?? row, row2: draggedRowIndex)
-//            modelView.draggedRow = draggedRowIndex
-//        }
-//    }
 
     func handleDragEnded() {
         modelView.draggedColumn = nil
@@ -113,6 +97,7 @@ struct ContentView: View {
                 neu
                 splate
                 addScaleRowMulti
+                addScaleRowDiv
             }
             .padding()
 
@@ -124,9 +109,10 @@ struct ContentView: View {
 
     @ViewBuilder
     func slider(from min: Int, to max: Int, for value: Binding<Double>, name: String) -> some View {
-        Slider(value: value,
-               in: Double(min)...Double(max),
-               step: 1.0
+        Slider(
+            value: value,
+            in: Double(min)...Double(max),
+            step: 1.0
         ) {
             Text(name)
         } minimumValueLabel: {
@@ -139,6 +125,7 @@ struct ContentView: View {
         Text("\(Int(value.wrappedValue))")
             .foregroundColor(isEditing ? .red : .blue)
     }
+
     @ViewBuilder
        var mischen: some View {
            Button(action: {
@@ -154,8 +141,8 @@ struct ContentView: View {
                if let firstColumn = selectedColumns.first, let secondColumn = selectedColumns.dropFirst().first {
                    modelView.columnSwitch(column1:firstColumn, column2: secondColumn )
                }
-               selectedRows = []
-               selectedColumns = []
+               selectedRows.removeAll()
+               selectedColumns.removeAll()
            }, label: {
                Text("spalte")
            })
@@ -167,23 +154,35 @@ struct ContentView: View {
             if let firstRow = selectedRows.first, let secondRow = selectedRows.dropFirst().first {
                 modelView.addScaleRow(faktor: Int(faktor), row1: firstRow, row2: secondRow, multi: true)
             }
-            selectedRows = []
-            selectedColumns = []
+            selectedRows.removeAll()
+            selectedColumns.removeAll()
         }, label: {
             Text("Multiplizieren")
         })
     }
+    @ViewBuilder
+    var addScaleRowDiv: some View {
+        Button(action: {
+            if let firstRow = selectedRows.first, let secondRow = selectedRows.dropFirst().first {
+                modelView.addScaleRow(faktor: Int(faktor), row1: firstRow, row2: secondRow, multi: false)
+            }
+            selectedRows.removeAll()
+            selectedColumns.removeAll()
+        }, label: {
+            Text("Dividieren")
+        })
+    }
 
-       @ViewBuilder
-       var neu: some View {
-           Button(action: {
-               modelView.newMatrix()
-               selectedRows = []
-               selectedColumns = []
-           }, label: {
-               Text("neu")
-           })
-       }
+        @ViewBuilder
+        var neu: some View {
+            Button(action: {
+                modelView.newMatrix()
+                selectedRows = []
+                selectedColumns = []
+            }, label: {
+                Text("neu")
+            })
+        }
    }
 
    struct FieldView: View {
@@ -198,6 +197,10 @@ struct ContentView: View {
                    shape.foregroundColor(.orange)
                    shape.strokeBorder(lineWidth: geometry.size.width / DrawingConstants.lineWidthDiv)
                    Text(String(field.content)).font(font(in: geometry.size))
+                   if field.notDiv {
+                       shape.strokeBorder(lineWidth: geometry.size.width / DrawingConstants.lineWidthDiv)
+                           .foregroundColor(.red)
+                   }
 
                }
            }
@@ -225,13 +228,14 @@ struct SelectionView: View {
     var items: [Int]
     @Binding var selectedItems: [Int]
     var axis: Axis
-
+    
     var body: some View {
         VStack {
             if axis == .vertical {
                 ForEach(items, id: \.self) { item in
                     Button(action: {
                         toggleSelection(item: item)
+                        
                     }, label: {
                         Text("\(item + 1)")
                             .padding(5)
@@ -258,14 +262,10 @@ struct SelectionView: View {
         }
         .padding(5)
     }
-
+    
     private func toggleSelection(item: Int) {
-        if selectedItems.contains(item) {
-            for i in 0 ..< selectedItems.count {
-                if selectedItems[i] == item {
-                    selectedItems.remove(at: i)
-                }
-            }
+        if let index = selectedItems.firstIndex(where: { $0 == item }) {
+            selectedItems.remove(at: index)
         } else {
             selectedItems.append(item)
         }
