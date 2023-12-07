@@ -30,48 +30,57 @@ struct ContentView: View {
                         .padding()
 
                     ForEach(0..<modelView.matrix[row].count, id: \.self) { column in
-                        VStack {
-                            Spacer()
-                            FieldView(field: modelView.matrix[row][column])
-                                .onTapGesture {
-                                    // Hier kannst du die Logik für das Tippen auf ein Feld implementieren
-                                }
-                                .border(selectedRows.contains(row) || selectedColumns.contains(column) ? Color.red : Color.clear, width: 2)
-                        }
-                        .overlay(
-                            Rectangle()
-                                .fill(Color.blue.opacity(0.5))
+                        GeometryReader { geometry in
+                            VStack {
+                                Spacer()
+                                Text(String(column))
                                 
-                                .gesture(
-                                    DragGesture()
-                                        .onChanged { value in
-                                            handleDragChanged(value: value, column: column)
-                                        }
-                                        .onEnded { _ in
-                                            handleDragEnded()
-                                        }
-                                )
-                        )
+                                FieldView(field: modelView.matrix[row][column])
+                                    .onTapGesture {
+                                        // Hier kannst du die Logik für das Tippen auf ein Feld implementieren
+                                    }
+                                    .border(selectedRows.contains(row) || selectedColumns.contains(column) ? Color.red : Color.clear, width: 2)
+                            }
+                            .overlay(
+                                Rectangle()
+                                    .fill(Color.blue.opacity(0.5))
+                                
+                                    .gesture(
+                                        DragGesture()
+                                            .onChanged { value in
+                                                handleDragChanged(value: value, column: column, size: geometry.size)
+                                            }
+                                            .onEnded { _ in
+                                                handleDragEnded()
+                                            }
+                                    )
+                            )
+                        }
                     }
                 }
             }
-            .padding()
+             .padding()
 
             controller()
         }
     }
 
-    func handleDragChanged(value: DragGesture.Value, column: Int) {
+    func handleDragChanged(value: DragGesture.Value, column: Int, size: CGSize) {
         let translation = value.translation.width
-        let columnWidth = UIScreen.main.bounds.width / CGFloat(modelView.matrix.first?.count ?? 1)
-
+        let columnWidth = size.width // CGFloat(modelView.matrix.first?.count ?? 1)
         var draggedColumnIndex = Int((value.startLocation.x + translation) / columnWidth)
-
+        if translation < 0 {
+//            if (value.startLocation.x + translation) <= 0 {
+               draggedColumnIndex = column - Int((value.startLocation.x - translation) / columnWidth )
+//            }
+           
+        }
+       
         // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
-//        draggedColumnIndex = max(0, min(draggedColumnIndex, modelView.matrix.first?.count ?? 0))
-        print(draggedColumnIndex, modelView.matrix.first?.count, value.startLocation.x / columnWidth)
+        draggedColumnIndex = max(0, min(draggedColumnIndex, modelView.matrix.first?.count ?? 0))
+        print(column, draggedColumnIndex, Int(value.startLocation.x + translation), value.startLocation.x, modelView.draggedColumn, Int(columnWidth), translation)
         if draggedColumnIndex != modelView.draggedColumn {
-            modelView.columnSwitch(column1: modelView.draggedColumn ?? 0, column2: draggedColumnIndex)
+            modelView.columnSwitch(column1: modelView.draggedColumn ?? column, column2: draggedColumnIndex)
             modelView.draggedColumn = draggedColumnIndex
         }
     }

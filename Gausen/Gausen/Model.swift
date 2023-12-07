@@ -26,8 +26,10 @@ struct Model {
     }
     
     mutating func columnSwitch(column1 : Int, column2 : Int) {
-        if column1 >= 0 && column2 >= 0 {
+        if self.matrix[0].count > column1 && column1 >= 0 && self.matrix[0].count > column2 && column2 >= 0 {
+            print(column1, column2)
             for i in 0 ..< self.matrix.count {
+               
                 let columnSaver : Field = self.matrix[i][column2]
                 self.matrix[i][column2] = self.matrix[i][column1]
                 self.matrix[i][column1] = columnSaver
