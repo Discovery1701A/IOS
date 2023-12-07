@@ -16,10 +16,11 @@ class ViewModel: ObservableObject {
         [7, 8, 9]
     ]
     private static func createSetGame () -> Model {
-        Model(rowCount: 3)
+        Model(rowCount: 4)
     }
     @Published private var model: Model = createSetGame()
         @Published var draggedColumn: Int?
+        @Published var draggedRow: Int?
     // MARK: - Intent(s
     var matrix : [[Field]] {
         return model.matrix

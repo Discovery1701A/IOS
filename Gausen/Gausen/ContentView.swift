@@ -28,7 +28,7 @@ struct ContentView: View {
                     // Auswahlansicht für Spalten
                     SelectionView(items: [row], selectedItems: $selectedRows, axis: .vertical)
                         .padding()
-
+                       
                     ForEach(0..<modelView.matrix[row].count, id: \.self) { column in
                         GeometryReader { geometry in
                             VStack {
@@ -49,6 +49,7 @@ struct ContentView: View {
                                         DragGesture()
                                             .onChanged { value in
                                                 handleDragChanged(value: value, column: column, size: geometry.size)
+                                               
                                             }
                                             .onEnded { _ in
                                                 handleDragEnded()
@@ -68,14 +69,12 @@ struct ContentView: View {
     func handleDragChanged(value: DragGesture.Value, column: Int, size: CGSize) {
         let translation = value.translation.width
         let columnWidth = size.width // CGFloat(modelView.matrix.first?.count ?? 1)
-        var draggedColumnIndex = Int((value.startLocation.x + translation) / columnWidth)
-        if translation < 0 {
-//            if (value.startLocation.x + translation) <= 0 {
-               draggedColumnIndex = column - Int((value.startLocation.x - translation) / columnWidth )
-//            }
-           
-        }
+        var draggedColumnIndex = column + Int((value.startLocation.x + translation) / columnWidth)
        
+        // schieben ins negative
+        if translation < 0 {
+               draggedColumnIndex = column - Int((value.startLocation.x - translation) / columnWidth )
+        }
         // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
         draggedColumnIndex = max(0, min(draggedColumnIndex, modelView.matrix.first?.count ?? 0))
         print(column, draggedColumnIndex, Int(value.startLocation.x + translation), value.startLocation.x, modelView.draggedColumn, Int(columnWidth), translation)
@@ -84,9 +83,26 @@ struct ContentView: View {
             modelView.draggedColumn = draggedColumnIndex
         }
     }
+//    func handleDragChanged(value: DragGesture.Value, row: Int, size: CGSize) {
+//        let translation = value.translation.height
+//        let rowHeight = size.height // CGFloat(modelView.matrix.first?.count ?? 1)
+//        var draggedRowIndex = Int((value.startLocation.x + translation) / rowHeight)
+//        // schieben ins negative
+//        if translation < 0 {
+//               draggedRowIndex = row - Int((value.startLocation.x - translation) / rowHeight )
+//        }
+//        // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
+//        draggedRowIndex = max(0, min(draggedRowIndex, modelView.matrix.first?.count ?? 0))
+////        print(column, draggedColumnIndex, Int(value.startLocation.x + translation), value.startLocation.x, modelView.draggedColumn, Int(columnWidth), translation)
+//        if draggedRowIndex != modelView.draggedColumn {
+//            modelView.rowSwitch(row1: modelView.draggedRow ?? row, row2: draggedRowIndex)
+//            modelView.draggedRow = draggedRowIndex
+//        }
+//    }
 
     func handleDragEnded() {
         modelView.draggedColumn = nil
+        modelView.draggedRow = nil
     }
 
     @ViewBuilder
