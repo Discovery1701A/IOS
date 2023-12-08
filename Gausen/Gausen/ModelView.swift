@@ -21,7 +21,7 @@ class ViewModel: ObservableObject {
     @Published private var model: Model = createSetGame()
         @Published var draggedColumn: Int?
         @Published var draggedRow: Int?
-    // MARK: - Intent(s
+
     var matrix : [[Field]] {
         return model.matrix
     }

@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var isEditing = false
     @State private var selectedRows: [Int] = []
     @State private var selectedColumns: [Int] = []
+    @State private var fieldSize: CGSize = .zero
 
     var body: some View {
         VStack {
@@ -31,11 +32,16 @@ struct ContentView: View {
                        
                     ForEach(0..<modelView.matrix[row].count, id: \.self) { column in
                         GeometryReader { geometry in
+                            
                             VStack {
                                 Spacer()
                                 Text(String(column))
                                 
                                 FieldView(field: modelView.matrix[row][column])
+                                    .onAppear {
+                                                                // Speichere die CGSize in der @State-Variable
+                                                                fieldSize = geometry.size
+                                    }
                                     .onTapGesture {
                                         // Hier kannst du die Logik für das Tippen auf ein Feld implementieren
                                     }

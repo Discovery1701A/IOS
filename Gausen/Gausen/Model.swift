@@ -57,7 +57,7 @@ struct Model {
     mutating func addScaleRow(faktor : Int, row1 : Int, row2 : Int, multi : Bool) {
         if controllScale(row: row1, faktor: faktor, multi : multi) {
             for i in 0 ..< self.matrix[row1].count {
-                if multi == true{
+                if multi == true {
                     self.matrix[row2][i].content += self.matrix[row1][i].content * faktor
                     self.matrix[row1][i].notDiv = false
 //                    print(self.matrix[row2][i].content)
