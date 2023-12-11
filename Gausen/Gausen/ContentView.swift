@@ -14,31 +14,42 @@ struct ContentView: View {
     @State private var selectedRows: [Int] = []
     @State private var selectedColumns: [Int] = []
     @State private var fieldSize: CGSize = .zero
-    
+
     var body: some View {
         VStack {
-           
-                // Auswahlansicht für Reihen
-        
-           gauseView()
-            
+            matrixView
+                .fieldSize($fieldSize) // Hier wird die Größe übergeben
             Spacer()
             controller()
         }
     }
+
     @ViewBuilder
-    func gauseView() -> some View {
-    
-        GeometryReader { geometry in
-          
-                ZStack { 
-                    
-//                    raster(geometry: geometry.size)
-                    
-                    matrixView()
-//                        .padding([.top, .leading])
-                   
+    var matrixView: some View {
+        VStack {
+            ForEach(-1..<modelView.matrix.count, id: \.self) { row in
+                HStack {
+                    SelectionView(items: [row], selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize)
+                    ForEach(0..<modelView.matrix[0].count, id: \.self) { column in
+                        VStack {
+                            if row >= 0 {
+                                FieldView(field: modelView.matrix[row][column])
+                                    .fieldSize($fieldSize)  // Hier wird die Größe ohne den Dollarzeichen verwendet
+//                                    .overlay(
+//                                        Text("Width: \(Int(fieldSize.width)), Height: \(Int(fieldSize.height))"))
+                                        
+                                    .border(selectedRows.contains(row) || selectedColumns.contains(column) ? Color.red : Color.clear, width: 2)
+                                    .background(
+                                     
+                                    )
+                            } else {
+                                SelectionView(items: [column], selectedItems: $selectedColumns, axis: .horizontal, fieldSize: fieldSize)
+                            }
+                        }
+                    }
+                    SelectionView(items: [row], selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize)
                 }
+            }
         }
     }
     
@@ -82,125 +93,6 @@ struct ContentView: View {
         modelView.draggedColumn = nil
         modelView.draggedRow = nil
     }
-    @ViewBuilder
-    func raster(geometry : CGSize) -> some View {
-        VStack {
-            ForEach(0..<modelView.matrix.count, id: \.self) { row in
-                HStack {
-//                    SelectionView(items: [row], selectedItems: $selectedRows, axis: .vertical)
-//                                            .padding()
-                    Rectangle()
-                        .fill(Color.blue.opacity(0.5))
-                        .frame(width: geometry.width, height: fieldSize.height)
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    handleDragChangedRow(value: value, row: row, size: geometry)
-                                    
-                                }
-                                .onEnded { _ in
-                                    handleDragEnded()
-                                }
-                        )
-                    
-                }
-            }
-            .padding(.top)
-            
-//            .padding()
-        }
-        .overlay(
-        HStack {
-            ForEach(0..<modelView.matrix[0].count, id: \.self) { column in
-                ZStack {
-                    
-                    SelectionView(items: [column], selectedItems: $selectedColumns, axis: .horizontal)
-                        .padding(.top)
-                    Rectangle()
-                        .fill(Color.blue.opacity(0.5))
-                        .frame(width: fieldSize.width, height: fieldSize.height)
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    handleDragChangedRow(value: value, row: 0, size: geometry)
-                                    
-                                }
-                                .onEnded { _ in
-                                    handleDragEnded()
-                                }
-                        )
-                    
-                }
-            }
-            
-        }
-            .padding()
-            
-            
-        )
-    }
-    @ViewBuilder
-    func matrixView() -> some View {
-        VStack {
-            HStack(){
-            ForEach(0..<modelView.matrix[0].count, id: \.self) { column in
-               
-                    SelectionView(items: [column], selectedItems: $selectedColumns, axis: .horizontal)
-            }
-            
-                
-            }.padding()
-            
-            ForEach(0..<modelView.matrix.count, id: \.self) { row in
-                HStack {
-                                    SelectionView(items: [row], selectedItems: $selectedRows, axis: .vertical)
-                                        .padding()
-                    
-                    ForEach(0..<modelView.matrix[row].count, id: \.self) { column in
-                        GeometryReader { geometry in
-                            
-                            VStack {
-                                
-                                Spacer()
-                                //                                Text(String(column))
-                                
-                                FieldView(field: modelView.matrix[row][column])
-                                
-                                    .onAppear {
-                                        // Speichere die CGSize in der @State-Variable
-                                        fieldSize = geometry.size
-                                    }
-                                    .border(selectedRows.contains(row) || selectedColumns.contains(column) ? Color.red : Color.clear, width: 2)
-                            }
-                            
-                            //                        .overlay(
-                            //                            Rectangle()
-                            //                                .fill(Color.blue.opacity(0.5))
-                            //                                .frame(width: geometry.size.width, height: geometry.size.height) // Rechteckgröße festlegen
-                            //                                .position(x: geometry.size.width / 2, y: geometry.size.height / 2 + 4) // Zentrieren
-                            //
-                            //                                .gesture(
-                            //                                    DragGesture()
-                            //                                        .onChanged { value in
-                            //                                            handleDragChangedColumn(value: value, column: column, size: fieldSize)
-                            //                                            handleDragChangedRow(value: value, row: row, size: fieldSize)
-                            //
-                            //                                        }
-                            //                                        .onEnded { _ in
-                            //                                            handleDragEnded()
-                            //                                        }
-                            //                                )
-                            //                        )
-                        }
-                    }
-                }
-//                .padding([.top, .leading])
-            }
-            
-            
-        }
-//        .padding(.trailing)
-    }
     
     @ViewBuilder
     func controller() -> some View {
@@ -213,10 +105,9 @@ struct ContentView: View {
                 addScaleRowDiv
             }
             .padding()
-            
-            HStack {
+           
                 slider(from: -10, to: 10, for: $faktor, name: "faktor")
-            }
+            
         }
     }
     
@@ -308,14 +199,20 @@ struct FieldView: View {
                 
                 shape.fill()
                 shape.foregroundColor(.orange)
-                shape.strokeBorder(lineWidth: geometry.size.width / DrawingConstants.lineWidthDiv)
+                shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
+                //                if field.notDiv {
+                //                    shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
+                //                        .foregroundColor(.red)
+                //                }
                 Text(String(field.content)).font(font(in: geometry.size))
-                if field.notDiv {
-                    shape.strokeBorder(lineWidth: geometry.size.width / DrawingConstants.lineWidthDiv)
-                        .foregroundColor(.red)
-                }
-                
+
             }
+            .background(
+                GeometryReader { geo in
+                    Color.clear
+                        .preference(key: SizePreferenceKey.self, value: geo.size)
+                }
+            )
         }
     }
     
@@ -325,8 +222,44 @@ struct FieldView: View {
     
     enum DrawingConstants {
         static let cornerRadius: CGFloat = 20
-        static let lineWidthDiv: CGFloat = 40
+        static let lineWidth: CGFloat = 2
         static let fontScale: CGFloat = 0.7
+    }
+}
+
+struct FieldSizeModifier: ViewModifier {
+    @Binding var fieldSize: CGSize
+    @State private var previousSize: CGSize = .zero
+    
+    func body(content: Content) -> some View {
+        content
+            .background(
+                GeometryReader { geo in
+                    Color.clear
+                        .preference(key: SizePreferenceKey.self, value: geo.size)
+                }
+            )
+            .onPreferenceChange(SizePreferenceKey.self) { size in
+                // Vergleiche die vorherige Größe mit der aktuellen Größe
+                if size != self.previousSize {
+                    self.fieldSize = size
+                    self.previousSize = size
+                }
+            }
+    }
+}
+
+struct SizePreferenceKey: PreferenceKey {
+    static var defaultValue: CGSize = .zero
+    
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+        value = nextValue()
+    }
+}
+
+extension View {
+    func fieldSize(_ fieldSize: Binding<CGSize>) -> some View {
+        self.modifier(FieldSizeModifier(fieldSize: fieldSize))
     }
 }
 
@@ -341,45 +274,58 @@ struct SelectionView: View {
     var items: [Int]
     @Binding var selectedItems: [Int]
     var axis: Axis
-    
+    var fieldSize: CGSize
+    var onDragChanged: ((DragGesture.Value, Int, CGSize) -> Void)?
+
     var body: some View {
         VStack {
             if axis == .vertical {
                 ForEach(items, id: \.self) { item in
                     Button(action: {
                         toggleSelection(item: item)
-                        
                     }, label: {
-                       
-                        Text("\(item + 1)")
-                            .padding(5)
-                            .background(selectedItems.contains(item) ? Color.blue : Color.clear)
-                            .cornerRadius(5)
-                                     
+                        if item >= 0 {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .frame(width: fieldSize.width / 4, height: fieldSize.height)
+                                    .opacity(0.5)
+                                    .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.5))
+                                Text("\(item + 1)")
+                                    .foregroundColor(selectedItems.contains(item) ? .white : .black)
+                            }
+                        }
                     })
+                    .gesture(DragGesture()
+                        .onChanged { value in
+                            onDragChanged?(value, item, fieldSize)
+                        }
+                    )
                 }
             } else {
                 HStack {
                     ForEach(items, id: \.self) { item in
-                        Spacer()
                         Button(action: {
                             toggleSelection(item: item)
                         }, label: {
-                            
-                            Text("\(item + 1)")
-                                .padding(5)
-                                .background(selectedItems.contains(item) ? Color.blue : Color.clear)
-                                .cornerRadius(5)
-                            
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .frame(width: fieldSize.width, height: fieldSize.height / 4)
+                                    .opacity(0.5)
+                                    .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.5))
+                                Text("\(item + 1)")
+                            }
                         })
-                        
+                        .gesture(DragGesture()
+                            .onChanged { value in
+                                onDragChanged?(value, item, fieldSize)
+                            }
+                        )
                     }
                 }
             }
         }
-        .padding(5)
     }
-    
+
     private func toggleSelection(item: Int) {
         if let index = selectedItems.firstIndex(where: { $0 == item }) {
             selectedItems.remove(at: index)
