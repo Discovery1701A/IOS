@@ -17,7 +17,7 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            matrixView
+            matrixView()
                 .fieldSize($fieldSize) // Hier wird die Größe übergeben
             Spacer()
             controller()
@@ -25,29 +25,29 @@ struct ContentView: View {
     }
 
     @ViewBuilder
-    var matrixView: some View {
+    func matrixView() -> some View {
         VStack {
             ForEach(-1..<modelView.matrix.count, id: \.self) { row in
                 HStack {
-                    SelectionView(items: [row], selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize)
+                    SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize) { value in
+                        handleDragChangedRow(value: value, row: row, size: fieldSize)
+                    }
                     ForEach(0..<modelView.matrix[0].count, id: \.self) { column in
                         VStack {
                             if row >= 0 {
                                 FieldView(field: modelView.matrix[row][column])
-                                    .fieldSize($fieldSize)  // Hier wird die Größe ohne den Dollarzeichen verwendet
-//                                    .overlay(
-//                                        Text("Width: \(Int(fieldSize.width)), Height: \(Int(fieldSize.height))"))
-                                        
+                                    .fieldSize($fieldSize)
                                     .border(selectedRows.contains(row) || selectedColumns.contains(column) ? Color.red : Color.clear, width: 2)
-                                    .background(
-                                     
-                                    )
                             } else {
-                                SelectionView(items: [column], selectedItems: $selectedColumns, axis: .horizontal, fieldSize: fieldSize)
+                                SelectionView(item: column, selectedItems: $selectedColumns, axis: .horizontal, fieldSize: fieldSize) { value in
+                                    handleDragChangedColumn(value: value, column: column, size: fieldSize)
+                                }
                             }
                         }
                     }
-                    SelectionView(items: [row], selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize)
+                    SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize) { value in
+                        handleDragChangedRow(value: value, row: row, size: fieldSize)
+                    }
                 }
             }
         }
@@ -69,6 +69,7 @@ struct ContentView: View {
             modelView.columnSwitch(column1: modelView.draggedColumn ?? column, column2: draggedColumnIndex)
             modelView.draggedColumn = draggedColumnIndex
         }
+        
     }
     
     func handleDragChangedRow(value: DragGesture.Value, row: Int, size: CGSize) {
@@ -271,57 +272,30 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 struct SelectionView: View {
-    var items: [Int]
+    var item: Int
     @Binding var selectedItems: [Int]
     var axis: Axis
     var fieldSize: CGSize
-    var onDragChanged: ((DragGesture.Value, Int, CGSize) -> Void)?
+    var onDragChanged: ((DragGesture.Value) -> Void)?
 
     var body: some View {
-        VStack {
-            if axis == .vertical {
-                ForEach(items, id: \.self) { item in
-                    Button(action: {
-                        toggleSelection(item: item)
-                    }, label: {
-                        if item >= 0 {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .frame(width: fieldSize.width / 4, height: fieldSize.height)
-                                    .opacity(0.5)
-                                    .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.5))
-                                Text("\(item + 1)")
-                                    .foregroundColor(selectedItems.contains(item) ? .white : .black)
-                            }
-                        }
-                    })
-                    .gesture(DragGesture()
-                        .onChanged { value in
-                            onDragChanged?(value, item, fieldSize)
-                        }
-                    )
+        Button(action: {
+            toggleSelection(item: item)
+        }) {
+            if item >= 0 {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 20)
+                        .frame(width: axis == .vertical ? fieldSize.width / 4 : fieldSize.width,
+                               height: axis == .vertical ? fieldSize.height : fieldSize.height / 4)
+                        .opacity(0.5)
+                        .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.5))
+
+                    Text("\(item + 1)")
+                        .foregroundColor(selectedItems.contains(item) ? .white : .black)
                 }
-            } else {
-                HStack {
-                    ForEach(items, id: \.self) { item in
-                        Button(action: {
-                            toggleSelection(item: item)
-                        }, label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .frame(width: fieldSize.width, height: fieldSize.height / 4)
-                                    .opacity(0.5)
-                                    .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.5))
-                                Text("\(item + 1)")
-                            }
-                        })
-                        .gesture(DragGesture()
-                            .onChanged { value in
-                                onDragChanged?(value, item, fieldSize)
-                            }
-                        )
-                    }
-                }
+                .gesture(DragGesture().onChanged { value in
+                    onDragChanged?(value)
+                })
             }
         }
     }
