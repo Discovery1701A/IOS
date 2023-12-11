@@ -50,12 +50,12 @@ struct ContentView: View {
                     }
                 }
             }
-        }
+        }.padding(1)
     }
     
     func handleDragChangedColumn(value: DragGesture.Value, column: Int, size: CGSize) {
         let translation = value.translation.width
-        let columnWidth = size.width // CGFloat(modelView.matrix.first?.count ?? 1)
+        let columnWidth = size.width + 1.0 // CGFloat(modelView.matrix.first?.count ?? 1)
         var draggedColumnIndex = column + Int((value.startLocation.x + translation) / columnWidth)
         
         // schieben ins negative
@@ -74,7 +74,7 @@ struct ContentView: View {
     
     func handleDragChangedRow(value: DragGesture.Value, row: Int, size: CGSize) {
         let translation = value.translation.height
-        let rowHeight = size.height / CGFloat(modelView.matrix.count) // CGFloat(modelView.matrix.first?.count ?? 1)
+        let rowHeight = size.height + 1.0 // CGFloat(modelView.matrix.first?.count ?? 1)
         var draggedRowIndex = row + Int((value.startLocation.y + translation) / rowHeight)
         
         // schieben ins negative
