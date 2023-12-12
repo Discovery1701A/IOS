@@ -19,13 +19,13 @@ class ViewModel: ObservableObject {
         Model(rowCount: 4)
     }
     @Published private var model: Model = createSetGame()
-        @Published var draggedColumn: Int?
-        @Published var draggedRow: Int?
-
+    @Published var draggedColumn: Int?
+    @Published var draggedRow: Int?
+    
     var matrix : [[Field]] {
         return model.matrix
     }
-   func rowSwitch(row1 : Int, row2 : Int) {
+    func rowSwitch(row1 : Int, row2 : Int) {
         model.rowSwitch(row1: row1, row2: row2)
     }
     
@@ -47,7 +47,9 @@ class ViewModel: ObservableObject {
     func controllScale(row : Int, faktor : Int, multi : Bool) -> Bool {
         model.controllScale(row : row, faktor : faktor, multi : multi) 
     }
-    
+    func drag(row : Int = -1, column : Int = -1, bool : Bool) {
+        model.drag(row: -1, column: -1, bool: bool)
+    } 
     func newMatrix() {
         model.generatMatrix()
     }

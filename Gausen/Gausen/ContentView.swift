@@ -14,7 +14,7 @@ struct ContentView: View {
     @State private var selectedRows: [Int] = []
     @State private var selectedColumns: [Int] = []
     @State private var fieldSize: CGSize = .zero
-
+    
     var body: some View {
         VStack {
             matrixView()
@@ -23,7 +23,7 @@ struct ContentView: View {
             controller()
         }
     }
-
+    
     @ViewBuilder
     func matrixView() -> some View {
         VStack {
@@ -54,13 +54,20 @@ struct ContentView: View {
     }
     
     func handleDragChangedColumn(value: DragGesture.Value, column: Int, size: CGSize) {
+        modelView.drag( column: column, bool: true)
         let translation = value.translation.width
         let columnWidth = size.width + 1.0 // CGFloat(modelView.matrix.first?.count ?? 1)
         var draggedColumnIndex = column + Int((value.startLocation.x + translation) / columnWidth)
         
-        // schieben ins negative
-        if translation < 0 {
-            draggedColumnIndex = column - Int((value.startLocation.x - translation) / columnWidth )
+        if Int((value.startLocation.x + translation)) < 0 {
+            draggedColumnIndex -= 1
+            
+            // print(draggedRowIndex,rowHeight, Int((value.startLocation.y + translation)))
+        }
+        if Int((value.startLocation.x + translation)) > 0 {
+            draggedColumnIndex += 1
+            
+            // print(draggedRowIndex,rowHeight, Int((value.startLocation.y + translation)))
         }
         // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
         draggedColumnIndex = max(0, min(draggedColumnIndex, modelView.matrix.first?.count ?? 0))
@@ -68,6 +75,7 @@ struct ContentView: View {
         if draggedColumnIndex != modelView.draggedColumn {
             modelView.columnSwitch(column1: modelView.draggedColumn ?? column, column2: draggedColumnIndex)
             modelView.draggedColumn = draggedColumnIndex
+            modelView.drag( column: column, bool: false)
         }
         
     }
@@ -77,13 +85,19 @@ struct ContentView: View {
         let rowHeight = size.height + 1.0 // CGFloat(modelView.matrix.first?.count ?? 1)
         var draggedRowIndex = row + Int((value.startLocation.y + translation) / rowHeight)
         
-        // schieben ins negative
-        if translation < 0 {
-            draggedRowIndex = row - Int((value.startLocation.y - translation) / rowHeight )
+        if Int((value.startLocation.y + translation)) < 0 && translation < 0 {
+            draggedRowIndex -= 1
+            
+           // print(draggedRowIndex,rowHeight, Int((value.startLocation.y + translation)))
+        }
+        if Int((value.startLocation.y + translation)) > 0 &&  translation > 0{
+            draggedRowIndex += 1
+            
+            print(draggedRowIndex,rowHeight, Int((value.startLocation.y + translation)))
         }
         // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
         draggedRowIndex = max(0, min(draggedRowIndex, modelView.matrix.first?.count ?? 0))
-        //        print(column, draggedColumnIndex, Int(value.startLocation.x + translation), value.startLocation.x, modelView.draggedColumn, Int(columnWidth), translation)
+
         if draggedRowIndex != modelView.draggedRow {
             modelView.rowSwitch(row1: modelView.draggedRow ?? row, row2: draggedRowIndex)
             modelView.draggedRow = draggedRowIndex
@@ -106,8 +120,8 @@ struct ContentView: View {
                 addScaleRowDiv
             }
             .padding()
-           
-                slider(from: -10, to: 10, for: $faktor, name: "faktor")
+            
+            slider(from: -10, to: 10, for: $faktor, name: "faktor")
             
         }
     }
@@ -199,14 +213,14 @@ struct FieldView: View {
                 let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
                 
                 shape.fill()
-                shape.foregroundColor(.orange)
+                shape.foregroundColor(backColor())
                 shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
                 //                if field.notDiv {
                 //                    shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
                 //                        .foregroundColor(.red)
                 //                }
                 Text(String(field.content)).font(font(in: geometry.size))
-
+                
             }
             .background(
                 GeometryReader { geo in
@@ -216,7 +230,15 @@ struct FieldView: View {
             )
         }
     }
-    
+    private func backColor() -> Color {
+        if field.draged {
+            return.cyan
+        } else if field.notDiv {
+            return Color.red
+        } else {
+          return .orange
+        }
+    }
     private func font(in size: CGSize) -> Font {
         Font.system(size: min(size.width, size.height) * DrawingConstants.fontScale)
     }
@@ -277,7 +299,7 @@ struct SelectionView: View {
     var axis: Axis
     var fieldSize: CGSize
     var onDragChanged: ((DragGesture.Value) -> Void)?
-
+    
     var body: some View {
         Button(action: {
             toggleSelection(item: item)
@@ -289,7 +311,7 @@ struct SelectionView: View {
                                height: axis == .vertical ? fieldSize.height : fieldSize.height / 4)
                         .opacity(0.5)
                         .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.5))
-
+                    
                     Text("\(item + 1)")
                         .foregroundColor(selectedItems.contains(item) ? .white : .black)
                 }
@@ -299,7 +321,7 @@ struct SelectionView: View {
             }
         }
     }
-
+    
     private func toggleSelection(item: Int) {
         if let index = selectedItems.firstIndex(where: { $0 == item }) {
             selectedItems.remove(at: index)
