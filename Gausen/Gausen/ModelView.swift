@@ -48,8 +48,8 @@ class ViewModel: ObservableObject {
         model.controllScale(row : row, faktor : faktor, multi : multi) 
     }
     func drag(row : Int = -1, column : Int = -1, bool : Bool) {
-        model.drag(row: -1, column: -1, bool: bool)
-    } 
+        model.drag(row: row, column: column, bool: bool)
+    }
     func newMatrix() {
         model.generatMatrix()
     }

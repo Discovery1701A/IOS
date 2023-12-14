@@ -17,6 +17,7 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
+            
             matrixView()
                 .fieldSize($fieldSize) // Hier wird die Größe übergeben
             Spacer()
@@ -29,9 +30,11 @@ struct ContentView: View {
         VStack {
             ForEach(-1..<modelView.matrix.count, id: \.self) { row in
                 HStack {
-                    SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize) { value in
-                        handleDragChangedRow(value: value, row: row, size: fieldSize)
-                    }
+                    SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize, onDragChanged: { value in
+                                        handleDragChangedRow(value: value, row: row, size: fieldSize)
+                                    }, onDragEnded: {
+                                        handleDragEnded()  // Aufruf der Funktion für DragEnded
+                                    })
                     ForEach(0..<modelView.matrix[0].count, id: \.self) { column in
                         VStack {
                             if row >= 0 {
@@ -39,72 +42,94 @@ struct ContentView: View {
                                     .fieldSize($fieldSize)
                                     .border(selectedRows.contains(row) || selectedColumns.contains(column) ? Color.red : Color.clear, width: 2)
                             } else {
-                                SelectionView(item: column, selectedItems: $selectedColumns, axis: .horizontal, fieldSize: fieldSize) { value in
+                                SelectionView(item: column, selectedItems: $selectedColumns, axis: .horizontal, fieldSize: fieldSize, onDragChanged: { value in
                                     handleDragChangedColumn(value: value, column: column, size: fieldSize)
-                                }
+                                }, onDragEnded: {
+                                    handleDragEnded()  // Aufruf der Funktion für DragEnded
+                                })
                             }
                         }
                     }
-                    SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize) { value in
-                        handleDragChangedRow(value: value, row: row, size: fieldSize)
-                    }
+                    SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize, onDragChanged: { value in
+                                        handleDragChangedRow(value: value, row: row, size: fieldSize)
+                                    }, onDragEnded: {
+                                        handleDragEnded()  // Aufruf der Funktion für DragEnded
+                                    })
                 }
             }
         }.padding(1)
     }
     
     func handleDragChangedColumn(value: DragGesture.Value, column: Int, size: CGSize) {
+        modelView.varReset()
         modelView.drag( column: column, bool: true)
         let translation = value.translation.width
-        let columnWidth = size.width + 1.0 // CGFloat(modelView.matrix.first?.count ?? 1)
+        let columnWidth = size.width  // CGFloat(modelView.matrix.first?.count ?? 1)
         var draggedColumnIndex = column + Int((value.startLocation.x + translation) / columnWidth)
         
         if Int((value.startLocation.x + translation)) < 0 {
+            if translation < 0 {
             draggedColumnIndex -= 1
-            
-            // print(draggedRowIndex,rowHeight, Int((value.startLocation.y + translation)))
+          
         }
-        if Int((value.startLocation.x + translation)) > 0 {
+        if  translation > 0 {
             draggedColumnIndex += 1
             
-            // print(draggedRowIndex,rowHeight, Int((value.startLocation.y + translation)))
         }
-        // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
+            
+        }
+        modelView.drag(column: draggedColumnIndex, bool: true)        // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
         draggedColumnIndex = max(0, min(draggedColumnIndex, modelView.matrix.first?.count ?? 0))
         //        print(column, draggedColumnIndex, Int(value.startLocation.x + translation), value.startLocation.x, modelView.draggedColumn, Int(columnWidth), translation)
         if draggedColumnIndex != modelView.draggedColumn {
             modelView.columnSwitch(column1: modelView.draggedColumn ?? column, column2: draggedColumnIndex)
             modelView.draggedColumn = draggedColumnIndex
-            modelView.drag( column: column, bool: false)
+//            modelView.drag( column: column, bool: false)
+//            modelView.varReset()
+        }
+        for i in 0 ..< modelView.matrix.count where i != draggedColumnIndex {
+            modelView.drag(column: i, bool: false)
         }
         
     }
     
     func handleDragChangedRow(value: DragGesture.Value, row: Int, size: CGSize) {
+        modelView.varReset()
         let translation = value.translation.height
-        let rowHeight = size.height + 1.0 // CGFloat(modelView.matrix.first?.count ?? 1)
-        var draggedRowIndex = row + Int((value.startLocation.y + translation) / rowHeight)
-        
-        if Int((value.startLocation.y + translation)) < 0 && translation < 0 {
+        let rowHeight = size.height  // CGFloat(modelView.matrix.first?.count ?? 1)
+        var draggedRowIndex = row + Int((value.startLocation.y + translation + CGFloat(row)) / rowHeight)
+       
+        if Int((value.startLocation.y + translation)) < 0 {
+            if translation < 0 {
             draggedRowIndex -= 1
             
-           // print(draggedRowIndex,rowHeight, Int((value.startLocation.y + translation)))
+            print(draggedRowIndex, rowHeight, Int((value.startLocation.y + translation)))
         }
-        if Int((value.startLocation.y + translation)) > 0 && translation > 0 {
+        if  translation > 0 {
             draggedRowIndex += 1
             
             print(draggedRowIndex, rowHeight, Int((value.startLocation.y + translation)))
         }
+            
+        }
+        modelView.drag(row: draggedRowIndex, bool: true)
         // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
         draggedRowIndex = max(0, min(draggedRowIndex, modelView.matrix.first?.count ?? 0))
-
+       
         if draggedRowIndex != modelView.draggedRow {
             modelView.rowSwitch(row1: modelView.draggedRow ?? row, row2: draggedRowIndex)
             modelView.draggedRow = draggedRowIndex
+            
         }
+        for i in 0 ..< modelView.matrix.count where i != draggedRowIndex {
+            modelView.drag(row: i, bool: false)
+        }
+        
     }
     
     func handleDragEnded() {
+        
+        modelView.varReset()
         modelView.draggedColumn = nil
         modelView.draggedRow = nil
     }
@@ -130,7 +155,7 @@ struct ContentView: View {
     func slider(from min: Int, to max: Int, for value: Binding<Double>, name: String) -> some View {
         Slider(
             value: value,
-            in: Double(min)...Double(max),
+            in: Double(min )...Double(max),
             step: 1.0
         ) {
             Text(name)
@@ -305,28 +330,32 @@ struct SelectionView: View {
     var axis: Axis
     var fieldSize: CGSize
     var onDragChanged: ((DragGesture.Value) -> Void)?
+    var onDragEnded: (() -> Void)?
     
     var body: some View {
-        Button(action: {
-            toggleSelection(item: item)
-        }) {
-            if item >= 0 {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 20)
-                        .frame(width: axis == .vertical ? fieldSize.width / 4 : fieldSize.width,
-                               height: axis == .vertical ? fieldSize.height : fieldSize.height / 4)
-                        .opacity(0.5)
-                        .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.5))
-                    
-                    Text("\(item + 1)")
-                        .foregroundColor(selectedItems.contains(item) ? .white : .black)
+            Button(action: {
+                toggleSelection(item: item)
+            }) {
+                if item >= 0 {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 20)
+                            .frame(width: axis == .vertical ? fieldSize.width / 4 : fieldSize.width,
+                                   height: axis == .vertical ? fieldSize.height : fieldSize.height / 4)
+                            .opacity(0.5)
+                            .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.5))
+                        
+                        Text("\(item + 1)")
+                            .foregroundColor(selectedItems.contains(item) ? .white : .black)
+                    }
+                    .gesture(DragGesture().onChanged { value in
+                        onDragChanged?(value)
+                    }
+                        .onEnded { _ in
+                            onDragEnded?() ?? {}()  // Default Closure, falls onDragEnded nil ist
+                        })
                 }
-                .gesture(DragGesture().onChanged { value in
-                    onDragChanged?(value)
-                })
             }
         }
-    }
     
     private func toggleSelection(item: Int) {
         if let index = selectedItems.firstIndex(where: { $0 == item }) {

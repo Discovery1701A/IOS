@@ -18,7 +18,7 @@ struct Model {
     
     mutating func rowSwitch(row1 : Int, row2 : Int) {
         // print(row1, self.matrix.count)
-        if row1 < self.matrix.count && row2 < self.matrix.count {
+        if self.matrix[0].count > row1 && row1 >= 0 && self.matrix[0].count > row2 && row2 >= 0 {
             let rowSaver : [Field] = self.matrix[row2]
             self.matrix[row2] = self.matrix[row1]
             self.matrix[row1] = rowSaver
@@ -79,13 +79,16 @@ struct Model {
                 self.matrix[row][i].notDiv = false
                 if multi == false {
 //                        print(self.matrix[row][i].content / faktor, multi)
-                    print("ssss", self.matrix[row][i].content % faktor) 
-                    if self.matrix[row][i].content % faktor == 1 {
+                    print("ssss", (self.matrix[row][i].content % faktor), self.matrix[row][i].content)
+                    if !(self.matrix[row][i].content % faktor == 0) {
                         self.matrix[row][i].notDiv = true
 //                        print( self.matrix[row][i].notDiv)
-                        return false
+                       
                     }
                 }
+            }
+            for j in 0 ..< self.matrix[row].count where self.matrix[row][j].notDiv == true {
+                return false
             }
             return true
         }
@@ -143,15 +146,18 @@ struct Model {
         // mixMatrix(howMany: 5, range: 3)
     }
     mutating func drag(row : Int = -1, column : Int = -1, bool : Bool) {
-        print("drag")
-        if row >= 0 {
-            for i in 0 ..< self.matrix[row].count {
-                self.matrix[row][i].draged = bool
+        print("drag", row)
+        if row <= self.matrix.count || column <= self.matrix[0].count {
+            if row >= 0 {
+                for i in 0 ..< self.matrix[row].count {
+                    self.matrix[row][i].draged = bool
+                    print(self.matrix[row][i].draged)
+                }
             }
-        }
-        if column >= 0 {
-            for i in 0 ..< self.matrix.count {
-                self.matrix[i][column].draged = bool
+            if column >= 0 {
+                for i in 0 ..< self.matrix.count {
+                    self.matrix[i][column].draged = bool
+                }
             }
         }
     }
@@ -164,6 +170,7 @@ struct Model {
                 self.matrix[i][j].selection = false
             }
             for j in 0 ..< self.matrix[i].count where self.matrix[i][j].draged == true {
+                print("off")
                 self.matrix[i][j].draged = false
             }
         }
