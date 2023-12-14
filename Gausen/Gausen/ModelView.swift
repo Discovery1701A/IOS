@@ -53,4 +53,7 @@ class ViewModel: ObservableObject {
     func newMatrix() {
         model.generatMatrix()
     }
+    func varReset() {
+        model.varReset()
+    }
 }

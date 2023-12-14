@@ -90,10 +90,10 @@ struct ContentView: View {
             
            // print(draggedRowIndex,rowHeight, Int((value.startLocation.y + translation)))
         }
-        if Int((value.startLocation.y + translation)) > 0 &&  translation > 0{
+        if Int((value.startLocation.y + translation)) > 0 && translation > 0 {
             draggedRowIndex += 1
             
-            print(draggedRowIndex,rowHeight, Int((value.startLocation.y + translation)))
+            print(draggedRowIndex, rowHeight, Int((value.startLocation.y + translation)))
         }
         // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
         draggedRowIndex = max(0, min(draggedRowIndex, modelView.matrix.first?.count ?? 0))
@@ -148,6 +148,7 @@ struct ContentView: View {
     @ViewBuilder
     var mischen: some View {
         Button(action: {
+            modelView.varReset()
             modelView.mixMatrix(howMany: 20, range: 3)
         }, label: {
             Text("mischen")
@@ -157,6 +158,7 @@ struct ContentView: View {
     @ViewBuilder
     var splate: some View {
         Button(action: {
+            modelView.varReset()
             if let firstColumn = selectedColumns.first, let secondColumn = selectedColumns.dropFirst().first {
                 modelView.columnSwitch(column1:firstColumn, column2: secondColumn )
             }
@@ -170,6 +172,7 @@ struct ContentView: View {
     @ViewBuilder
     var addScaleRowMulti: some View {
         Button(action: {
+            modelView.varReset()
             if let firstRow = selectedRows.first, let secondRow = selectedRows.dropFirst().first {
                 modelView.addScaleRow(faktor: Int(faktor), row1: firstRow, row2: secondRow, multi: true)
             }
@@ -182,8 +185,11 @@ struct ContentView: View {
     @ViewBuilder
     var addScaleRowDiv: some View {
         Button(action: {
+            modelView.varReset()
             if let firstRow = selectedRows.first, let secondRow = selectedRows.dropFirst().first {
-                modelView.addScaleRow(faktor: Int(faktor), row1: firstRow, row2: secondRow, multi: false)
+                if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: false) {
+                    modelView.addScaleRow(faktor: Int(faktor), row1: firstRow, row2: secondRow, multi: false)
+                }
             }
             selectedRows.removeAll()
             selectedColumns.removeAll()

@@ -76,16 +76,13 @@ struct Model {
     mutating func controllScale(row : Int, faktor : Int, multi : Bool) -> Bool {
         if faktor != 0 {
             for i in 0 ..< self.matrix[row].count {
-                
-                if multi == true || faktor <= 0 {
-                    if !(type(of: self.matrix[row][i].content * faktor) == Int.self) {
+                self.matrix[row][i].notDiv = false
+                if multi == false {
+//                        print(self.matrix[row][i].content / faktor, multi)
+                    print("ssss", self.matrix[row][i].content % faktor) 
+                    if self.matrix[row][i].content % faktor == 1 {
                         self.matrix[row][i].notDiv = true
-                        return false
-                    }
-                } else {
-                    //                    print(self.matrix[row][i].content / faktor, multi)
-                    if !(type(of: self.matrix[row][i].content / faktor) == Int.self) {
-                        self.matrix[row][i].notDiv = true
+//                        print( self.matrix[row][i].notDiv)
                         return false
                     }
                 }
@@ -146,6 +143,7 @@ struct Model {
         // mixMatrix(howMany: 5, range: 3)
     }
     mutating func drag(row : Int = -1, column : Int = -1, bool : Bool) {
+        print("drag")
         if row >= 0 {
             for i in 0 ..< self.matrix[row].count {
                 self.matrix[row][i].draged = bool
@@ -154,6 +152,19 @@ struct Model {
         if column >= 0 {
             for i in 0 ..< self.matrix.count {
                 self.matrix[i][column].draged = bool
+            }
+        }
+    }
+    mutating func varReset () {
+        for i in 0 ..< self.matrix.count {
+            for j in 0 ..< self.matrix[i].count where self.matrix[i][j].notDiv == true {
+                self.matrix[i][j].notDiv = false
+            }
+            for j in 0 ..< self.matrix[i].count where self.matrix[i][j].selection == true {
+                self.matrix[i][j].selection = false
+            }
+            for j in 0 ..< self.matrix[i].count where self.matrix[i][j].draged == true {
+                self.matrix[i][j].draged = false
             }
         }
     }
