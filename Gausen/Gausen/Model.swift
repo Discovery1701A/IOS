@@ -95,28 +95,46 @@ struct Model {
         return false
     }
     
-    mutating func mixMatrix(howMany : Int, range : Int) {
-        
-        for _ in 0 ..< howMany {
-            
-            if Bool.random() == true {
-                addScaleRow(faktor: Int.random(in: (-range)..<(range - 1)), row1: Int.random(in: 0..<self.matrix.count), row2: Int.random(in: 0..<self.matrix.count), multi: Bool.random())
-                //                        print(i)
-                //  continue
-            } else if Bool.random() == true {
-                scaleRow(faktor : Int.random(in: (-range)..<(range - 1)), row : Int.random(in: 0..<self.matrix.count), multi: Bool.random())
-                //  continue
-                
-            } else if Bool.random() == true {
-                
-                columnSwitch(column1: Int.random(in: 0..<self.matrix.count), column2:Int.random(in: 0..<self.matrix.count))
-                //  continue
+    mutating func mixMatrix(howMany: Int, range: Int) {
+        var addCount = 0
+        var switchCount = 0
+
+        for _ in 0..<howMany {
+            let randomValue = Int.random(in: (-range)..<range)
+            let randomRow1 = Int.random(in: 0..<self.matrix.count)
+            let randomRow2 = Int.random(in: 0..<self.matrix.count)
+            let randomColumn1 = Int.random(in: 0..<self.matrix[0].count)
+            let randomColumn2 = Int.random(in: 0..<self.matrix[0].count)
+
+            if addCount < howMany / 2 {
+                // Zuerst die add-Funktionen aufrufen
+                switch Int.random(in: 0..<2) {
+                case 0:
+                    addScaleRow(faktor: randomValue, row1: randomRow1, row2: randomRow2, multi: Bool.random())
+                    addCount += 1
+                case 1:
+                    scaleRow(faktor: randomValue, row: randomRow1, multi: Bool.random())
+                    addCount += 1
+                default:
+                    break
+                }
             } else {
-                rowSwitch(row1: Int.random(in: 0..<self.matrix.count), row2: Int.random(in: 0..<self.matrix.count))
+                // Dann die switch-Funktionen aufrufen
+                switch Int.random(in: 0..<2) {
+                case 0:
+                    columnSwitch(column1: randomColumn1, column2: randomColumn2)
+                    switchCount += 1
+                case 1:
+                    rowSwitch(row1: randomRow1, row2: randomRow2)
+                    switchCount += 1
+                default:
+                    break
+                }
             }
-            
         }
+        varReset()
     }
+
     mutating func vergleichen(is value: Int) -> Bool {
         for i in 0 ..< self.rowCount where self.matrix[i][i].content == value {
             return true

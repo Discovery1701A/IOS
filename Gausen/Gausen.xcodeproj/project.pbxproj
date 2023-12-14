@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		586A7B1F2B2B43AE0034BA36 /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A7B1E2B2B43AE0034BA36 /* SelectionView.swift */; };
+		586A7B212B2B43F80034BA36 /* FieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A7B202B2B43F80034BA36 /* FieldView.swift */; };
 		58BF9CE42B0FC1DC002D5DCC /* GausenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BF9CE32B0FC1DC002D5DCC /* GausenApp.swift */; };
 		58BF9CE62B0FC1DC002D5DCC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BF9CE52B0FC1DC002D5DCC /* ContentView.swift */; };
 		58BF9CE82B0FC1DE002D5DCC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58BF9CE72B0FC1DE002D5DCC /* Assets.xcassets */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		586A7B1E2B2B43AE0034BA36 /* SelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionView.swift; sourceTree = "<group>"; };
+		586A7B202B2B43F80034BA36 /* FieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldView.swift; sourceTree = "<group>"; };
 		58BF9CE02B0FC1DC002D5DCC /* Gausen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gausen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58BF9CE32B0FC1DC002D5DCC /* GausenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GausenApp.swift; sourceTree = "<group>"; };
 		58BF9CE52B0FC1DC002D5DCC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -57,6 +61,8 @@
 			children = (
 				58BF9CE32B0FC1DC002D5DCC /* GausenApp.swift */,
 				58BF9CE52B0FC1DC002D5DCC /* ContentView.swift */,
+				586A7B202B2B43F80034BA36 /* FieldView.swift */,
+				586A7B1E2B2B43AE0034BA36 /* SelectionView.swift */,
 				58BF9CF12B0FC357002D5DCC /* ModelView.swift */,
 				58BF9CF32B0FC3AB002D5DCC /* Model.swift */,
 				58BF9CE72B0FC1DE002D5DCC /* Assets.xcassets */,
@@ -166,9 +172,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				58BF9CF22B0FC357002D5DCC /* ModelView.swift in Sources */,
+				586A7B212B2B43F80034BA36 /* FieldView.swift in Sources */,
 				58BF9CE62B0FC1DC002D5DCC /* ContentView.swift in Sources */,
 				58BF9CE42B0FC1DC002D5DCC /* GausenApp.swift in Sources */,
 				58BF9CF42B0FC3AB002D5DCC /* Model.swift in Sources */,
+				586A7B1F2B2B43AE0034BA36 /* SelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

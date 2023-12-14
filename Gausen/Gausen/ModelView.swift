@@ -15,13 +15,13 @@ class ViewModel: ObservableObject {
         [4, 5, 6],
         [7, 8, 9]
     ]
-    private static func createSetGame () -> Model {
-        Model(rowCount: 4)
+    private static func createSetGame (rowCount : Int) -> Model {
+        Model(rowCount: rowCount)
     }
-    @Published private var model: Model = createSetGame()
+    @Published private var model: Model = createSetGame(rowCount: 2)
     @Published var draggedColumn: Int?
     @Published var draggedRow: Int?
-    
+    @Published var status : String = "start"
     var matrix : [[Field]] {
         return model.matrix
     }
@@ -50,7 +50,8 @@ class ViewModel: ObservableObject {
     func drag(row : Int = -1, column : Int = -1, bool : Bool) {
         model.drag(row: row, column: column, bool: bool)
     }
-    func newMatrix() {
+    func newMatrix(rowCount : Int) {
+        model = ViewModel.createSetGame(rowCount: rowCount)
         model.generatMatrix()
     }
     func varReset() {

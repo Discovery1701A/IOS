@@ -10,18 +10,34 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var modelView: ViewModel
     @State private var faktor = 1.0
+    @State private var rowCount = 3.0
     @State private var isEditing = false
     @State private var selectedRows: [Int] = []
     @State private var selectedColumns: [Int] = []
     @State private var fieldSize: CGSize = .zero
     
     var body: some View {
-        VStack {
+        if  modelView.status == "start"{
+            start()
             
-            matrixView()
-                .fieldSize($fieldSize) // Hier wird die Größe übergeben
+        } else if  modelView.status == "play"{
+            VStack {
+                
+                matrixView()
+                    .fieldSize($fieldSize) // Hier wird die Größe übergeben
+                Spacer()
+                controller()
+            }
+        }
+    }
+    @ViewBuilder
+    func start() -> some View {
+        VStack {
+            Text("Start")
             Spacer()
-            controller()
+            slider(from: 2, to: 6, for: $rowCount, name: "Wie Viele Zeilen")
+            startButton
+            
         }
     }
     
@@ -147,7 +163,7 @@ struct ContentView: View {
             .padding()
             
             slider(from: -10, to: 10, for: $faktor, name: "faktor")
-            
+            backButton
         }
     }
     
@@ -174,9 +190,30 @@ struct ContentView: View {
     var mischen: some View {
         Button(action: {
             modelView.varReset()
-            modelView.mixMatrix(howMany: 20, range: 3)
+            modelView.mixMatrix(howMany: 30, range: 10)
         }, label: {
             Text("mischen")
+        })
+    }
+    @ViewBuilder
+    var startButton: some View {
+        Button(action: {
+            modelView.newMatrix(rowCount: Int(rowCount))
+            selectedRows = []
+            selectedColumns = []
+            modelView.status = "play"
+        }, label: {
+            Text("Start")
+        })
+    }
+    @ViewBuilder
+    var backButton: some View {
+        Button(action: {
+            selectedRows = []
+            selectedColumns = []
+            modelView.status = "start"
+        }, label: {
+            Text("Zurück")
         })
     }
     
@@ -226,7 +263,7 @@ struct ContentView: View {
     @ViewBuilder
     var neu: some View {
         Button(action: {
-            modelView.newMatrix()
+            modelView.newMatrix(rowCount: 4)
             selectedRows = []
             selectedColumns = []
         }, label: {
@@ -235,133 +272,9 @@ struct ContentView: View {
     }
 }
 
-struct FieldView: View {
-    let field: ViewModel.Field
-    
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-                
-                shape.fill()
-                shape.foregroundColor(backColor())
-                shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
-                //                if field.notDiv {
-                //                    shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
-                //                        .foregroundColor(.red)
-                //                }
-                Text(String(field.content)).font(font(in: geometry.size))
-                
-            }
-            .background(
-                GeometryReader { geo in
-                    Color.clear
-                        .preference(key: SizePreferenceKey.self, value: geo.size)
-                }
-            )
-        }
-    }
-    private func backColor() -> Color {
-        if field.draged {
-            return.cyan
-        } else if field.notDiv {
-            return Color.red
-        } else {
-          return .orange
-        }
-    }
-    private func font(in size: CGSize) -> Font {
-        Font.system(size: min(size.width, size.height) * DrawingConstants.fontScale)
-    }
-    
-    enum DrawingConstants {
-        static let cornerRadius: CGFloat = 20
-        static let lineWidth: CGFloat = 2
-        static let fontScale: CGFloat = 0.7
-    }
-}
-
-struct FieldSizeModifier: ViewModifier {
-    @Binding var fieldSize: CGSize
-    @State private var previousSize: CGSize = .zero
-    
-    func body(content: Content) -> some View {
-        content
-            .background(
-                GeometryReader { geo in
-                    Color.clear
-                        .preference(key: SizePreferenceKey.self, value: geo.size)
-                }
-            )
-            .onPreferenceChange(SizePreferenceKey.self) { size in
-                // Vergleiche die vorherige Größe mit der aktuellen Größe
-                if size != self.previousSize {
-                    self.fieldSize = size
-                    self.previousSize = size
-                }
-            }
-    }
-}
-
-struct SizePreferenceKey: PreferenceKey {
-    static var defaultValue: CGSize = .zero
-    
-    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
-        value = nextValue()
-    }
-}
-
-extension View {
-    func fieldSize(_ fieldSize: Binding<CGSize>) -> some View {
-        self.modifier(FieldSizeModifier(fieldSize: fieldSize))
-    }
-}
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let modelView = ViewModel()
         ContentView(modelView: modelView)
-    }
-}
-
-struct SelectionView: View {
-    var item: Int
-    @Binding var selectedItems: [Int]
-    var axis: Axis
-    var fieldSize: CGSize
-    var onDragChanged: ((DragGesture.Value) -> Void)?
-    var onDragEnded: (() -> Void)?
-    
-    var body: some View {
-            Button(action: {
-                toggleSelection(item: item)
-            }) {
-                if item >= 0 {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .frame(width: axis == .vertical ? fieldSize.width / 4 : fieldSize.width,
-                                   height: axis == .vertical ? fieldSize.height : fieldSize.height / 4)
-                            .opacity(0.5)
-                            .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.5))
-                        
-                        Text("\(item + 1)")
-                            .foregroundColor(selectedItems.contains(item) ? .white : .black)
-                    }
-                    .gesture(DragGesture().onChanged { value in
-                        onDragChanged?(value)
-                    }
-                        .onEnded { _ in
-                            onDragEnded?() ?? {}()  // Default Closure, falls onDragEnded nil ist
-                        })
-                }
-            }
-        }
-    
-    private func toggleSelection(item: Int) {
-        if let index = selectedItems.firstIndex(where: { $0 == item }) {
-            selectedItems.remove(at: index)
-        } else {
-            selectedItems.append(item)
-        }
     }
 }
