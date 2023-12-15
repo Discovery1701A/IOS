@@ -40,13 +40,17 @@ struct Model {
         }
     }
     mutating func back () {
-        self.currentNode = linkedList.back(currentNode: currentNode)
-        self.matrix = self.currentNode.element as! [[Field]]
+        if linkedList.back(currentNode: currentNode).element != nil {
+            self.currentNode = linkedList.back(currentNode: currentNode)
+            self.matrix = self.currentNode.element as! [[Field]]
+        }
     }
     
     mutating func forwart () {
-        self.currentNode = linkedList.forwart(currentNode: currentNode)
-        self.matrix = self.currentNode.element as! [[Field]]
+        if linkedList.forwart(currentNode: currentNode).element != nil {
+            self.currentNode = linkedList.forwart(currentNode: currentNode)
+            self.matrix = self.currentNode.element as! [[Field]]
+        }
     }
     
     mutating func rowSwitch(row1 : Int, row2 : Int) {
