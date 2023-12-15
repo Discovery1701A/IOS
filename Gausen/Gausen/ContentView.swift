@@ -173,6 +173,8 @@ struct ContentView: View {
                 scaleRowDiv
                 scaleRowMulti
             }
+            undo
+            redo
             .padding()
             
             slider(from: -10, to: 10, for: $faktor, name: "faktor")
@@ -198,6 +200,17 @@ struct ContentView: View {
         }
         Text("\(Int(value.wrappedValue))")
             .foregroundColor(isEditing ? .red : .blue)
+    }
+    
+    @ViewBuilder
+    var redo : some View {
+        Button(action: {
+            modelView.forwart()}, label: { Image(systemName: "arrow.uturn.forward") })
+    }
+    @ViewBuilder
+    var undo : some View {
+        Button(action: {
+            modelView.back()}, label: { Image(systemName: "arrow.uturn.backward") })
     }
     
     @ViewBuilder

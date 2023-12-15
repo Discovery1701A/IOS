@@ -28,6 +28,7 @@ struct Model {
                 for j in 0 ..< self.matrix[i].count {
                     if currentNodeMatrix[i][j].content != self.matrix[i][j].content {
                         // Update the element or perform any other actions
+                        linkedList.removeAllBehinde(currentNode: currentNode)
                         linkedList.add(element: self.matrix)
                         self.currentNode = linkedList.lastNode
                     }
@@ -55,6 +56,7 @@ struct Model {
             self.matrix[row2] = self.matrix[row1]
             self.matrix[row1] = rowSaver
         }
+        updateMatrixNode()
     }
     
     mutating func columnSwitch(column1 : Int, column2 : Int) {
@@ -67,6 +69,7 @@ struct Model {
                 self.matrix[i][column1] = columnSaver
             }
         }
+        updateMatrixNode()
     }
     
     mutating func scaleRow(faktor : Int, row : Int, multi : Bool) {
@@ -84,6 +87,7 @@ struct Model {
                 print(0)
             }
         }
+        updateMatrixNode()
     }
     
     mutating func addScaleRow(faktor : Int, row1 : Int, row2 : Int, multi : Bool) {
@@ -103,6 +107,7 @@ struct Model {
                 print(0)
             }
         }
+        updateMatrixNode()
     }
     
     mutating func controllScale(row : Int, faktor : Int, multi : Bool) -> Bool {
@@ -208,7 +213,9 @@ struct Model {
                     self.matrix[i][column].draged = bool
                 }
         }
+        updateMatrixNode()
     }
+    
     mutating func varReset () {
         for i in 0 ..< self.matrix.count {
             for j in 0 ..< self.matrix[i].count where self.matrix[i][j].notDiv == true {
@@ -222,6 +229,7 @@ struct Model {
                 self.matrix[i][j].draged = false
             }
         }
+        updateMatrixNode()
     }
     
     struct Field :Identifiable, Hashable {

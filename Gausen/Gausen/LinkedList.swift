@@ -85,6 +85,7 @@ class LinkedList {
     }
     func removeAllBehinde(currentNode : Node) {
         currentNode.successor = nil
+        lastNode = currentNode
     }
     
     func back(currentNode : Node) -> Node {
