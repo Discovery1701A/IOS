@@ -1,10 +1,3 @@
-//
-//  FieldView.swift
-//  Gausen
-//
-//  Created by Anna Rieckmann on 14.12.23.
-//
-
 import SwiftUI
 
 struct FieldView: View {
@@ -38,7 +31,7 @@ struct FieldView: View {
         } else if field.notDiv {
             return Color.red
         } else {
-          return .orange
+            return .orange
         }
     }
     

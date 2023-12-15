@@ -10,6 +10,7 @@ import SwiftUI
 
 class ViewModel: ObservableObject {
     typealias Field = Model.Field
+    
     var testMatrix = [
         [1, 2, 3],
         [4, 5, 6],
@@ -47,14 +48,34 @@ class ViewModel: ObservableObject {
     func controllScale(row : Int, faktor : Int, multi : Bool) -> Bool {
         model.controllScale(row : row, faktor : faktor, multi : multi) 
     }
+    
     func drag(row : Int = -1, column : Int = -1, bool : Bool) {
         model.drag(row: row, column: column, bool: bool)
     }
+    
     func newMatrix(rowCount : Int) {
         model = ViewModel.createSetGame(rowCount: rowCount)
         model.generatMatrix()
     }
+    
     func varReset() {
         model.varReset()
     }
+    
+    func back() {
+        model.back()
+    }
+    
+    func forwart() {
+        model.forwart()
+    }
+    
+    func updateMatrixNode() {
+        model.updateMatrixNode()
+    }
+    
+    func resetMemory() {
+        model.linkedList.reset()
+    }
+    
 }

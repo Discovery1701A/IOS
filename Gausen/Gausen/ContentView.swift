@@ -34,11 +34,22 @@ struct ContentView: View {
     func start() -> some View {
         VStack {
             Text("Start")
-            Spacer()
-            slider(from: 2, to: 6, for: $rowCount, name: "Wie Viele Zeilen")
-            startButton
+                .font(.title)
+                .padding(.bottom, 20) // Abstand unterhalb des Texts
             
+            Spacer()
+            
+            slider(from: 2, to: 6, for: $rowCount, name: "Wie Viele Zeilen")
+                .padding([.leading, .trailing, .bottom]) // Padding auf der linken, rechten und unteren Seite
+            
+            Spacer()
+            
+            startButton
+                .padding() // Standard-Padding für den Startbutton
+            
+            Spacer()
         }
+        .padding() // Padding für den gesamten VStack
     }
     
     @ViewBuilder
@@ -47,10 +58,10 @@ struct ContentView: View {
             ForEach(-1..<modelView.matrix.count, id: \.self) { row in
                 HStack {
                     SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize, onDragChanged: { value in
-                                        handleDragChangedRow(value: value, row: row, size: fieldSize)
-                                    }, onDragEnded: {
-                                        handleDragEnded()  // Aufruf der Funktion für DragEnded
-                                    })
+                        handleDragChangedRow(value: value, row: row, size: fieldSize)
+                    }, onDragEnded: {
+                        handleDragEnded()  // Aufruf der Funktion für DragEnded
+                    })
                     ForEach(0..<modelView.matrix[0].count, id: \.self) { column in
                         VStack {
                             if row >= 0 {
@@ -67,10 +78,10 @@ struct ContentView: View {
                         }
                     }
                     SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize, onDragChanged: { value in
-                                        handleDragChangedRow(value: value, row: row, size: fieldSize)
-                                    }, onDragEnded: {
-                                        handleDragEnded()  // Aufruf der Funktion für DragEnded
-                                    })
+                        handleDragChangedRow(value: value, row: row, size: fieldSize)
+                    }, onDragEnded: {
+                        handleDragEnded()  // Aufruf der Funktion für DragEnded
+                    })
                 }
             }
         }.padding(1)
@@ -85,13 +96,13 @@ struct ContentView: View {
         
         if Int((value.startLocation.x + translation)) < 0 {
             if translation < 0 {
-            draggedColumnIndex -= 1
-          
-        }
-        if  translation > 0 {
-            draggedColumnIndex += 1
-            
-        }
+                draggedColumnIndex -= 1
+                
+            }
+            if  translation > 0 {
+                draggedColumnIndex += 1
+                
+            }
             
         }
         modelView.drag(column: draggedColumnIndex, bool: true)        // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
@@ -100,8 +111,8 @@ struct ContentView: View {
         if draggedColumnIndex != modelView.draggedColumn {
             modelView.columnSwitch(column1: modelView.draggedColumn ?? column, column2: draggedColumnIndex)
             modelView.draggedColumn = draggedColumnIndex
-//            modelView.drag( column: column, bool: false)
-//            modelView.varReset()
+            //            modelView.drag( column: column, bool: false)
+            //            modelView.varReset()
         }
         for i in 0 ..< modelView.matrix.count where i != draggedColumnIndex {
             modelView.drag(column: i, bool: false)
@@ -114,24 +125,24 @@ struct ContentView: View {
         let translation = value.translation.height
         let rowHeight = size.height  // CGFloat(modelView.matrix.first?.count ?? 1)
         var draggedRowIndex = row + Int((value.startLocation.y + translation + CGFloat(row)) / rowHeight)
-       
+        
         if Int((value.startLocation.y + translation)) < 0 {
             if translation < 0 {
-            draggedRowIndex -= 1
-            
-            print(draggedRowIndex, rowHeight, Int((value.startLocation.y + translation)))
-        }
-        if  translation > 0 {
-            draggedRowIndex += 1
-            
-            print(draggedRowIndex, rowHeight, Int((value.startLocation.y + translation)))
-        }
+                draggedRowIndex -= 1
+                
+                print(draggedRowIndex, rowHeight, Int((value.startLocation.y + translation)))
+            }
+            if  translation > 0 {
+                draggedRowIndex += 1
+                
+                print(draggedRowIndex, rowHeight, Int((value.startLocation.y + translation)))
+            }
             
         }
         modelView.drag(row: draggedRowIndex, bool: true)
         // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
         draggedRowIndex = max(0, min(draggedRowIndex, modelView.matrix.first?.count ?? 0))
-       
+        
         if draggedRowIndex != modelView.draggedRow {
             modelView.rowSwitch(row1: modelView.draggedRow ?? row, row2: draggedRowIndex)
             modelView.draggedRow = draggedRowIndex
@@ -159,6 +170,8 @@ struct ContentView: View {
                 splate
                 addScaleRowMulti
                 addScaleRowDiv
+                scaleRowDiv
+                scaleRowMulti
             }
             .padding()
             
@@ -169,12 +182,13 @@ struct ContentView: View {
     
     @ViewBuilder
     func slider(from min: Int, to max: Int, for value: Binding<Double>, name: String) -> some View {
+        Text(name)
         Slider(
             value: value,
             in: Double(min )...Double(max),
             step: 1.0
         ) {
-            Text(name)
+            
         } minimumValueLabel: {
             Text(String(min))
         } maximumValueLabel: {
@@ -190,7 +204,7 @@ struct ContentView: View {
     var mischen: some View {
         Button(action: {
             modelView.varReset()
-            modelView.mixMatrix(howMany: 30, range: 10)
+            modelView.mixMatrix(howMany: modelView.matrix.count * 10, range: 10)
         }, label: {
             Text("mischen")
         })
@@ -256,7 +270,38 @@ struct ContentView: View {
             selectedRows.removeAll()
             selectedColumns.removeAll()
         }, label: {
+            Text("Dividieren +")
+        })
+    }
+    @ViewBuilder
+    var scaleRowDiv: some View {
+        Button(action: {
+            modelView.varReset()
+            if let firstRow = selectedRows.first {
+                if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: false) {
+                    modelView.scaleRow(faktor: Int(faktor), row: firstRow, multi: false)
+                }
+            }
+            selectedRows.removeAll()
+            selectedColumns.removeAll()
+        }, label: {
             Text("Dividieren")
+        })
+    } 
+    
+    @ViewBuilder
+    var scaleRowMulti: some View {
+        Button(action: {
+            modelView.varReset()
+            if let firstRow = selectedRows.first {
+                if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: true) {
+                    modelView.scaleRow(faktor: Int(faktor), row: firstRow, multi: true)
+                }
+            }
+            selectedRows.removeAll()
+            selectedColumns.removeAll()
+        }, label: {
+            Text("Multiplizieren")
         })
     }
     

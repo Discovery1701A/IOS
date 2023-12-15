@@ -10,10 +10,42 @@ import Foundation
 struct Model {
     private(set) var rowCount : Int
     private(set) var matrix : [[Field]]
+    var linkedList : LinkedList
+    var currentNode : LinkedList.Node
     init(rowCount: Int) {
+        self.linkedList = LinkedList()
+        self.currentNode = self.linkedList.emptyNode
         self.rowCount = rowCount
         self.matrix = []
-        generatMatrix()
+        self.generatMatrix()
+        self.linkedList.add(element: self.matrix)
+        self.currentNode = linkedList.lastNode
+    }
+    
+    mutating func updateMatrixNode() {
+        if let currentNodeMatrix = currentNode.element as? [[Field]] {
+            for i in 0 ..< self.matrix.count {
+                for j in 0 ..< self.matrix[i].count {
+                    if currentNodeMatrix[i][j].content != self.matrix[i][j].content {
+                        // Update the element or perform any other actions
+                        linkedList.add(element: self.matrix)
+                        self.currentNode = linkedList.lastNode
+                    }
+                }
+            }
+        }
+        if linkedList.numberOfElements > 20 {
+            linkedList.remove(index: 0)
+        }
+    }
+    mutating func back () {
+        self.currentNode = linkedList.back(currentNode: currentNode)
+        self.matrix = self.currentNode.element as! [[Field]]
+    }
+    
+    mutating func forwart () {
+        self.currentNode = linkedList.forwart(currentNode: currentNode)
+        self.matrix = self.currentNode.element as! [[Field]]
     }
     
     mutating func rowSwitch(row1 : Int, row2 : Int) {
@@ -78,12 +110,12 @@ struct Model {
             for i in 0 ..< self.matrix[row].count {
                 self.matrix[row][i].notDiv = false
                 if multi == false {
-//                        print(self.matrix[row][i].content / faktor, multi)
+                    //                        print(self.matrix[row][i].content / faktor, multi)
                     print("ssss", (self.matrix[row][i].content % faktor), self.matrix[row][i].content)
                     if !(self.matrix[row][i].content % faktor == 0) {
                         self.matrix[row][i].notDiv = true
-//                        print( self.matrix[row][i].notDiv)
-                       
+                        //                        print( self.matrix[row][i].notDiv)
+                        
                     }
                 }
             }
@@ -98,14 +130,14 @@ struct Model {
     mutating func mixMatrix(howMany: Int, range: Int) {
         var addCount = 0
         var switchCount = 0
-
+        
         for _ in 0..<howMany {
             let randomValue = Int.random(in: (-range)..<range)
             let randomRow1 = Int.random(in: 0..<self.matrix.count)
             let randomRow2 = Int.random(in: 0..<self.matrix.count)
             let randomColumn1 = Int.random(in: 0..<self.matrix[0].count)
             let randomColumn2 = Int.random(in: 0..<self.matrix[0].count)
-
+            
             if addCount < howMany / 2 {
                 // Zuerst die add-Funktionen aufrufen
                 switch Int.random(in: 0..<2) {
@@ -134,7 +166,7 @@ struct Model {
         }
         varReset()
     }
-
+    
     mutating func vergleichen(is value: Int) -> Bool {
         for i in 0 ..< self.rowCount where self.matrix[i][i].content == value {
             return true
@@ -164,19 +196,17 @@ struct Model {
         // mixMatrix(howMany: 5, range: 3)
     }
     mutating func drag(row : Int = -1, column : Int = -1, bool : Bool) {
-        print("drag", row)
-        if row <= self.matrix.count || column <= self.matrix[0].count {
-            if row >= 0 {
-                for i in 0 ..< self.matrix[row].count {
+        print("drag", row, self.matrix.count)
+            if row >= 0 && row < self.matrix.count {
+                for i in 0 ..< self.matrix.count {
                     self.matrix[row][i].draged = bool
                     print(self.matrix[row][i].draged)
                 }
             }
-            if column >= 0 {
+            if column >= 0 && column < self.matrix[0].count {
                 for i in 0 ..< self.matrix.count {
                     self.matrix[i][column].draged = bool
                 }
-            }
         }
     }
     mutating func varReset () {
