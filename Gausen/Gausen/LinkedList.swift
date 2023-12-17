@@ -14,15 +14,15 @@ class LinkedList {
         
         init(element: Any?) {
             self.element = element
-            self.successor = nil
-            self.predecessor = nil
+            successor = nil
+            predecessor = nil
         }
     }
     
     var emptyNode = Node(element: nil)
     var firstNode: Node
     var lastNode: Node
-    var numberOfElements: Int 
+    var numberOfElements: Int
     
     init() {
         firstNode = emptyNode
@@ -45,10 +45,10 @@ class LinkedList {
     }
     
     func remove(index: Int) {
-        if index >= 0 && index < numberOfElements {
+        if index >= 0, index < numberOfElements {
             var currentNode: Node? = firstNode
             
-            for currentIndex in 0..<index {
+            for _ in 0..<index {
                 currentNode = currentNode?.successor
             }
             
@@ -69,43 +69,41 @@ class LinkedList {
             numberOfElements -= 1
         }
     }
-    func get(index : Int) -> Any? {
+
+    func get(index: Int) -> Any? {
         if index >= 0 || index < numberOfElements {
-            
-            var nodeAtCurrentIndex : Node = firstNode.successor!
+            var nodeAtCurrentIndex: Node = firstNode.successor!
             
             for _ in 0..<index {
                 nodeAtCurrentIndex = nodeAtCurrentIndex.successor!
-                
             }
             return nodeAtCurrentIndex.element
-            
         }
         return nil
     }
     
-    func removeAllBehinde(currentNode : Node) {
+    func removeAllBehinde(currentNode: Node) {
         currentNode.successor = nil
         lastNode = currentNode
     }
     
-    func back(currentNode : Node) -> Node {
+    func back(currentNode: Node) -> Node {
         if currentNode.predecessor != nil {
             return currentNode.predecessor!
         }
         return emptyNode
     }
-    func forwart (currentNode : Node) -> Node {
+
+    func forwart(currentNode: Node) -> Node {
         if currentNode.successor != nil {
             return currentNode.successor!
         }
         return emptyNode
     }
     
-    func reset () {
+    func reset() {
         firstNode = emptyNode
         lastNode = emptyNode
         numberOfElements = 0
     }
-    
 }

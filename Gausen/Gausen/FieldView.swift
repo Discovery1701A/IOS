@@ -27,7 +27,7 @@ struct FieldView: View {
     
     private func backColor() -> Color {
         if field.draged {
-            return.cyan
+            return .cyan
         } else if field.notDiv {
             return Color.red
         } else if field.selection {
@@ -84,6 +84,6 @@ struct SizePreferenceKey: PreferenceKey {
 
 extension View {
     func fieldSize(_ fieldSize: Binding<CGSize>) -> some View {
-        self.modifier(FieldSizeModifier(fieldSize: fieldSize))
+        modifier(FieldSizeModifier(fieldSize: fieldSize))
     }
 }

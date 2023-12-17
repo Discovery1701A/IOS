@@ -16,27 +16,30 @@ class ViewModel: ObservableObject {
         [4, 5, 6],
         [7, 8, 9]
     ]
-    private static func createSetGame (rowCount : Int) -> Model {
+    private static func createSetGame(rowCount: Int) -> Model {
         Model(rowCount: rowCount)
     }
+
     @Published private var model: Model = createSetGame(rowCount: 2)
     @Published var draggedColumn: Int?
     @Published var draggedRow: Int?
-    @Published var status : String = "start"
-    var matrix : [[Field]] {
+    @Published var status: String = "start"
+    var matrix: [[Field]] {
         return model.matrix
     }
-    func rowSwitch(row1 : Int, row2 : Int) {
+
+    func rowSwitch(row1: Int, row2: Int) {
         model.rowSwitch(row1: row1, row2: row2)
     }
     
-    func columnSwitch(column1 : Int, column2 : Int) {
+    func columnSwitch(column1: Int, column2: Int) {
         model.columnSwitch(column1: column1, column2: column2)
     }
     
-    func mixMatrix(howMany : Int, range : Int) {
+    func mixMatrix(howMany: Int, range: Int) {
         model.mixMatrix(howMany: howMany, range: range)
     }
+
     func addScaleRow(faktor: Int, row1: Int, row2: Int, multi: Bool) {
         model.addScaleRow(faktor: faktor, row1: row1, row2: row2, multi: multi)
     }
@@ -45,15 +48,15 @@ class ViewModel: ObservableObject {
         model.scaleRow(faktor: faktor, row: row, multi: multi)
     }
     
-    func controllScale(row : Int, faktor : Int, multi : Bool) -> Bool {
-        model.controllScale(row : row, faktor : faktor, multi : multi) 
+    func controllScale(row: Int, faktor: Int, multi: Bool) -> Bool {
+        model.controllScale(row: row, faktor: faktor, multi: multi)
     }
     
-    func drag(row : Int = -1, column : Int = -1, bool : Bool) {
+    func drag(row: Int = -1, column: Int = -1, bool: Bool) {
         model.drag(row: row, column: column, bool: bool)
     }
     
-    func newMatrix(rowCount : Int) {
+    func newMatrix(rowCount: Int) {
         model = ViewModel.createSetGame(rowCount: rowCount)
         model.generatMatrix()
     }
@@ -78,8 +81,7 @@ class ViewModel: ObservableObject {
         model.linkedList.reset()
     }
     
-    func updateSelection(row : Int, column : Int, selection : Bool) {
+    func updateSelection(row: Int, column: Int, selection: Bool) {
         model.updateSelection(row: row, column: column, selection: selection)
     }
-    
 }

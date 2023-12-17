@@ -19,13 +19,12 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geometry in
             
-                if  modelView.status == "start"{
-                    start()
+            if modelView.status == "start" {
+                start()
                     
-                } else if  modelView.status == "play"{
-                    if geometry.size.width < geometry.size.height {
+            } else if modelView.status == "play" {
+                if geometry.size.width < geometry.size.height {
                     VStack {
-                        
                         matrixView()
                             .fieldSize($fieldSize) // Hier wird die Größe übergeben
                         Spacer()
@@ -33,7 +32,6 @@ struct ContentView: View {
                     }
                 } else {
                     HStack {
-                        
                         matrixView()
                             .fieldSize($fieldSize) // Hier wird die Größe übergeben
                         Spacer()
@@ -43,6 +41,7 @@ struct ContentView: View {
             }
         }
     }
+
     @ViewBuilder
     func start() -> some View {
         VStack {
@@ -68,69 +67,63 @@ struct ContentView: View {
     @ViewBuilder
     func matrixView() -> some View {
         VStack {
-            ForEach(-1..<modelView.matrix.count, id: \.self) { row in
+            ForEach(-1 ..< modelView.matrix.count, id: \.self) { row in
                 HStack {
-                    SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize, onDragChanged: { value in
-                        handleDragChangedRow(value: value, row: row, size: fieldSize)
-                    }, onDragEnded: {
-                        handleDragEnded()  // Aufruf der Funktion für DragEnded
-                    })
-                    ForEach(0..<modelView.matrix[0].count, id: \.self) { column in
+                    SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize,
+                                  onDragChanged: { value in
+                                      handleDragChangedRow(value: value, row: row, size: fieldSize)
+                                  }, onDragEnded: {
+                                      handleDragEnded()
+                                  })
+                    ForEach(0 ..< modelView.matrix[0].count, id: \.self) { column in
                         VStack {
                             if row >= 0 {
                                 FieldView(field: modelView.matrix[row][column])
-                                                        .fieldSize($fieldSize)
-                                                        .onAppear {
-                                                                                        
-                                                                                               if selectedRows.contains(row) || selectedColumns.contains(column) {
-                                                                                                   modelView.updateSelection(row: row, column: column, selection: !modelView.matrix[row][column].selection)
-                                                                                                                                   }
-                                                        }
-                                                        
-                                //                                                        .gesture(
-//                                                            MagnificationGesture()
-//                                                                .onChanged { scale in
-//                                                                    handleScaleGesture(scale, row: row)
-//                                                                }
-//                                                        )
+                                    .fieldSize($fieldSize)
+                                
                             } else {
-                                SelectionView(item: column, selectedItems: $selectedColumns, axis: .horizontal, fieldSize: fieldSize, onDragChanged: { value in
-                                    handleDragChangedColumn(value: value, column: column, size: fieldSize)
-                                }, onDragEnded: {
-                                    handleDragEnded()  // Aufruf der Funktion für DragEnded
-                                })
+                                SelectionView(item: column, selectedItems: $selectedColumns, axis: .horizontal, fieldSize: fieldSize,
+                                              onDragChanged: { value in
+                                                  handleDragChangedColumn(value: value, column: column, size: fieldSize)
+                                              }, onDragEnded: {
+                                                  handleDragEnded()
+                                              })
                             }
                         }
                     }
                     SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize, onDragChanged: { value in
                         handleDragChangedRow(value: value, row: row, size: fieldSize)
                     }, onDragEnded: {
-                        handleDragEnded()  // Aufruf der Funktion für DragEnded
+                        handleDragEnded()
                     })
                 }
             }
         }.padding(1)
     }
     
+    func handleFieldTap(row: Int, column: Int) {
+        if selectedRows.contains(row) || selectedColumns.contains(column) {
+            print(row, column)
+            modelView.updateSelection(row: row, column: column, selection: !modelView.matrix[row][column].selection)
+        }
+    }
+    
     func handleDragChangedColumn(value: DragGesture.Value, column: Int, size: CGSize) {
         modelView.varReset()
-        modelView.drag( column: column, bool: true)
+        modelView.drag(column: column, bool: true)
         let translation = value.translation.width
-        let columnWidth = size.width  // CGFloat(modelView.matrix.first?.count ?? 1)
+        let columnWidth = size.width // CGFloat(modelView.matrix.first?.count ?? 1)
         var draggedColumnIndex = column + Int((value.startLocation.x + translation) / columnWidth)
         
-        if Int((value.startLocation.x + translation)) < 0 {
+        if Int(value.startLocation.x + translation) < 0 {
             if translation < 0 {
                 draggedColumnIndex -= 1
-                
             }
-            if  translation > 0 {
+            if translation > 0 {
                 draggedColumnIndex += 1
-                
             }
-            
         }
-        modelView.drag(column: draggedColumnIndex, bool: true)        // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
+        modelView.drag(column: draggedColumnIndex, bool: true) // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
         draggedColumnIndex = max(0, min(draggedColumnIndex, modelView.matrix.first?.count ?? 0))
         //        print(column, draggedColumnIndex, Int(value.startLocation.x + translation), value.startLocation.x, modelView.draggedColumn, Int(columnWidth), translation)
         if draggedColumnIndex != modelView.draggedColumn {
@@ -142,7 +135,6 @@ struct ContentView: View {
         for i in 0 ..< modelView.matrix.count where i != draggedColumnIndex {
             modelView.drag(column: i, bool: false)
         }
-        
     }
     
 //    func handleScaleGesture(_ scale: CGFloat, row: Int) {
@@ -155,21 +147,20 @@ struct ContentView: View {
     func handleDragChangedRow(value: DragGesture.Value, row: Int, size: CGSize) {
         modelView.varReset()
         let translation = value.translation.height
-        let rowHeight = size.height  // CGFloat(modelView.matrix.first?.count ?? 1)
+        let rowHeight = size.height // CGFloat(modelView.matrix.first?.count ?? 1)
         var draggedRowIndex = row + Int((value.startLocation.y + translation + CGFloat(row)) / rowHeight)
         
-        if Int((value.startLocation.y + translation)) < 0 {
+        if Int(value.startLocation.y + translation) < 0 {
             if translation < 0 {
                 draggedRowIndex -= 1
                 
-                print(draggedRowIndex, rowHeight, Int((value.startLocation.y + translation)))
+                print(draggedRowIndex, rowHeight, Int(value.startLocation.y + translation))
             }
-            if  translation > 0 {
+            if translation > 0 {
                 draggedRowIndex += 1
                 
-                print(draggedRowIndex, rowHeight, Int((value.startLocation.y + translation)))
+                print(draggedRowIndex, rowHeight, Int(value.startLocation.y + translation))
             }
-            
         }
         modelView.drag(row: draggedRowIndex, bool: true)
         // Begrenze die Position des gezogenen Rechtecks auf den erlaubten Bereich
@@ -178,16 +169,13 @@ struct ContentView: View {
         if draggedRowIndex != modelView.draggedRow {
             modelView.rowSwitch(row1: modelView.draggedRow ?? row, row2: draggedRowIndex)
             modelView.draggedRow = draggedRowIndex
-            
         }
         for i in 0 ..< modelView.matrix.count where i != draggedRowIndex {
             modelView.drag(row: i, bool: false)
         }
-        
     }
     
     func handleDragEnded() {
-        
         modelView.varReset()
         modelView.draggedColumn = nil
         modelView.draggedRow = nil
@@ -207,7 +195,7 @@ struct ContentView: View {
             }
             undo
             redo
-            .padding()
+                .padding()
             
             slider(from: -10, to: 10, for: $faktor, name: "faktor")
             backButton
@@ -219,11 +207,9 @@ struct ContentView: View {
         Text(name)
         Slider(
             value: value,
-            in: Double(min )...Double(max),
+            in: Double(min) ... Double(max),
             step: 1.0
-        ) {
-            
-        } minimumValueLabel: {
+        ) {} minimumValueLabel: {
             Text(String(min))
         } maximumValueLabel: {
             Text(String(max))
@@ -235,14 +221,17 @@ struct ContentView: View {
     }
     
     @ViewBuilder
-    var redo : some View {
+    var redo: some View {
         Button(action: {
-            modelView.forwart()}, label: { Image(systemName: "arrow.uturn.forward") })
+            modelView.forwart()
+        }, label: { Image(systemName: "arrow.uturn.forward") })
     }
+
     @ViewBuilder
-    var undo : some View {
+    var undo: some View {
         Button(action: {
-            modelView.back()}, label: { Image(systemName: "arrow.uturn.backward") })
+            modelView.back()
+        }, label: { Image(systemName: "arrow.uturn.backward") })
     }
     
     @ViewBuilder
@@ -254,6 +243,7 @@ struct ContentView: View {
             Text("mischen")
         })
     }
+
     @ViewBuilder
     var startButton: some View {
         Button(action: {
@@ -265,6 +255,7 @@ struct ContentView: View {
             Text("Start")
         })
     }
+
     @ViewBuilder
     var backButton: some View {
         Button(action: {
@@ -281,7 +272,7 @@ struct ContentView: View {
         Button(action: {
             modelView.varReset()
             if let firstColumn = selectedColumns.first, let secondColumn = selectedColumns.dropFirst().first {
-                modelView.columnSwitch(column1:firstColumn, column2: secondColumn )
+                modelView.columnSwitch(column1: firstColumn, column2: secondColumn)
             }
             selectedRows.removeAll()
             selectedColumns.removeAll()
@@ -303,6 +294,7 @@ struct ContentView: View {
             Text("Multiplizieren")
         })
     }
+
     @ViewBuilder
     var addScaleRowDiv: some View {
         Button(action: {
@@ -318,6 +310,7 @@ struct ContentView: View {
             Text("Dividieren +")
         })
     }
+
     @ViewBuilder
     var scaleRowDiv: some View {
         Button(action: {
@@ -332,7 +325,7 @@ struct ContentView: View {
         }, label: {
             Text("Dividieren")
         })
-    } 
+    }
     
     @ViewBuilder
     var scaleRowMulti: some View {
@@ -356,9 +349,9 @@ struct ContentView: View {
             modelView.newMatrix(rowCount: 4)
             selectedRows = []
             selectedColumns = []
-        }, label: {
+        }) {
             Text("neu")
-        })
+        }
     }
 }
 
