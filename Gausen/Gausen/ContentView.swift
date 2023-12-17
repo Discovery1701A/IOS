@@ -17,16 +17,29 @@ struct ContentView: View {
     @State private var fieldSize: CGSize = .zero
     
     var body: some View {
-        if  modelView.status == "start"{
-            start()
+        GeometryReader { geometry in
             
-        } else if  modelView.status == "play"{
-            VStack {
-                
-                matrixView()
-                    .fieldSize($fieldSize) // Hier wird die Größe übergeben
-                Spacer()
-                controller()
+                if  modelView.status == "start"{
+                    start()
+                    
+                } else if  modelView.status == "play"{
+                    if geometry.size.width < geometry.size.height {
+                    VStack {
+                        
+                        matrixView()
+                            .fieldSize($fieldSize) // Hier wird die Größe übergeben
+                        Spacer()
+                        controller()
+                    }
+                } else {
+                    HStack {
+                        
+                        matrixView()
+                            .fieldSize($fieldSize) // Hier wird die Größe übergeben
+                        Spacer()
+                        controller()
+                    }
+                }
             }
         }
     }
@@ -66,8 +79,20 @@ struct ContentView: View {
                         VStack {
                             if row >= 0 {
                                 FieldView(field: modelView.matrix[row][column])
-                                    .fieldSize($fieldSize)
-                                    .border(selectedRows.contains(row) || selectedColumns.contains(column) ? Color.red : Color.clear, width: 2)
+                                                        .fieldSize($fieldSize)
+                                                        .onAppear {
+                                                                                        
+                                                                                               if selectedRows.contains(row) || selectedColumns.contains(column) {
+                                                                                                   modelView.updateSelection(row: row, column: column, selection: !modelView.matrix[row][column].selection)
+                                                                                                                                   }
+                                                        }
+                                                        
+                                //                                                        .gesture(
+//                                                            MagnificationGesture()
+//                                                                .onChanged { scale in
+//                                                                    handleScaleGesture(scale, row: row)
+//                                                                }
+//                                                        )
                             } else {
                                 SelectionView(item: column, selectedItems: $selectedColumns, axis: .horizontal, fieldSize: fieldSize, onDragChanged: { value in
                                     handleDragChangedColumn(value: value, column: column, size: fieldSize)
@@ -119,6 +144,13 @@ struct ContentView: View {
         }
         
     }
+    
+//    func handleScaleGesture(_ scale: CGFloat, row: Int) {
+//        // Hier kannst du die Skalierungsfaktor-Logik implementieren
+//        let scaleFactor = Double(scale) // Passe dies nach Bedarf an
+//        print(scaleFactor)
+//        modelView.scaleRow(faktor: Int(scaleFactor), row: row, multi: true)
+//    }
     
     func handleDragChangedRow(value: DragGesture.Value, row: Int, size: CGSize) {
         modelView.varReset()

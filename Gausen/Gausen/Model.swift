@@ -236,6 +236,14 @@ struct Model {
         updateMatrixNode()
     }
     
+    mutating func updateSelection(row: Int, column :Int, selection : Bool) {
+        guard row >= 0 && row < matrix.count && column >= 0 && column < matrix[0].count else {
+                   return
+               }
+
+               matrix[row][column].selection = selection
+           }
+    
     struct Field :Identifiable, Hashable {
         var content: Int
         let id: Int
@@ -247,5 +255,6 @@ struct Model {
             self.id = id
             
         }
+        
     }
 }

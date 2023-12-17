@@ -30,6 +30,8 @@ struct FieldView: View {
             return.cyan
         } else if field.notDiv {
             return Color.red
+        } else if field.selection {
+            return .red
         } else {
             return .orange
         }

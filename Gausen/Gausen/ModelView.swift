@@ -78,4 +78,8 @@ class ViewModel: ObservableObject {
         model.linkedList.reset()
     }
     
+    func updateSelection(row : Int, column : Int, selection : Bool) {
+        model.updateSelection(row: row, column: column, selection: selection)
+    }
+    
 }
