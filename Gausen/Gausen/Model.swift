@@ -235,12 +235,20 @@ struct Model {
         self.updateMatrixNode()
     }
     
-    mutating func updateSelection(row: Int, column: Int, selection: Bool) {
-        guard row >= 0, row < self.matrix.count, column >= 0, column < self.matrix[0].count else {
+    mutating func updateSelection(item: Int, selection: Bool, axe : String) {
+        guard item >= 0, item < self.matrix.count else {
             return
         }
-
-        self.matrix[row][column].selection = selection
+        for i in 0 ..< self.matrix.count {
+            print(i)
+            if axe == "row"{
+                self.matrix[item][i].selection = selection
+                print(self.matrix[item][i].selection)
+            }
+            if axe == "column"{
+                self.matrix[i][item].selection = selection
+            }
+        }
     }
     
     struct Field: Identifiable, Hashable {

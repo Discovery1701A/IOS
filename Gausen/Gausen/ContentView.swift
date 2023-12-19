@@ -21,7 +21,7 @@ struct ContentView: View {
             
             if modelView.status == "start" {
                 start()
-                    
+                
             } else if modelView.status == "play" {
                 if geometry.size.width < geometry.size.height {
                     VStack {
@@ -41,7 +41,7 @@ struct ContentView: View {
             }
         }
     }
-
+    
     @ViewBuilder
     func start() -> some View {
         VStack {
@@ -56,7 +56,7 @@ struct ContentView: View {
             
             Spacer()
             
-            startButton
+            startButton()
                 .padding() // Standard-Padding für den Startbutton
             
             Spacer()
@@ -69,43 +69,82 @@ struct ContentView: View {
         VStack {
             ForEach(-1 ..< modelView.matrix.count, id: \.self) { row in
                 HStack {
-                    SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize,
-                                  onDragChanged: { value in
-                                      handleDragChangedRow(value: value, row: row, size: fieldSize)
-                                  }, onDragEnded: {
-                                      handleDragEnded()
-                                  })
+                    SelectionView(
+                        item: row,
+                        selectedItems: $selectedRows,
+                        axis: .vertical,
+                        fieldSize: fieldSize,
+                        onDragChanged: { value in
+                            handleDragChangedRow(
+                                value: value,
+                                row: row,
+                                size: fieldSize
+                            )
+                        }, onDragEnded: {
+                            handleDragEnded()
+                        },
+                        handleFieldSelection: handleFieldSelection(item: row)
+                    )
                     ForEach(0 ..< modelView.matrix[0].count, id: \.self) { column in
                         VStack {
                             if row >= 0 {
                                 FieldView(field: modelView.matrix[row][column])
                                     .fieldSize($fieldSize)
-                                
                             } else {
-                                SelectionView(item: column, selectedItems: $selectedColumns, axis: .horizontal, fieldSize: fieldSize,
-                                              onDragChanged: { value in
-                                                  handleDragChangedColumn(value: value, column: column, size: fieldSize)
-                                              }, onDragEnded: {
-                                                  handleDragEnded()
-                                              })
+                                SelectionView(
+                                    item: column,
+                                    selectedItems: $selectedColumns,
+                                    axis: .horizontal,
+                                    fieldSize: fieldSize,
+                                    onDragChanged: { value in
+                                        handleDragChangedColumn(
+                                            value: value,
+                                            column: column,
+                                            size: fieldSize
+                                        )
+                                    }, onDragEnded: {
+                                        handleDragEnded()
+                                    },
+                                    handleFieldSelection: handleFieldSelection(item: column)
+                                )
                             }
                         }
                     }
-                    SelectionView(item: row, selectedItems: $selectedRows, axis: .vertical, fieldSize: fieldSize, onDragChanged: { value in
-                        handleDragChangedRow(value: value, row: row, size: fieldSize)
-                    }, onDragEnded: {
-                        handleDragEnded()
-                    })
+                    SelectionView(
+                        item: row,
+                        selectedItems: $selectedRows,
+                        axis: .vertical,
+                        fieldSize: fieldSize,
+                        onDragChanged: { value in
+                            handleDragChangedRow(
+                                value: value,
+                                row: row,
+                                size: fieldSize
+                            )
+                        }, onDragEnded: {
+                            handleDragEnded()
+                        },
+                        handleFieldSelection: handleFieldSelection(item: row)
+                    )
                 }
             }
-        }.padding(1)
+        }
+        .padding(1)
     }
     
-    func handleFieldTap(row: Int, column: Int) {
-        if selectedRows.contains(row) || selectedColumns.contains(column) {
-            print(row, column)
-            modelView.updateSelection(row: row, column: column, selection: !modelView.matrix[row][column].selection)
+    func handleFieldSelection(item: Int) {
+        if selectedRows.contains(item) {
+            
+            modelView.updateSelection(item : item, selection: true, axe : "row")
+        } else {
+            modelView.updateSelection(item : item, selection: false, axe : "row")
         }
+        if selectedColumns.contains(item) {
+            modelView.updateSelection(item : item, selection: true, axe: "column")
+        } else {
+            modelView.updateSelection(item : item, selection: false, axe: "column")
+        }
+        
     }
     
     func handleDragChangedColumn(value: DragGesture.Value, column: Int, size: CGSize) {
@@ -153,13 +192,11 @@ struct ContentView: View {
         if Int(value.startLocation.y + translation) < 0 {
             if translation < 0 {
                 draggedRowIndex -= 1
-                
-                print(draggedRowIndex, rowHeight, Int(value.startLocation.y + translation))
+//                print(draggedRowIndex, rowHeight, Int(value.startLocation.y + translation))
             }
             if translation > 0 {
                 draggedRowIndex += 1
-                
-                print(draggedRowIndex, rowHeight, Int(value.startLocation.y + translation))
+//                print(draggedRowIndex, rowHeight, Int(value.startLocation.y + translation))
             }
         }
         modelView.drag(row: draggedRowIndex, bool: true)
@@ -185,20 +222,20 @@ struct ContentView: View {
     func controller() -> some View {
         VStack {
             HStack {
-                mischen
-                neu
-                splate
-                addScaleRowMulti
-                addScaleRowDiv
-                scaleRowDiv
-                scaleRowMulti
+                mix()
+                neu()
+                spalte()
+                addScaleRowMulti()
+                addScaleRowDiv()
+                scaleRowDiv()
+                scaleRowMulti()
             }
-            undo
-            redo
+            undo()
+            redo()
                 .padding()
             
             slider(from: -10, to: 10, for: $faktor, name: "faktor")
-            backButton
+            backButton()
         }
     }
     
@@ -221,137 +258,163 @@ struct ContentView: View {
     }
     
     @ViewBuilder
-    var redo: some View {
+    func redo() -> some View {
         Button(action: {
             modelView.forwart()
-        }, label: { Image(systemName: "arrow.uturn.forward") })
-    }
-
-    @ViewBuilder
-    var undo: some View {
-        Button(action: {
-            modelView.back()
-        }, label: { Image(systemName: "arrow.uturn.backward") })
-    }
-    
-    @ViewBuilder
-    var mischen: some View {
-        Button(action: {
-            modelView.varReset()
-            modelView.mixMatrix(howMany: modelView.matrix.count * 10, range: 10)
         }, label: {
-            Text("mischen")
+            Image(systemName: "arrow.uturn.forward")
         })
     }
 
     @ViewBuilder
-    var startButton: some View {
-        Button(action: {
-            modelView.newMatrix(rowCount: Int(rowCount))
-            selectedRows = []
-            selectedColumns = []
-            modelView.status = "play"
-        }, label: {
-            Text("Start")
-        })
-    }
-
-    @ViewBuilder
-    var backButton: some View {
-        Button(action: {
-            selectedRows = []
-            selectedColumns = []
-            modelView.status = "start"
-        }, label: {
-            Text("Zurück")
-        })
-    }
-    
-    @ViewBuilder
-    var splate: some View {
-        Button(action: {
-            modelView.varReset()
-            if let firstColumn = selectedColumns.first, let secondColumn = selectedColumns.dropFirst().first {
-                modelView.columnSwitch(column1: firstColumn, column2: secondColumn)
+    func undo() -> some View {
+        Button(
+            action: {
+                modelView.back()
+            },
+            label: { Image(systemName: "arrow.uturn.backward")
             }
-            selectedRows.removeAll()
-            selectedColumns.removeAll()
-        }, label: {
-            Text("spalte")
-        })
+        )
     }
     
     @ViewBuilder
-    var addScaleRowMulti: some View {
-        Button(action: {
-            modelView.varReset()
-            if let firstRow = selectedRows.first, let secondRow = selectedRows.dropFirst().first {
-                modelView.addScaleRow(faktor: Int(faktor), row1: firstRow, row2: secondRow, multi: true)
+    func mix() -> some View {
+        Button(
+            action: {
+                modelView.varReset()
+                modelView.mixMatrix(howMany: modelView.matrix.count * 10, range: 10)
+            }, label: {
+                Text("mischen")
             }
-            selectedRows.removeAll()
-            selectedColumns.removeAll()
-        }, label: {
-            Text("Multiplizieren")
-        })
+        )
     }
 
     @ViewBuilder
-    var addScaleRowDiv: some View {
-        Button(action: {
-            modelView.varReset()
-            if let firstRow = selectedRows.first, let secondRow = selectedRows.dropFirst().first {
-                if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: false) {
-                    modelView.addScaleRow(faktor: Int(faktor), row1: firstRow, row2: secondRow, multi: false)
+    func startButton() -> some View {
+        Button(
+            action: {
+                modelView.newMatrix(rowCount: Int(rowCount))
+                selectedRows = []
+                selectedColumns = []
+                modelView.status = "play"
+            }, label: {
+                Text("Start")
+            }
+        )
+    }
+
+    @ViewBuilder
+    func backButton() -> some View {
+        Button(
+            action: {
+                selectedRows = []
+                selectedColumns = []
+                modelView.status = "start"
+            }, label: {
+                Text("Zurück")
+            }
+        )
+    }
+    
+    @ViewBuilder
+    func spalte() -> some View {
+        Button(
+            action: {
+                modelView.varReset()
+                if let firstColumn = selectedColumns.first, let secondColumn = selectedColumns.dropFirst().first {
+                    modelView.columnSwitch(column1: firstColumn, column2: secondColumn)
                 }
+                selectedRows.removeAll()
+                selectedColumns.removeAll()
+            }, label: {
+                Text("spalte")
             }
-            selectedRows.removeAll()
-            selectedColumns.removeAll()
-        }, label: {
-            Text("Dividieren +")
-        })
+        )
+    }
+    
+    @ViewBuilder
+    func addScaleRowMulti() -> some View {
+        Button(
+            action: {
+                modelView.varReset()
+                if let firstRow = selectedRows.first, let secondRow = selectedRows.dropFirst().first {
+                    modelView.addScaleRow(faktor: Int(faktor), row1: firstRow, row2: secondRow, multi: true)
+                }
+                selectedRows.removeAll()
+                selectedColumns.removeAll()
+            }, label: {
+                Text("Multiplizieren")
+            }
+        )
     }
 
     @ViewBuilder
-    var scaleRowDiv: some View {
-        Button(action: {
-            modelView.varReset()
-            if let firstRow = selectedRows.first {
-                if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: false) {
-                    modelView.scaleRow(faktor: Int(faktor), row: firstRow, multi: false)
+    func addScaleRowDiv() -> some View {
+        Button(
+            action: {
+                modelView.varReset()
+                if let firstRow = selectedRows.first, let secondRow = selectedRows.dropFirst().first {
+                    if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: false) {
+                        modelView.addScaleRow(faktor: Int(faktor), row1: firstRow, row2: secondRow, multi: false)
+                    }
                 }
+                selectedRows.removeAll()
+                selectedColumns.removeAll()
+            }, label: {
+                Text("Dividieren +")
             }
-            selectedRows.removeAll()
-            selectedColumns.removeAll()
-        }, label: {
-            Text("Dividieren")
-        })
+        )
+    }
+
+    @ViewBuilder
+    func scaleRowDiv() -> some View {
+        Button(
+            action: {
+                modelView.varReset()
+                if let firstRow = selectedRows.first {
+                    if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: false) {
+                        modelView.scaleRow(faktor: Int(faktor), row: firstRow, multi: false)
+                    }
+                }
+                selectedRows.removeAll()
+                selectedColumns.removeAll()
+            }, label: {
+                Text("Dividieren")
+            }
+        )
     }
     
     @ViewBuilder
-    var scaleRowMulti: some View {
-        Button(action: {
-            modelView.varReset()
-            if let firstRow = selectedRows.first {
-                if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: true) {
-                    modelView.scaleRow(faktor: Int(faktor), row: firstRow, multi: true)
+    func scaleRowMulti() -> some View {
+        Button(
+            action: {
+                modelView.varReset()
+                if let firstRow = selectedRows.first {
+                    if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: true) {
+                        modelView.scaleRow(faktor: Int(faktor), row: firstRow, multi: true)
+                    }
                 }
+                selectedRows.removeAll()
+                selectedColumns.removeAll()
+            },
+            label: {
+                Text("Multiplizieren")
             }
-            selectedRows.removeAll()
-            selectedColumns.removeAll()
-        }, label: {
-            Text("Multiplizieren")
-        })
+        )
     }
     
     @ViewBuilder
-    var neu: some View {
-        Button(action: {
-            modelView.newMatrix(rowCount: 4)
-            selectedRows = []
-            selectedColumns = []
-        }) {
-            Text("neu")
-        }
+    func neu() -> some View {
+        Button(
+            action: {
+                modelView.newMatrix(rowCount: 4)
+                selectedRows = []
+                selectedColumns = []
+            },
+            label: {
+                Text("neu")
+            }
+        )
     }
 }
 
