@@ -27,6 +27,7 @@ struct ContentView: View {
                     VStack {
                         matrixView()
                             .fieldSize($fieldSize) // Hier wird die Größe übergeben
+                            
                         Spacer()
                         controller()
                     }
@@ -82,14 +83,20 @@ struct ContentView: View {
                             )
                         }, onDragEnded: {
                             handleDragEnded()
-                        },
-                        handleFieldSelection: handleFieldSelection(item: row)
+                        }
                     )
                     ForEach(0 ..< modelView.matrix[0].count, id: \.self) { column in
                         VStack {
                             if row >= 0 {
                                 FieldView(field: modelView.matrix[row][column])
                                     .fieldSize($fieldSize)
+//                                    .onChange(of: selectedRows.contains(row)) { _, newValue in
+//                                            modelView.updateSelection(item: row, selection: newValue, axe: "row")
+//                                    }
+//                                    .onChange(of: selectedColumns.contains(column)) { _, newValue in
+//                                            modelView.updateSelection(item: column, selection: newValue, axe: "column")
+//                                    }
+
                             } else {
                                 SelectionView(
                                     item: column,
@@ -104,8 +111,7 @@ struct ContentView: View {
                                         )
                                     }, onDragEnded: {
                                         handleDragEnded()
-                                    },
-                                    handleFieldSelection: handleFieldSelection(item: column)
+                                    }
                                 )
                             }
                         }
@@ -123,8 +129,7 @@ struct ContentView: View {
                             )
                         }, onDragEnded: {
                             handleDragEnded()
-                        },
-                        handleFieldSelection: handleFieldSelection(item: row)
+                        }
                     )
                 }
             }
@@ -133,18 +138,19 @@ struct ContentView: View {
     }
     
     func handleFieldSelection(item: Int) {
+        print(item)
         if selectedRows.contains(item) {
-            
+            print(item)
             modelView.updateSelection(item : item, selection: true, axe : "row")
-        } else {
+        } else if !selectedRows.contains(item) {
             modelView.updateSelection(item : item, selection: false, axe : "row")
-        }
-        if selectedColumns.contains(item) {
+        } else if selectedColumns.contains(item) {
             modelView.updateSelection(item : item, selection: true, axe: "column")
-        } else {
+        } else if !selectedColumns.contains(item) {
             modelView.updateSelection(item : item, selection: false, axe: "column")
+        } else {
+            modelView.varReset()
         }
-        
     }
     
     func handleDragChangedColumn(value: DragGesture.Value, column: Int, size: CGSize) {

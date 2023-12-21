@@ -7,13 +7,12 @@ struct SelectionView: View {
     var fieldSize: CGSize
     var onDragChanged: ((DragGesture.Value) -> Void)?
     var onDragEnded: (() -> Void)?
-    var handleFieldSelection : ()
     
     var body: some View {
         Button(
             action: {
                 toggleSelection(item: item)
-                handleFieldSelection
+            
             },
             label: {
                 if item >= 0 {

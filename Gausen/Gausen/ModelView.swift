@@ -82,9 +82,9 @@ class ViewModel: ObservableObject {
     }
     
     func updateSelection(item: Int, selection: Bool, axe: String) {
-        DispatchQueue.main.async {
+//        DispatchQueue.main.async {
             self.model.updateSelection(item: item, selection: selection, axe: axe)
         }
-    }
+//    }
 
 }
