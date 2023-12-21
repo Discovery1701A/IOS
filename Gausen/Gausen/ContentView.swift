@@ -9,12 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var modelView: ViewModel
-    @State private var faktor = 1.0
-    @State private var rowCount = 3.0
-    @State private var isEditing = false
-    @State private var selectedRows: [Int] = []
-    @State private var selectedColumns: [Int] = []
-    @State private var fieldSize: CGSize = .zero
     
     var body: some View {
         GeometryReader { geometry in
@@ -26,7 +20,7 @@ struct ContentView: View {
                 if geometry.size.width < geometry.size.height {
                     VStack {
                         matrixView()
-                            .fieldSize($fieldSize) // Hier wird die Größe übergeben
+                            .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
                             
                         Spacer()
                         controller()
@@ -34,7 +28,7 @@ struct ContentView: View {
                 } else {
                     HStack {
                         matrixView()
-                            .fieldSize($fieldSize) // Hier wird die Größe übergeben
+                            .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
                         Spacer()
                         controller()
                     }
@@ -52,7 +46,8 @@ struct ContentView: View {
             
             Spacer()
             
-            slider(from: 2, to: 6, for: $rowCount, name: "Wie Viele Zeilen")
+            slider(from: 2, to: 6, for: $modelView.rowCount, name: "Wie Viele Zeilen")
+                        .padding([.leading, .trailing, .bottom])
                 .padding([.leading, .trailing, .bottom]) // Padding auf der linken, rechten und unteren Seite
             
             Spacer()
@@ -72,14 +67,14 @@ struct ContentView: View {
                 HStack {
                     SelectionView(
                         item: row,
-                        selectedItems: $selectedRows,
+                        selectedItems: $modelView.selectedRows,
                         axis: .vertical,
-                        fieldSize: fieldSize,
+                        fieldSize: modelView.fieldSize,
                         onDragChanged: { value in
                             handleDragChangedRow(
                                 value: value,
                                 row: row,
-                                size: fieldSize
+                                size: modelView.fieldSize
                             )
                         }, onDragEnded: {
                             handleDragEnded()
@@ -89,25 +84,25 @@ struct ContentView: View {
                         VStack {
                             if row >= 0 {
                                 FieldView(field: modelView.matrix[row][column])
-                                    .fieldSize($fieldSize)
-//                                    .onChange(of: selectedRows.contains(row)) { _, newValue in
-//                                            modelView.updateSelection(item: row, selection: newValue, axe: "row")
-//                                    }
-//                                    .onChange(of: selectedColumns.contains(column)) { _, newValue in
-//                                            modelView.updateSelection(item: column, selection: newValue, axe: "column")
-//                                    }
+                                    .fieldSize($modelView.fieldSize)
+                                    .onChange(of: modelView.selectedRows.contains(row)) { _, newValue in
+                                            modelView.updateSelection(item: row, selection: newValue, axe: "row")
+                                    }
+                                    .onChange(of: modelView.selectedColumns.contains(column)) { _, newValue in
+                                            modelView.updateSelection(item: column, selection: newValue, axe: "column")
+                                    }
 
                             } else {
                                 SelectionView(
                                     item: column,
-                                    selectedItems: $selectedColumns,
+                                    selectedItems: $modelView.selectedColumns,
                                     axis: .horizontal,
-                                    fieldSize: fieldSize,
+                                    fieldSize: modelView.fieldSize,
                                     onDragChanged: { value in
                                         handleDragChangedColumn(
                                             value: value,
                                             column: column,
-                                            size: fieldSize
+                                            size: modelView.fieldSize
                                         )
                                     }, onDragEnded: {
                                         handleDragEnded()
@@ -118,14 +113,14 @@ struct ContentView: View {
                     }
                     SelectionView(
                         item: row,
-                        selectedItems: $selectedRows,
+                        selectedItems: $modelView.selectedRows,
                         axis: .vertical,
-                        fieldSize: fieldSize,
+                        fieldSize: modelView.fieldSize,
                         onDragChanged: { value in
                             handleDragChangedRow(
                                 value: value,
                                 row: row,
-                                size: fieldSize
+                                size: modelView.fieldSize
                             )
                         }, onDragEnded: {
                             handleDragEnded()
@@ -135,22 +130,6 @@ struct ContentView: View {
             }
         }
         .padding(1)
-    }
-    
-    func handleFieldSelection(item: Int) {
-        print(item)
-        if selectedRows.contains(item) {
-            print(item)
-            modelView.updateSelection(item : item, selection: true, axe : "row")
-        } else if !selectedRows.contains(item) {
-            modelView.updateSelection(item : item, selection: false, axe : "row")
-        } else if selectedColumns.contains(item) {
-            modelView.updateSelection(item : item, selection: true, axe: "column")
-        } else if !selectedColumns.contains(item) {
-            modelView.updateSelection(item : item, selection: false, axe: "column")
-        } else {
-            modelView.varReset()
-        }
     }
     
     func handleDragChangedColumn(value: DragGesture.Value, column: Int, size: CGSize) {
@@ -240,28 +219,28 @@ struct ContentView: View {
             redo()
                 .padding()
             
-            slider(from: -10, to: 10, for: $faktor, name: "faktor")
+            slider(from: -10, to: 10, for: $modelView.faktor, name: "faktor")
             backButton()
         }
     }
     
     @ViewBuilder
-    func slider(from min: Int, to max: Int, for value: Binding<Double>, name: String) -> some View {
-        Text(name)
-        Slider(
-            value: value,
-            in: Double(min) ... Double(max),
-            step: 1.0
-        ) {} minimumValueLabel: {
-            Text(String(min))
-        } maximumValueLabel: {
-            Text(String(max))
-        } onEditingChanged: { editing in
-            isEditing = editing
+        func slider(from min: Int, to max: Int, for value: Binding<Double>, name: String) -> some View {
+            Text(name)
+            Slider(
+                value: value,
+                in: Double(min) ... Double(max),
+                step: 1.0
+            ) {} minimumValueLabel: {
+                Text(String(min))
+            } maximumValueLabel: {
+                Text(String(max))
+            } onEditingChanged: { editing in
+                modelView.setIsEditing(editing)
+            }
+            Text("\(Int(value.wrappedValue))")
+                .foregroundColor(modelView.getIsEditing() ? .red : .blue)
         }
-        Text("\(Int(value.wrappedValue))")
-            .foregroundColor(isEditing ? .red : .blue)
-    }
     
     @ViewBuilder
     func redo() -> some View {
@@ -299,9 +278,9 @@ struct ContentView: View {
     func startButton() -> some View {
         Button(
             action: {
-                modelView.newMatrix(rowCount: Int(rowCount))
-                selectedRows = []
-                selectedColumns = []
+                modelView.newMatrix(rowCount: Int(modelView.rowCount))
+                modelView.selectedRows = []
+                modelView.selectedColumns = []
                 modelView.status = "play"
             }, label: {
                 Text("Start")
@@ -313,8 +292,8 @@ struct ContentView: View {
     func backButton() -> some View {
         Button(
             action: {
-                selectedRows = []
-                selectedColumns = []
+                modelView.selectedRows = []
+                modelView.selectedColumns = []
                 modelView.status = "start"
             }, label: {
                 Text("Zurück")
@@ -327,11 +306,11 @@ struct ContentView: View {
         Button(
             action: {
                 modelView.varReset()
-                if let firstColumn = selectedColumns.first, let secondColumn = selectedColumns.dropFirst().first {
+                if let firstColumn = modelView.selectedColumns.first, let secondColumn = modelView.selectedColumns.dropFirst().first {
                     modelView.columnSwitch(column1: firstColumn, column2: secondColumn)
                 }
-                selectedRows.removeAll()
-                selectedColumns.removeAll()
+                modelView.selectedRows.removeAll()
+                modelView.selectedColumns.removeAll()
             }, label: {
                 Text("spalte")
             }
@@ -343,11 +322,11 @@ struct ContentView: View {
         Button(
             action: {
                 modelView.varReset()
-                if let firstRow = selectedRows.first, let secondRow = selectedRows.dropFirst().first {
-                    modelView.addScaleRow(faktor: Int(faktor), row1: firstRow, row2: secondRow, multi: true)
+                if let firstRow = modelView.selectedRows.first, let secondRow = modelView.selectedRows.dropFirst().first {
+                    modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, multi: true)
                 }
-                selectedRows.removeAll()
-                selectedColumns.removeAll()
+                modelView.selectedRows.removeAll()
+                modelView.selectedColumns.removeAll()
             }, label: {
                 Text("Multiplizieren")
             }
@@ -359,13 +338,13 @@ struct ContentView: View {
         Button(
             action: {
                 modelView.varReset()
-                if let firstRow = selectedRows.first, let secondRow = selectedRows.dropFirst().first {
-                    if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: false) {
-                        modelView.addScaleRow(faktor: Int(faktor), row1: firstRow, row2: secondRow, multi: false)
+                if let firstRow = modelView.selectedRows.first, let secondRow = modelView.selectedRows.dropFirst().first {
+                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: false) {
+                        modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, multi: false)
                     }
                 }
-                selectedRows.removeAll()
-                selectedColumns.removeAll()
+                modelView.selectedRows.removeAll()
+                modelView.selectedColumns.removeAll()
             }, label: {
                 Text("Dividieren +")
             }
@@ -377,13 +356,13 @@ struct ContentView: View {
         Button(
             action: {
                 modelView.varReset()
-                if let firstRow = selectedRows.first {
-                    if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: false) {
-                        modelView.scaleRow(faktor: Int(faktor), row: firstRow, multi: false)
+                if let firstRow = modelView.selectedRows.first {
+                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: false) {
+                        modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, multi: false)
                     }
                 }
-                selectedRows.removeAll()
-                selectedColumns.removeAll()
+                modelView.selectedRows.removeAll()
+                modelView.selectedColumns.removeAll()
             }, label: {
                 Text("Dividieren")
             }
@@ -395,13 +374,13 @@ struct ContentView: View {
         Button(
             action: {
                 modelView.varReset()
-                if let firstRow = selectedRows.first {
-                    if modelView.controllScale(row: firstRow, faktor: Int(faktor), multi: true) {
-                        modelView.scaleRow(faktor: Int(faktor), row: firstRow, multi: true)
+                if let firstRow = modelView.selectedRows.first {
+                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: true) {
+                        modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, multi: true)
                     }
                 }
-                selectedRows.removeAll()
-                selectedColumns.removeAll()
+                modelView.selectedRows.removeAll()
+                modelView.selectedColumns.removeAll()
             },
             label: {
                 Text("Multiplizieren")
@@ -414,8 +393,8 @@ struct ContentView: View {
         Button(
             action: {
                 modelView.newMatrix(rowCount: 4)
-                selectedRows = []
-                selectedColumns = []
+                modelView.selectedRows = []
+                modelView.selectedColumns = []
             },
             label: {
                 Text("neu")

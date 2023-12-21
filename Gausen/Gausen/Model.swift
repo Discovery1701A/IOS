@@ -12,6 +12,7 @@ struct Model {
     private(set) var matrix: [[Field]]
     var linkedList: LinkedList
     var currentNode: LinkedList.Node
+    
     init(rowCount: Int) {
         self.linkedList = LinkedList()
         self.currentNode = self.linkedList.emptyNode
@@ -27,7 +28,6 @@ struct Model {
             for i in 0 ..< self.matrix.count where i < currentNodeMatrix.count {
                 for j in 0 ..< self.matrix[i].count where j < currentNodeMatrix[i].count {
                     if currentNodeMatrix[i][j].content != self.matrix[i][j].content {
-                       
                         // Update the element or perform any other actions
                         self.linkedList.removeAllBehinde(currentNode: self.currentNode)
                        
@@ -237,22 +237,18 @@ struct Model {
                 self.matrix[i][j].draged = false
             }
         }
-        
     }
     
-    mutating func updateSelection(item: Int, selection: Bool, axe : String) {
+    mutating func updateSelection(item: Int, selection: Bool, axe: String) {
         guard item >= 0, item < self.matrix.count else {
             return
         }
         for i in 0 ..< self.matrix.count {
-            print(i)
-            if axe == "row"{
+            if axe == "row" {
                 self.matrix[item][i].selection = selection
-                if item == 2 {
-                    print(self.matrix[item][i].selection)
-                }
+                
             }
-            if axe == "column"{
+            if axe == "column" {
                 self.matrix[i][item].selection = selection
             }
         }

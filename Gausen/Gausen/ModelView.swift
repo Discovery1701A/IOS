@@ -24,9 +24,64 @@ class ViewModel: ObservableObject {
     @Published var draggedColumn: Int?
     @Published var draggedRow: Int?
     @Published var status: String = "start"
+    @Published  var faktor = 1.0
+        @Published  var rowCount = 3.0
+        @Published  var isEditing = false
+        @Published  var selectedRows: [Int] = []
+        @Published  var selectedColumns: [Int] = []
+        @Published var fieldSize: CGSize = .zero
     var matrix: [[Field]] {
         return model.matrix
     }
+    // Getter-Methoden für die einzelnen Eigenschaften
+        func getFaktor() -> Double {
+            return faktor
+        }
+
+        func getRowCount() -> Double {
+            return rowCount
+        }
+
+        func getIsEditing() -> Bool {
+            return isEditing
+        }
+
+        func getSelectedRows() -> [Int] {
+            return selectedRows
+        }
+
+        func getSelectedColumns() -> [Int] {
+            return selectedColumns
+        }
+
+        func getFieldSize() -> CGSize {
+            return fieldSize
+        }
+
+        // Setter-Methoden für die einzelnen Eigenschaften
+        func setFaktor(_ value: Double) {
+            faktor = value
+        }
+
+        func setRowCount(_ value: Double) {
+            rowCount = value
+        }
+
+        func setIsEditing(_ value: Bool) {
+            isEditing = value
+        }
+
+        func setSelectedRows(_ value: [Int]) {
+            selectedRows = value
+        }
+
+        func setSelectedColumns(_ value: [Int]) {
+            selectedColumns = value
+        }
+
+        func setFieldSize(_ value: CGSize) {
+            fieldSize = value
+        }
 
     func rowSwitch(row1: Int, row2: Int) {
         model.rowSwitch(row1: row1, row2: row2)

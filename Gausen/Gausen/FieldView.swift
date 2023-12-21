@@ -31,7 +31,7 @@ struct FieldView: View {
         } else if field.notDiv {
             return Color.red
         } else if field.selection {
-            return .red
+            return Color(hex: 0x2080a5) 
         } else {
             return .orange
         }
@@ -85,5 +85,17 @@ struct SizePreferenceKey: PreferenceKey {
 extension View {
     func fieldSize(_ fieldSize: Binding<CGSize>) -> some View {
         modifier(FieldSizeModifier(fieldSize: fieldSize))
+    }
+}
+
+extension Color {
+    init(hex: UInt, alpha: Double = 1.0) {
+        self.init(
+            .sRGB,
+            red: Double((hex & 0xFF0000) >> 16) / 255.0,
+            green: Double((hex & 0x00FF00) >> 8) / 255.0,
+            blue: Double(hex & 0x0000FF) / 255.0,
+            opacity: alpha
+        )
     }
 }
