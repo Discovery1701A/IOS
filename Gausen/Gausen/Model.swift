@@ -29,6 +29,7 @@ struct Model {
                     if currentNodeMatrix[i][j].content != self.matrix[i][j].content {
                         // Update the element or perform any other actions
                         self.linkedList.removeAllBehinde(currentNode: self.currentNode)
+                        self.varReset()
                         self.linkedList.add(element: self.matrix)
                         self.currentNode = self.linkedList.lastNode
                     }
