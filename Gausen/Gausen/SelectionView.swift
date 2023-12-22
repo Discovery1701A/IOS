@@ -11,7 +11,9 @@ struct SelectionView: View {
     var body: some View {
         Button(
             action: {
+                if axis == .vertical {
                 toggleSelection(item: item)
+                }
             
             },
             label: {
@@ -31,6 +33,7 @@ struct SelectionView: View {
                     .gesture(
                         DragGesture().onChanged { value in
                             onDragChanged?(value)
+                            
                         }
                         .onEnded { _ in
                             onDragEnded?() ?? {}() // Default Closure, falls onDragEnded nil ist
@@ -42,8 +45,8 @@ struct SelectionView: View {
     }
     
     private func toggleSelection(item: Int) {
-        if selectedItems.count >= 2 {
-            selectedItems = []
+        if selectedItems.count >= 2 && selectedItems[0] != item {
+            selectedItems.remove(at: 0)
         }
         if let index = selectedItems.firstIndex(where: { $0 == item }) {
             selectedItems.remove(at: index)

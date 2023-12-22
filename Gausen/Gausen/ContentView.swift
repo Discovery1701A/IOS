@@ -88,9 +88,9 @@ struct ContentView: View {
                                     .onChange(of: modelView.selectedRows.contains(row)) { _, newValue in
                                             modelView.updateSelection(item: row, selection: newValue, axe: "row")
                                     }
-                                    .onChange(of: modelView.selectedColumns.contains(column)) { _, newValue in
-                                            modelView.updateSelection(item: column, selection: newValue, axe: "column")
-                                    }
+//                                    .onChange(of: modelView.selectedColumns.contains(column)) { _, newValue in
+//                                            modelView.updateSelection(item: column, selection: newValue, axe: "column")
+//                                    }
 
                             } else {
                                 SelectionView(
