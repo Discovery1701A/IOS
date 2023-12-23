@@ -17,46 +17,7 @@ struct ContentView: View {
                 start()
                 
             } else if modelView.status == "play" {
-                if geometry.size.width < geometry.size.height {
-                    VStack {
-                        Text(String(modelView.activityCount))
-                        Text(modelView.time)
-                                    .onAppear {
-                                        // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
-                                        modelView.updateTime()
-                                        
-                                        // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
-                                        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                                            modelView.updateTime()
-                                        }
-                                    }
-                        matrixView()
-                            .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
-                            
-                        Spacer()
-                        controller()
-                    }
-                } else {
-                    VStack {
-                        Text(String(modelView.activityCount))
-                        Text(modelView.time)
-                                    .onAppear {
-                                        // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
-                                        modelView.updateTime()
-                                        
-                                        // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
-                                        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                                            modelView.updateTime()
-                                        }
-                                    }
-                        HStack {
-                            matrixView()
-                                .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
-                            Spacer()
-                            controller()
-                        }
-                    }
-                }
+                play(size: geometry.size)
             }
         }
     }
@@ -71,7 +32,7 @@ struct ContentView: View {
             Spacer()
             
             slider(from: 2, to: 6, for: $modelView.rowCount, name: "Wie Viele Zeilen")
-                        .padding([.leading, .trailing, .bottom])
+                .padding([.leading, .trailing, .bottom])
                 .padding([.leading, .trailing, .bottom]) // Padding auf der linken, rechten und unteren Seite
             
             Spacer()
@@ -82,6 +43,50 @@ struct ContentView: View {
             Spacer()
         }
         .padding() // Padding für den gesamten VStack
+    }
+    
+    @ViewBuilder
+    func play (size : CGSize) -> some View {
+        if size.width < size.height {
+            VStack {
+                Text(String(modelView.activityCount))
+                Text(modelView.time)
+                    .onAppear {
+                        // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
+                        modelView.updateTime()
+                                
+                        // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
+                        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                            modelView.updateTime()
+                        }
+                    }
+                matrixView()
+                    .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
+                    
+                Spacer()
+                controller()
+            }
+        } else {
+            VStack {
+                Text(String(modelView.activityCount))
+                Text(modelView.time)
+                    .onAppear {
+                        // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
+                        modelView.updateTime()
+                                
+                        // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
+                        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                            modelView.updateTime()
+                        }
+                    }
+                HStack {
+                    matrixView()
+                        .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
+                    Spacer()
+                    controller()
+                }
+            }
+        }
     }
     
     @ViewBuilder
@@ -110,7 +115,7 @@ struct ContentView: View {
                                 FieldView(field: modelView.matrix[row][column])
                                     .fieldSize($modelView.fieldSize)
                                     .onChange(of: modelView.selectedRows.contains(row)) { _, newValue in
-                                            modelView.updateSelection(item: row, selection: newValue, axe: "row")
+                                        modelView.updateSelection(item: row, selection: newValue, axe: "row")
                                     }
 //                                    .onChange(of: modelView.selectedColumns.contains(column)) { _, newValue in
 //                                            modelView.updateSelection(item: column, selection: newValue, axe: "column")
@@ -249,181 +254,21 @@ struct ContentView: View {
     }
     
     @ViewBuilder
-        func slider(from min: Int, to max: Int, for value: Binding<Double>, name: String) -> some View {
-            Text(name)
-            Slider(
-                value: value,
-                in: Double(min) ... Double(max),
-                step: 1.0
-            ) {} minimumValueLabel: {
-                Text(String(min))
-            } maximumValueLabel: {
-                Text(String(max))
-            } onEditingChanged: { editing in
-                modelView.setIsEditing(editing)
-            }
-            Text("\(Int(value.wrappedValue))")
-                .foregroundColor(modelView.getIsEditing() ? .red : .blue)
+    func slider(from min: Int, to max: Int, for value: Binding<Double>, name: String) -> some View {
+        Text(name)
+        Slider(
+            value: value,
+            in: Double(min) ... Double(max),
+            step: 1.0
+        ) {} minimumValueLabel: {
+            Text(String(min))
+        } maximumValueLabel: {
+            Text(String(max))
+        } onEditingChanged: { editing in
+            modelView.setIsEditing(editing)
         }
-    
-    @ViewBuilder
-    func redo() -> some View {
-        Button(action: {
-            modelView.forwart()
-        }, label: {
-            Image(systemName: "arrow.uturn.forward")
-        })
-    }
-
-    @ViewBuilder
-    func undo() -> some View {
-        Button(
-            action: {
-                modelView.back()
-            },
-            label: { Image(systemName: "arrow.uturn.backward")
-            }
-        )
-    }
-    
-    @ViewBuilder
-    func mix() -> some View {
-        Button(
-            action: {
-                modelView.varReset()
-                modelView.mixMatrix(howMany: modelView.matrix.count - 1, range: 10)
-            }, label: {
-                Text("mischen")
-            }
-        )
-    }
-
-    @ViewBuilder
-    func startButton() -> some View {
-        Button(
-            action: {
-                modelView.newMatrix(rowCount: Int(modelView.rowCount))
-                modelView.selectedRows = []
-                modelView.selectedColumns = []
-                modelView.status = "play"
-            }, label: {
-                Text("Start")
-            }
-        )
-    }
-
-    @ViewBuilder
-    func backButton() -> some View {
-        Button(
-            action: {
-                modelView.selectedRows = []
-                modelView.selectedColumns = []
-                modelView.status = "start"
-            }, label: {
-                Text("Zurück")
-            }
-        )
-    }
-    
-    @ViewBuilder
-    func spalte() -> some View {
-        Button(
-            action: {
-                modelView.varReset()
-                if let firstColumn = modelView.selectedColumns.first, let secondColumn = modelView.selectedColumns.dropFirst().first {
-                    modelView.columnSwitch(column1: firstColumn, column2: secondColumn)
-                }
-                modelView.selectedRows.removeAll()
-                modelView.selectedColumns.removeAll()
-            }, label: {
-                Text("spalte")
-            }
-        )
-    }
-    
-    @ViewBuilder
-    func addScaleRowMulti() -> some View {
-        Button(
-            action: {
-                modelView.varReset()
-                if let firstRow = modelView.selectedRows.first, let secondRow = modelView.selectedRows.dropFirst().first {
-                    modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, multi: true)
-                }
-                modelView.selectedRows.removeAll()
-                modelView.selectedColumns.removeAll()
-            }, label: {
-                Text("Multiplizieren")
-            }
-        )
-    }
-
-    @ViewBuilder
-    func addScaleRowDiv() -> some View {
-        Button(
-            action: {
-                modelView.varReset()
-                if let firstRow = modelView.selectedRows.first, let secondRow = modelView.selectedRows.dropFirst().first {
-                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: false) {
-                        modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, multi: false)
-                    }
-                }
-                modelView.selectedRows.removeAll()
-                modelView.selectedColumns.removeAll()
-            }, label: {
-                Text("Dividieren +")
-            }
-        )
-    }
-
-    @ViewBuilder
-    func scaleRowDiv() -> some View {
-        Button(
-            action: {
-                modelView.varReset()
-                if let firstRow = modelView.selectedRows.first {
-                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: false) {
-                        modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, multi: false)
-                    }
-                }
-                modelView.selectedRows.removeAll()
-                modelView.selectedColumns.removeAll()
-            }, label: {
-                Text("Dividieren")
-            }
-        )
-    }
-    
-    @ViewBuilder
-    func scaleRowMulti() -> some View {
-        Button(
-            action: {
-                modelView.varReset()
-                if let firstRow = modelView.selectedRows.first {
-                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: true) {
-                        modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, multi: true)
-                    }
-                }
-                modelView.selectedRows.removeAll()
-                modelView.selectedColumns.removeAll()
-            },
-            label: {
-                Text("Multiplizieren")
-            }
-        )
-    }
-    
-    @ViewBuilder
-    func neu() -> some View {
-        Button(
-            action: {
-                modelView.newMatrix(rowCount: 4)
-                modelView.selectedRows = []
-                modelView.selectedColumns = []
-            },
-            label: {
-                Text("neu")
-            }
-        )
+        Text("\(Int(value.wrappedValue))")
+            .foregroundColor(modelView.getIsEditing() ? .red : .blue)
     }
 }
 

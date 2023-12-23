@@ -101,9 +101,10 @@ struct Model {
     }
     
     mutating func scaleRow(faktor: Int, row: Int, multi: Bool) {
+        print(self.controllScale(row: row, faktor: faktor, multi: multi))
         if self.controllScale(row: row, faktor: faktor, multi: multi) {
             for i in 0 ..< self.matrix[row].count {
-                if multi == true || faktor < 0 {
+                if multi == true {
                     self.matrix[row][i].content *= faktor
                     print(self.matrix[row][i].content)
                 } else {

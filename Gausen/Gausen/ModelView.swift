@@ -24,37 +24,43 @@ class ViewModel: ObservableObject {
     @Published var draggedColumn: Int?
     @Published var draggedRow: Int?
     @Published var status: String = "start"
-    @Published  var faktor = 1.0
-        @Published  var rowCount = 3.0
-        @Published  var isEditing = false
-        @Published  var selectedRows: [Int] = []
-        @Published  var selectedColumns: [Int] = []
-        @Published var fieldSize: CGSize = .zero
+    @Published var faktor = 1.0
+    @Published var rowCount = 3.0
+    @Published var isEditing = false
+    @Published var selectedRows: [Int] = []
+    @Published var selectedColumns: [Int] = []
+    @Published var fieldSize: CGSize = .zero
     @Published private(set) var time: String = ""
     
-    var activityCount : Int {
+    var activityCount: Int {
         return model.activityCount
     }
     
     var matrix: [[Field]] {
         return model.matrix
     }
+
     // Getter-Methoden für die einzelnen Eigenschaften
       
-        func getIsEditing() -> Bool {
-            return isEditing
-        }
+    func getIsEditing() -> Bool {
+        return isEditing
+    }
 
-        // Setter-Methoden für die einzelnen Eigenschaften
+    // Setter-Methoden für die einzelnen Eigenschaften
 
-        func setIsEditing(_ value: Bool) {
-            isEditing = value
-        }
+    func setIsEditing(_ value: Bool) {
+        isEditing = value
+    }
     
     func updateTime() {
-            self.time = model.timeTracking()
-        }
+        time = model.timeTracking()
+    }
 
+    func resetSelection() {
+        selectedRows = []
+        selectedColumns = []
+    }
+    
     func rowSwitch(row1: Int, row2: Int) {
         model.rowSwitch(row1: row1, row2: row2)
     }
@@ -110,8 +116,7 @@ class ViewModel: ObservableObject {
     
     func updateSelection(item: Int, selection: Bool, axe: String) {
 //        DispatchQueue.main.async {
-            self.model.updateSelection(item: item, selection: selection, axe: axe)
-        }
+        model.updateSelection(item: item, selection: selection, axe: axe)
+    }
 //    }
-
 }
