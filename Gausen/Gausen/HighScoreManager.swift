@@ -107,23 +107,27 @@ class HighscoreManager:  ObservableObject {
     func newScoreTime (time : String, personName : String) {
         print(highScoreTime)
         var saveScoreRow = [" ", "99:99"]
+        var isIn = false
         for i in 0 ..< highScoreTime.count {
             if convertTimeStringToDouble(saveScoreRow[1])! < convertTimeStringToDouble(highScoreTime[i][1])! {
                var saveScoreRow2 = highScoreTime[i]
                 highScoreTime[i] = saveScoreRow
                 saveScoreRow = saveScoreRow2
             }
-            if convertTimeStringToDouble(time)! < convertTimeStringToDouble(highScoreTime[i][1])! {
+            if convertTimeStringToDouble(time)! < convertTimeStringToDouble(highScoreTime[i][1])! && isIn == false {
                saveScoreRow = highScoreTime[i]
                 highScoreTime[i] = [personName, time]
+                isIn = true
             }
             
         }
+        saveHighscore(for: .time)
     }
     
     func newScoreActivityCount(activityCount : Int, personName : String) {
       print(highScoreActivityCount)
         var saveScoreRow = [" ", "9223372036854775807"]
+        var isIn = false
         for i in 0 ..< highScoreTime.count {
             print(highScoreActivityCount[i][1])
             if Int(saveScoreRow[1])! < Int(highScoreActivityCount[i][1])! {
@@ -131,12 +135,14 @@ class HighscoreManager:  ObservableObject {
                 highScoreActivityCount[i] = saveScoreRow
                 saveScoreRow = saveScoreRow2
             }
-            if activityCount < Int(highScoreActivityCount[i][1])! {
+            if activityCount < Int(highScoreActivityCount[i][1])! && isIn == false {
                saveScoreRow = highScoreActivityCount[i]
                 highScoreActivityCount[i] = [personName, String(activityCount)]
+                isIn = true
             }
            
         }
+        saveHighscore(for: .activityCount)
     }
     
 }
