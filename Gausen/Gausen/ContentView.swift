@@ -19,6 +19,17 @@ struct ContentView: View {
             } else if modelView.status == "play" {
                 if geometry.size.width < geometry.size.height {
                     VStack {
+                        Text(String(modelView.activityCount))
+                        Text(modelView.time)
+                                    .onAppear {
+                                        // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
+                                        modelView.updateTime()
+                                        
+                                        // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
+                                        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                                            modelView.updateTime()
+                                        }
+                                    }
                         matrixView()
                             .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
                             
@@ -26,11 +37,24 @@ struct ContentView: View {
                         controller()
                     }
                 } else {
-                    HStack {
-                        matrixView()
-                            .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
-                        Spacer()
-                        controller()
+                    VStack {
+                        Text(String(modelView.activityCount))
+                        Text(modelView.time)
+                                    .onAppear {
+                                        // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
+                                        modelView.updateTime()
+                                        
+                                        // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
+                                        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                                            modelView.updateTime()
+                                        }
+                                    }
+                        HStack {
+                            matrixView()
+                                .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
+                            Spacer()
+                            controller()
+                        }
                     }
                 }
             }
@@ -267,7 +291,7 @@ struct ContentView: View {
         Button(
             action: {
                 modelView.varReset()
-                modelView.mixMatrix(howMany: modelView.matrix.count * 10, range: 10)
+                modelView.mixMatrix(howMany: modelView.matrix.count - 1, range: 10)
             }, label: {
                 Text("mischen")
             }

@@ -30,57 +30,29 @@ class ViewModel: ObservableObject {
         @Published  var selectedRows: [Int] = []
         @Published  var selectedColumns: [Int] = []
         @Published var fieldSize: CGSize = .zero
+    @Published private(set) var time: String = ""
+    
+    var activityCount : Int {
+        return model.activityCount
+    }
+    
     var matrix: [[Field]] {
         return model.matrix
     }
     // Getter-Methoden für die einzelnen Eigenschaften
-        func getFaktor() -> Double {
-            return faktor
-        }
-
-        func getRowCount() -> Double {
-            return rowCount
-        }
-
+      
         func getIsEditing() -> Bool {
             return isEditing
         }
 
-        func getSelectedRows() -> [Int] {
-            return selectedRows
-        }
-
-        func getSelectedColumns() -> [Int] {
-            return selectedColumns
-        }
-
-        func getFieldSize() -> CGSize {
-            return fieldSize
-        }
-
         // Setter-Methoden für die einzelnen Eigenschaften
-        func setFaktor(_ value: Double) {
-            faktor = value
-        }
-
-        func setRowCount(_ value: Double) {
-            rowCount = value
-        }
 
         func setIsEditing(_ value: Bool) {
             isEditing = value
         }
-
-        func setSelectedRows(_ value: [Int]) {
-            selectedRows = value
-        }
-
-        func setSelectedColumns(_ value: [Int]) {
-            selectedColumns = value
-        }
-
-        func setFieldSize(_ value: CGSize) {
-            fieldSize = value
+    
+    func updateTime() {
+            self.time = model.timeTracking()
         }
 
     func rowSwitch(row1: Int, row2: Int) {

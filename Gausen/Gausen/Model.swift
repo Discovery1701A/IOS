@@ -12,16 +12,33 @@ struct Model {
     private(set) var matrix: [[Field]]
     var linkedList: LinkedList
     var currentNode: LinkedList.Node
+    var activityCount : Int
+    var startTime = Date()
+    var time : Double = 0.0
     
     init(rowCount: Int) {
         self.linkedList = LinkedList()
         self.currentNode = self.linkedList.emptyNode
         self.rowCount = rowCount
         self.matrix = []
+        self.activityCount = 0
         self.generatMatrix()
         self.linkedList.add(element: self.matrix)
         self.currentNode = self.linkedList.lastNode
     }
+    
+    mutating func timeTracking() -> String {
+      
+               let timeNow = Date()
+               time = timeNow.timeIntervalSince(startTime)
+               let formatter = DateComponentsFormatter()
+                   formatter.unitsStyle = .positional
+                   formatter.allowedUnits = [.minute, .second]
+                   formatter.zeroFormattingBehavior = .pad
+       //        time = formatter.string(from: elapsedTime)!
+//        print(formatter.string(from: time))
+        return formatter.string(from: time) ?? "00"
+           }
     
     mutating func updateMatrixNode() {
         if let currentNodeMatrix = currentNode.element as? [[Field]] {
@@ -66,6 +83,7 @@ struct Model {
             self.matrix[row2] = self.matrix[row1]
             self.matrix[row1] = rowSaver
         }
+        self.activityCount += 1
         self.updateMatrixNode()
     }
     
@@ -78,6 +96,7 @@ struct Model {
                 self.matrix[i][column1] = columnSaver
             }
         }
+        self.activityCount += 1
         self.updateMatrixNode()
     }
     
@@ -96,6 +115,7 @@ struct Model {
                 print(0)
             }
         }
+        self.activityCount += 1
         self.updateMatrixNode()
     }
     
@@ -116,6 +136,7 @@ struct Model {
                 print(0)
             }
         }
+        self.activityCount += 1
         self.updateMatrixNode()
     }
     
@@ -139,42 +160,40 @@ struct Model {
     }
     
     mutating func mixMatrix(howMany: Int, range: Int) {
-        var addCount = 0
-        var switchCount = 0
-        
+//        let randomRow1 = Int.random(in: 0 ..< self.matrix.count)
+//        let randomRow2 = Int.random(in: 0 ..< self.matrix.count)
+//        let randomColumn1 = Int.random(in: 0 ..< self.matrix[0].count)
+//        let randomColumn2 = Int.random(in: 0 ..< self.matrix[0].count)
         for _ in 0 ..< howMany {
-            let randomValue = Int.random(in: -range ..< range)
-            let randomRow1 = Int.random(in: 0 ..< self.matrix.count)
-            let randomRow2 = Int.random(in: 0 ..< self.matrix.count)
-            let randomColumn1 = Int.random(in: 0 ..< self.matrix[0].count)
-            let randomColumn2 = Int.random(in: 0 ..< self.matrix[0].count)
-            
-            if addCount < howMany / 2 {
-                // Zuerst die add-Funktionen aufrufen
-                switch Int.random(in: 0 ..< 2) {
-                case 0:
-                    self.addScaleRow(faktor: randomValue, row1: randomRow1, row2: randomRow2, multi: Bool.random())
-                    addCount += 1
-                case 1:
-                    self.scaleRow(faktor: randomValue, row: randomRow1, multi: Bool.random())
-                    addCount += 1
-                default:
-                    break
+            for i in 0 ..< self.matrix.count {
+                let randomValue = Int.random(in: -range ..< range)
+//                let randomValue2 = Int.random(in: -range ..< range)
+                var randomRow2 = Int.random(in: 0 ..< self.matrix.count)
+                var randomBool = Bool.random()
+                if !self.controllScale(row: i, faktor: randomValue, multi: randomBool) {
+                    randomBool.toggle()
                 }
-            } else {
-                // Dann die switch-Funktionen aufrufen
-                switch Int.random(in: 0 ..< 2) {
-                case 0:
-                    self.columnSwitch(column1: randomColumn1, column2: randomColumn2)
-                    switchCount += 1
-                case 1:
-                    self.rowSwitch(row1: randomRow1, row2: randomRow2)
-                    switchCount += 1
-                default:
-                    break
+                if i == randomRow2 {
+                    randomRow2 = Int.random(in: 0 ..< self.matrix.count)
                 }
+                self.scaleRow(faktor: randomValue, row: i, multi: randomBool)
+                self.addScaleRow(faktor: 1, row1: i, row2: randomRow2, multi: randomBool)
+            }
+            for i in 0 ..< self.matrix.count {
+                var randomRow2 = Int.random(in: 0 ..< self.matrix.count)
+                var randomColumn2 = Int.random(in: 0 ..< self.matrix[0].count)
+                if i == randomRow2 {
+                    randomRow2 = Int.random(in: 0 ..< self.matrix.count)
+                }
+                if i == randomColumn2 {
+                    randomColumn2 = Int.random(in: 0 ..< self.matrix.count)
+                }
+                self.rowSwitch(row1: i, row2: randomRow2)
+                self.columnSwitch(column1: i, column2: randomColumn2)
             }
         }
+        self.linkedList.reset()
+        self.activityCount = 0
         self.varReset()
     }
     
@@ -201,6 +220,7 @@ struct Model {
                 }
             }
         }
+        startTime = Date()
         //        for row in matrix {
         // print(row)
         //        }
@@ -246,12 +266,70 @@ struct Model {
         for i in 0 ..< self.matrix.count {
             if axe == "row" {
                 self.matrix[item][i].selection = selection
-                
             }
             if axe == "column" {
                 self.matrix[i][item].selection = selection
             }
         }
+    }
+    
+    func isConvertibleToIdentity(matrix: [[Field]]) -> Bool {
+        let rowCount = matrix.count
+        let columnCount = matrix[0].count
+
+        // Überprüfe, ob die Matrix quadratisch ist
+        guard rowCount == columnCount else {
+            return false
+        }
+
+        // Berechne den Rang der Matrix
+        let rank = self.calculateRank(matrix: matrix)
+
+        // Überprüfe, ob der Rang gleich der Anzahl der Zeilen/Spalten ist
+        return rank == rowCount
+    }
+
+    func calculateRank(matrix: [[Field]]) -> Int {
+        var augmentedMatrix = matrix
+        let rowCount = matrix.count
+        let columnCount = matrix[0].count
+
+        var rank = 0
+
+        for col in 0 ..< columnCount {
+            var foundPivot = false
+
+            // Suche nach einem nicht-null Element in der aktuellen Spalte
+            for row in rank ..< rowCount {
+                if augmentedMatrix[row][col].content != 0 {
+                    // Tausche die Zeilen aus, um ein Nicht-Null-Element als Pivot zu erhalten
+                    augmentedMatrix.swapAt(rank, row)
+                    foundPivot = true
+                    break
+                }
+            }
+
+            // Wenn kein Pivot gefunden wurde, gehe zur nächsten Spalte
+            if !foundPivot {
+                continue
+            }
+
+            // Setze alle Elemente über und unter dem Pivot auf null
+            let pivot = augmentedMatrix[rank][col].content
+            for i in 0 ..< rowCount {
+                if i != rank {
+                    let factor = -augmentedMatrix[i][col].content / pivot
+                    for j in 0 ..< columnCount {
+                        augmentedMatrix[i][j].content += factor * augmentedMatrix[rank][j].content
+                    }
+                }
+            }
+
+            // Inkrementiere den Rang
+            rank += 1
+        }
+
+        return rank
     }
     
     struct Field: Identifiable, Hashable {
