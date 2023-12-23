@@ -5,6 +5,7 @@
 //  Created by Anna Rieckmann on 23.12.23.
 //
 import SwiftUI
+
 struct HighscoreView: View {
     @ObservedObject var highscoreManager = HighscoreManager.shared
 
@@ -13,7 +14,7 @@ struct HighscoreView: View {
             HighscoreListView(title: "Highscore Time", highscores: highscoreManager.highScoreTime)
             HighscoreListView(title: "Highscore ActivityCount", highscores: highscoreManager.highScoreActivityCount)
         }
-        .padding()
+//        .padding()
     }
 }
 
@@ -28,15 +29,19 @@ struct HighscoreListView: View {
                 .foregroundColor(.blue)
                 .padding(.bottom, 10)
 
-            ForEach(highscores, id: \.self) { entry in
+            ForEach(highscores.indices, id: \.self) { index in
                 HStack {
-                    Text(entry[0])
+                    Text("\(index + 1).") // Anzeigen des Platzes
+                        .font(.headline)
+                        .foregroundColor(.primary)
+
+                    Text(highscores[index][0])
                         .font(.headline)
                         .foregroundColor(.primary)
 
                     Spacer()
 
-                    Text(entry[1])
+                    Text(highscores[index][1])
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }

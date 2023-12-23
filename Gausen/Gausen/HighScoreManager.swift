@@ -72,17 +72,27 @@ class HighscoreManager:  ObservableObject {
                     highScoreTime = [
                         ["Spencer", "1:10"],
                         ["Brennan", "1:34"],
+                        ["Tony", "1:43"],
                         ["Julian", "2:47"],
+                        ["Emma", "3:13"],
                         ["James", "5:24"],
-                        ["Alex", "5:49"]
+                        ["Alex", "5:49"],
+                        ["Bucky", "6:32"],
+                        ["Maggi", "7:24"],
+                        ["John", "9:36"]
                     ]
                 case .activityCount:
                     highScoreActivityCount = [
+                        ["Tony", "8"],
                         ["Spencer", "10"],
                         ["Julian", "14"],
                         ["Alex", "18"],
                         ["Jack", "25"],
-                        ["Xaden", "41"]
+                        ["Maggi", "45"],
+                        ["John", "39"],
+                        ["Xaden", "41"],
+                        ["Emma", "42"],
+                        ["James", "80"]
                     ]
                 }
             }
