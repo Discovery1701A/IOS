@@ -10,17 +10,20 @@ import Foundation
 struct Model {
     private(set) var rowCount: Int
     private(set) var matrix: [[Field]]
+    private(set) var unitMatrix: [[Field]]
     var linkedList: LinkedList
     var currentNode: LinkedList.Node
-    var activityCount : Int
+    var activityCount: Int
     var startTime = Date()
-    var time : Double = 0.0
+    var time: Double
     
     init(rowCount: Int) {
         self.linkedList = LinkedList()
         self.currentNode = self.linkedList.emptyNode
         self.rowCount = rowCount
         self.matrix = []
+        self.unitMatrix = []
+        self.time = 0.0
         self.activityCount = 0
         self.generatMatrix()
         self.linkedList.add(element: self.matrix)
@@ -28,17 +31,16 @@ struct Model {
     }
     
     mutating func timeTracking() -> String {
-      
-               let timeNow = Date()
-               time = timeNow.timeIntervalSince(startTime)
-               let formatter = DateComponentsFormatter()
-                   formatter.unitsStyle = .positional
-                   formatter.allowedUnits = [.minute, .second]
-                   formatter.zeroFormattingBehavior = .pad
-       //        time = formatter.string(from: elapsedTime)!
+        let timeNow = Date()
+        self.time = timeNow.timeIntervalSince(self.startTime)
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .positional
+        formatter.allowedUnits = [.minute, .second]
+        formatter.zeroFormattingBehavior = .pad
+        //        time = formatter.string(from: elapsedTime)!
 //        print(formatter.string(from: time))
-        return formatter.string(from: time) ?? "00"
-           }
+        return formatter.string(from: self.time) ?? "00"
+    }
     
     mutating func updateMatrixNode() {
         if let currentNodeMatrix = currentNode.element as? [[Field]] {
@@ -198,34 +200,47 @@ struct Model {
         self.varReset()
     }
     
-    mutating func vergleichen(is value: Int) -> Bool {
-        for i in 0 ..< self.rowCount where self.matrix[i][i].content == value {
-            return true
+    mutating func check() -> Bool {
+        for i in 0 ..< self.unitMatrix.count {
+            for j in 0 ..< self.unitMatrix.count {
+                if self.unitMatrix[i][j].content != self.matrix[i][j].content {
+                    return false
+                }
+            }
         }
-        return false
+        self.markWinnig()
+        return true
+    }
+    
+    mutating func markWinnig() {
+        for i in 0 ..< self.matrix.count {
+            self.matrix[i][i].winning = true
+        }
     }
     
     mutating func generatMatrix() {
-        self.matrix = []
+        var ddmatrix: [[Field]] = []
         var id = 0
-        if self.matrix.count < self.rowCount {
+        if ddmatrix.count < self.rowCount {
             for i in 0 ..< self.rowCount {
-                self.matrix.append([])
+                ddmatrix.append([])
                 for j in 0 ..< self.rowCount {
                     id += 1
                     if j == i {
-                        self.matrix[i].append(Field(content: 1, id: id))
+                        ddmatrix[i].append(Field(content: 1, id: id))
                     } else {
-                        self.matrix[i].append(Field(content: 0, id: id))
+                        ddmatrix[i].append(Field(content: 0, id: id))
                     }
                 }
             }
         }
-        startTime = Date()
+        self.matrix = ddmatrix
+        self.unitMatrix = ddmatrix
+        self.startTime = Date()
         //        for row in matrix {
         // print(row)
         //        }
-        // mixMatrix(howMany: 5, range: 3)
+        mixMatrix(howMany: 1, range: 3)
     }
 
     mutating func drag(row: Int = -1, column: Int = -1, bool: Bool) {
@@ -294,9 +309,7 @@ struct Model {
         var augmentedMatrix = matrix
         let rowCount = matrix.count
         let columnCount = matrix[0].count
-
         var rank = 0
-
         for col in 0 ..< columnCount {
             var foundPivot = false
 
@@ -309,7 +322,6 @@ struct Model {
                     break
                 }
             }
-
             // Wenn kein Pivot gefunden wurde, gehe zur nächsten Spalte
             if !foundPivot {
                 continue
@@ -339,6 +351,7 @@ struct Model {
         var notDiv = false
         var selection = false
         var draged = false
+        var winning = false
         init(content: Int, id: Int) {
             self.content = content
             self.id = id

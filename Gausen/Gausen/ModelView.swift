@@ -113,7 +113,9 @@ class ViewModel: ObservableObject {
     func resetMemory() {
         model.linkedList.reset()
     }
-    
+    func check () -> Bool {
+        model.check()
+    }
     func updateSelection(item: Int, selection: Bool, axe: String) {
 //        DispatchQueue.main.async {
         model.updateSelection(item: item, selection: selection, axe: axe)

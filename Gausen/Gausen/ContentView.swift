@@ -18,6 +18,11 @@ struct ContentView: View {
                 
             } else if modelView.status == "play" {
                 play(size: geometry.size)
+            } else if modelView.status == "winning"{
+                ZStack{
+                    Text("Gewonnen")
+                    play(size: geometry.size)
+                }
             }
         }
     }
@@ -116,6 +121,9 @@ struct ContentView: View {
                                     .fieldSize($modelView.fieldSize)
                                     .onChange(of: modelView.selectedRows.contains(row)) { _, newValue in
                                         modelView.updateSelection(item: row, selection: newValue, axe: "row")
+                                    }
+                                    .onChange(of: modelView.matrix) { _, _ in
+                                        modelView.check()
                                     }
 //                                    .onChange(of: modelView.selectedColumns.contains(column)) { _, newValue in
 //                                            modelView.updateSelection(item: column, selection: newValue, axe: "column")

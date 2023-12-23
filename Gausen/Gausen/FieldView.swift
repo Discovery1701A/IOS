@@ -26,7 +26,9 @@ struct FieldView: View {
     }
     
     private func backColor() -> Color {
-        if field.draged {
+        if field.winning {
+            return .green
+        } else if field.draged {
             return .cyan
         } else if field.notDiv {
             return Color.red
