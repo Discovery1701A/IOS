@@ -19,10 +19,18 @@ struct ContentView: View {
             } else if modelView.status == "play" {
                 play(size: geometry.size)
             } else if modelView.status == "winning"{
-                ZStack{
-                    Text("Gewonnen")
+                ZStack {
                     play(size: geometry.size)
+                    VStack {
+                        Text("Gewonnen").font(.largeTitle)
+                        TextField("Name eingeben", text: $modelView.playerName)
+                                        .padding()
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        weiterButton()
+                    }
                 }
+            } else if modelView.status == "highScore" {
+                HighscoreView(highscoreManager: modelView.highscoreManager )
             }
         }
     }
@@ -114,6 +122,7 @@ struct ContentView: View {
                             handleDragEnded()
                         }
                     )
+                    .disabled(modelView.status != "play")
                     ForEach(0 ..< modelView.matrix[0].count, id: \.self) { column in
                         VStack {
                             if row >= 0 {
@@ -123,7 +132,9 @@ struct ContentView: View {
                                         modelView.updateSelection(item: row, selection: newValue, axe: "row")
                                     }
                                     .onChange(of: modelView.matrix) { _, _ in
-                                        modelView.check()
+                                        if modelView.check() {
+                                            modelView.status = "winning"
+                                        }
                                     }
 //                                    .onChange(of: modelView.selectedColumns.contains(column)) { _, newValue in
 //                                            modelView.updateSelection(item: column, selection: newValue, axe: "column")
@@ -145,6 +156,7 @@ struct ContentView: View {
                                         handleDragEnded()
                                     }
                                 )
+                                .disabled(modelView.status != "play")
                             }
                         }
                     }
@@ -163,6 +175,7 @@ struct ContentView: View {
                             handleDragEnded()
                         }
                     )
+                    .disabled(modelView.status != "play")
                 }
             }
         }
@@ -259,6 +272,7 @@ struct ContentView: View {
             slider(from: -10, to: 10, for: $modelView.faktor, name: "faktor")
             backButton()
         }
+        
     }
     
     @ViewBuilder

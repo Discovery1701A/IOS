@@ -15,7 +15,9 @@ extension ContentView {
             modelView.resetSelection()
         }, label: {
             Image(systemName: "arrow.uturn.forward")
-        })
+        }
+        )
+        .disabled(modelView.status != "play")
     }
 
     @ViewBuilder
@@ -28,6 +30,7 @@ extension ContentView {
             label: { Image(systemName: "arrow.uturn.backward")
             }
         )
+        .disabled(modelView.status != "play")
     }
     
     @ViewBuilder
@@ -41,6 +44,7 @@ extension ContentView {
                 Text("mischen")
             }
         )
+        .disabled(modelView.status != "play")
     }
 
     @ViewBuilder
@@ -55,6 +59,17 @@ extension ContentView {
             }
         )
     }
+    @ViewBuilder
+    func weiterButton() -> some View {
+        Button(
+            action: {
+                modelView.checkScore()
+                modelView.status = "highScore"
+            }, label: {
+                Text("Weiter")
+            }
+        )
+    }
 
     @ViewBuilder
     func backButton() -> some View {
@@ -66,6 +81,7 @@ extension ContentView {
                 Text("Zurück")
             }
         )
+        .disabled(modelView.status != "play")
     }
     
     @ViewBuilder
@@ -83,6 +99,7 @@ extension ContentView {
                 Text("spalte")
             }
         )
+        .disabled(modelView.status != "play")
     }
     
     @ViewBuilder
@@ -98,6 +115,7 @@ extension ContentView {
                 Text("Multiplizieren +")
             }
         )
+        .disabled(modelView.status != "play")
     }
 
     @ViewBuilder
@@ -115,6 +133,7 @@ extension ContentView {
                 Text("Dividieren +")
             }
         )
+        .disabled(modelView.status != "play")
     }
 
     @ViewBuilder
@@ -132,6 +151,7 @@ extension ContentView {
                 Text("Dividieren")
             }
         )
+        .disabled(modelView.status != "play")
     }
     
     @ViewBuilder
@@ -150,6 +170,7 @@ extension ContentView {
                 Text("Multiplizieren")
             }
         )
+        .disabled(modelView.status != "play")
     }
     
     @ViewBuilder
@@ -163,5 +184,6 @@ extension ContentView {
                 Text("neu")
             }
         )
+        .disabled(modelView.status != "play")
     }
 }

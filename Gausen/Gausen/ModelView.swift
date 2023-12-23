@@ -10,12 +10,8 @@ import SwiftUI
 
 class ViewModel: ObservableObject {
     typealias Field = Model.Field
+    var highscoreManager = HighscoreManager.shared
     
-    var testMatrix = [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]
-    ]
     private static func createSetGame(rowCount: Int) -> Model {
         Model(rowCount: rowCount)
     }
@@ -24,6 +20,7 @@ class ViewModel: ObservableObject {
     @Published var draggedColumn: Int?
     @Published var draggedRow: Int?
     @Published var status: String = "start"
+ @Published var playerName: String = ""
     @Published var faktor = 1.0
     @Published var rowCount = 3.0
     @Published var isEditing = false
@@ -53,7 +50,14 @@ class ViewModel: ObservableObject {
     }
     
     func updateTime() {
-        time = model.timeTracking()
+        if status == "play" {
+            time = model.timeTracking()
+        }
+    }
+    
+    func checkScore () {
+        highscoreManager.newScoreActivityCount(activityCount: activityCount, personName: playerName)
+        highscoreManager.newScoreTime(time: time, personName: playerName)
     }
 
     func resetSelection() {
@@ -113,9 +117,11 @@ class ViewModel: ObservableObject {
     func resetMemory() {
         model.linkedList.reset()
     }
-    func check () -> Bool {
+
+    func check() -> Bool {
         model.check()
     }
+
     func updateSelection(item: Int, selection: Bool, axe: String) {
 //        DispatchQueue.main.async {
         model.updateSelection(item: item, selection: selection, axe: axe)
