@@ -5,7 +5,6 @@
 //  Created by Anna Rieckmann on 23.12.23.
 //
 import SwiftUI
-
 struct HighscoreView: View {
     @ObservedObject var highscoreManager = HighscoreManager.shared
 
@@ -23,20 +22,37 @@ struct HighscoreListView: View {
     let highscores: [[String]]
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack {
             Text(title)
                 .font(.title)
+                .foregroundColor(.blue)
                 .padding(.bottom, 10)
 
             ForEach(highscores, id: \.self) { entry in
                 HStack {
                     Text(entry[0])
                         .font(.headline)
+                        .foregroundColor(.primary)
+
                     Spacer()
+
                     Text(entry[1])
                         .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
+                .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color(.systemGray6))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color(.systemGray4), lineWidth: 1)
+                )
+
+                Divider().padding(.horizontal, 16) // Subtile Trennlinie nach jedem Eintrag
             }
         }
+        .padding()
     }
 }

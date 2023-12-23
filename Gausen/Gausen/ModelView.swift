@@ -19,7 +19,7 @@ class ViewModel: ObservableObject {
     @Published private var model: Model = createSetGame(rowCount: 2)
     @Published var draggedColumn: Int?
     @Published var draggedRow: Int?
-    @Published var status: String = "start"
+    @Published var status: String = "highScore"
  @Published var playerName: String = ""
     @Published var faktor = 1.0
     @Published var rowCount = 3.0
