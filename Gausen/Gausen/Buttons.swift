@@ -10,12 +10,13 @@ import SwiftUI
 extension ContentView {
     @ViewBuilder
     func redo() -> some View {
-        Button(action: {
+        Button(
+            action: {
             modelView.forwart()
             modelView.resetSelection()
-        }, label: {
+            }, label: {
             Image(systemName: "arrow.uturn.forward")
-        }
+            }
         )
         .disabled(modelView.status != "play")
     }
@@ -32,7 +33,7 @@ extension ContentView {
         )
         .disabled(modelView.status != "play")
     }
-    
+
     @ViewBuilder
     func mix() -> some View {
         Button(
@@ -59,6 +60,7 @@ extension ContentView {
             }
         )
     }
+
     @ViewBuilder
     func weiterButton() -> some View {
         Button(
@@ -81,9 +83,9 @@ extension ContentView {
                 Text("Zurück")
             }
         )
-        .disabled(modelView.status != "play")
+        .disabled(modelView.status != "play" && modelView.status != "highScore")
     }
-    
+
     @ViewBuilder
     func spalte() -> some View {
         Button(
@@ -101,7 +103,7 @@ extension ContentView {
         )
         .disabled(modelView.status != "play")
     }
-    
+
     @ViewBuilder
     func addScaleRowMulti() -> some View {
         Button(
@@ -153,7 +155,7 @@ extension ContentView {
         )
         .disabled(modelView.status != "play")
     }
-    
+
     @ViewBuilder
     func scaleRowMulti() -> some View {
         Button(
@@ -172,7 +174,7 @@ extension ContentView {
         )
         .disabled(modelView.status != "play")
     }
-    
+
     @ViewBuilder
     func neu() -> some View {
         Button(

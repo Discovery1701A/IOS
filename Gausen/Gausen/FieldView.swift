@@ -9,12 +9,16 @@ struct FieldView: View {
                 let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
                 
                 shape.fill()
-                shape.foregroundColor(backColor())
+                withAnimation {
+                    shape.fill().foregroundColor(backColor())
+                }
                 shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
                 
                 // Verwende eine flexible Schriftgröße basierend auf der Anzahl der Ziffern
-                Text(String(field.content))
-                    .font(font(in: geometry.size, content: String(field.content)))
+                withAnimation {
+                    Text(String(field.content))
+                        .font(font(in: geometry.size, content: String(field.content)))
+                }
             }
             .background(
                 GeometryReader { geo in

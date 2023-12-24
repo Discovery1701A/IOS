@@ -120,7 +120,7 @@ class HighscoreManager:  ObservableObject {
         var isIn = false
         for i in 0 ..< highScoreTime.count {
             if convertTimeStringToDouble(saveScoreRow[1])! < convertTimeStringToDouble(highScoreTime[i][1])! {
-               var saveScoreRow2 = highScoreTime[i]
+                let saveScoreRow2 = highScoreTime[i]
                 highScoreTime[i] = saveScoreRow
                 saveScoreRow = saveScoreRow2
             }
@@ -141,7 +141,7 @@ class HighscoreManager:  ObservableObject {
         for i in 0 ..< highScoreTime.count {
             print(highScoreActivityCount[i][1])
             if Int(saveScoreRow[1])! < Int(highScoreActivityCount[i][1])! {
-               var saveScoreRow2 = highScoreActivityCount[i]
+                let saveScoreRow2 = highScoreActivityCount[i]
                 highScoreActivityCount[i] = saveScoreRow
                 saveScoreRow = saveScoreRow2
             }

@@ -202,10 +202,8 @@ struct Model {
     
     mutating func check() -> Bool {
         for i in 0 ..< self.unitMatrix.count {
-            for j in 0 ..< self.unitMatrix.count {
-                if self.unitMatrix[i][j].content != self.matrix[i][j].content {
-                    return false
-                }
+            for j in 0 ..< self.unitMatrix.count where self.unitMatrix[i][j].content != self.matrix[i][j].content {
+                return false
             }
         }
         self.markWinnig()
@@ -240,7 +238,7 @@ struct Model {
         //        for row in matrix {
         // print(row)
         //        }
-        mixMatrix(howMany: 1, range: 3)
+        self.mixMatrix(howMany: 1, range: 3)
     }
 
     mutating func drag(row: Int = -1, column: Int = -1, bool: Bool) {
@@ -314,13 +312,11 @@ struct Model {
             var foundPivot = false
 
             // Suche nach einem nicht-null Element in der aktuellen Spalte
-            for row in rank ..< rowCount {
-                if augmentedMatrix[row][col].content != 0 {
-                    // Tausche die Zeilen aus, um ein Nicht-Null-Element als Pivot zu erhalten
-                    augmentedMatrix.swapAt(rank, row)
-                    foundPivot = true
-                    break
-                }
+            for row in rank ..< rowCount where augmentedMatrix[row][col].content != 0 {
+                // Tausche die Zeilen aus, um ein Nicht-Null-Element als Pivot zu erhalten
+                augmentedMatrix.swapAt(rank, row)
+                foundPivot = true
+                break
             }
             // Wenn kein Pivot gefunden wurde, gehe zur nächsten Spalte
             if !foundPivot {
@@ -329,19 +325,15 @@ struct Model {
 
             // Setze alle Elemente über und unter dem Pivot auf null
             let pivot = augmentedMatrix[rank][col].content
-            for i in 0 ..< rowCount {
-                if i != rank {
-                    let factor = -augmentedMatrix[i][col].content / pivot
-                    for j in 0 ..< columnCount {
-                        augmentedMatrix[i][j].content += factor * augmentedMatrix[rank][j].content
-                    }
+            for i in 0 ..< rowCount where i != rank {
+                let factor = -augmentedMatrix[i][col].content / pivot
+                for j in 0 ..< columnCount {
+                    augmentedMatrix[i][j].content += factor * augmentedMatrix[rank][j].content
                 }
             }
-
             // Inkrementiere den Rang
             rank += 1
         }
-
         return rank
     }
     
