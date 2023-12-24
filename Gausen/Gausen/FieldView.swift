@@ -2,13 +2,29 @@ import SwiftUI
 
 struct FieldView: View {
     let field: ViewModel.Field
-    
+//    @Binding var fieldSize: CGSize
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
+//                    
+//                shape
+//                      .background(
+//                GeometryReader { geo in
+//                    Color.clear
+//                        .preference(key: SizePreferenceKey.self, value: geo.size)
+//                    
+//                }
+//            )
+//            .onPreferenceChange(SizePreferenceKey.self) { size in
+//                // Vergleiche die vorherige Größe mit der aktuellen Größe
+//                if size != self.fieldSize {
+//                    print(size)
+//                    self.fieldSize = size
+//                    
+//                }
+//            }
                 
-                shape.fill()
                 withAnimation {
                     shape.fill().foregroundColor(backColor())
                 }
@@ -19,13 +35,9 @@ struct FieldView: View {
                     Text(String(field.content))
                         .font(font(in: geometry.size, content: String(field.content)))
                 }
+//                Text(String(Double(geometry.size.width)))
             }
-            .background(
-                GeometryReader { geo in
-                    Color.clear
-                        .preference(key: SizePreferenceKey.self, value: geo.size)
-                }
-            )
+            
         }
     }
     
@@ -37,7 +49,7 @@ struct FieldView: View {
         } else if field.notDiv {
             return Color.red
         } else if field.selection {
-            return Color(hex: 0x2080a5) 
+            return Color(hex: 0x2080A5)
         } else {
             return .orange
         }
@@ -58,7 +70,8 @@ struct FieldView: View {
     }
 }
 
-struct FieldSizeModifier: ViewModifier {
+ struct FieldSizeModifier: ViewModifier {
+ 
     @Binding var fieldSize: CGSize
     @State private var previousSize: CGSize = .zero
     
@@ -72,13 +85,16 @@ struct FieldSizeModifier: ViewModifier {
             )
             .onPreferenceChange(SizePreferenceKey.self) { size in
                 // Vergleiche die vorherige Größe mit der aktuellen Größe
-                if size != self.previousSize {
+                if size != self.previousSize && size != self.fieldSize {
+                    print(size)
+                    print(content)
                     self.fieldSize = size
+              
                     self.previousSize = size
                 }
             }
     }
-}
+ }
 
 struct SizePreferenceKey: PreferenceKey {
     static var defaultValue: CGSize = .zero
@@ -88,11 +104,11 @@ struct SizePreferenceKey: PreferenceKey {
     }
 }
 
-extension View {
+ extension View {
     func fieldSize(_ fieldSize: Binding<CGSize>) -> some View {
         modifier(FieldSizeModifier(fieldSize: fieldSize))
     }
-}
+ }
 
 extension Color {
     init(hex: UInt, alpha: Double = 1.0) {

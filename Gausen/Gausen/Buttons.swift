@@ -18,7 +18,7 @@ extension ContentView {
             Image(systemName: "arrow.uturn.forward")
             }
         )
-        .disabled(modelView.status != "play")
+        .disabled(modelView.gameStatus != .play)
     }
 
     @ViewBuilder
@@ -31,7 +31,7 @@ extension ContentView {
             label: { Image(systemName: "arrow.uturn.backward")
             }
         )
-        .disabled(modelView.status != "play")
+        .disabled(modelView.gameStatus != .play)
     }
 
     @ViewBuilder
@@ -45,7 +45,7 @@ extension ContentView {
                 Text("mischen")
             }
         )
-        .disabled(modelView.status != "play")
+        .disabled(modelView.gameStatus != .play)
     }
 
     @ViewBuilder
@@ -54,7 +54,7 @@ extension ContentView {
             action: {
                 modelView.newMatrix(rowCount: Int(modelView.rowCount))
                 modelView.resetSelection()
-                modelView.status = "play"
+                modelView.gameStatus = .play
             }, label: {
                 Text("Start")
             }
@@ -66,7 +66,7 @@ extension ContentView {
         Button(
             action: {
                 modelView.checkScore()
-                modelView.status = "highScore"
+                modelView.gameStatus = .highScore
             }, label: {
                 Text("Weiter")
             }
@@ -78,12 +78,12 @@ extension ContentView {
         Button(
             action: {
                 modelView.resetSelection()
-                modelView.status = "start"
+                modelView.gameStatus = .start
             }, label: {
                 Text("Zurück")
             }
         )
-        .disabled(modelView.status != "play" && modelView.status != "highScore")
+        .disabled(modelView.gameStatus != .play && modelView.gameStatus != .highScore)
     }
 
     @ViewBuilder
@@ -101,7 +101,7 @@ extension ContentView {
                 Text("spalte")
             }
         )
-        .disabled(modelView.status != "play")
+        .disabled(modelView.gameStatus != .play)
     }
 
     @ViewBuilder
@@ -117,7 +117,7 @@ extension ContentView {
                 Text("Multiplizieren +")
             }
         )
-        .disabled(modelView.status != "play")
+        .disabled(modelView.gameStatus != .play)
     }
 
     @ViewBuilder
@@ -135,7 +135,7 @@ extension ContentView {
                 Text("Dividieren +")
             }
         )
-        .disabled(modelView.status != "play")
+        .disabled(modelView.gameStatus != .play)
     }
 
     @ViewBuilder
@@ -153,7 +153,7 @@ extension ContentView {
                 Text("Dividieren")
             }
         )
-        .disabled(modelView.status != "play")
+        .disabled(modelView.gameStatus != .play)
     }
 
     @ViewBuilder
@@ -172,7 +172,7 @@ extension ContentView {
                 Text("Multiplizieren")
             }
         )
-        .disabled(modelView.status != "play")
+        .disabled(modelView.gameStatus != .play)
     }
 
     @ViewBuilder
@@ -186,6 +186,6 @@ extension ContentView {
                 Text("neu")
             }
         )
-        .disabled(modelView.status != "play")
+        .disabled(modelView.gameStatus != .play)
     }
 }

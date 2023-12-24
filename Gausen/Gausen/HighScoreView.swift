@@ -10,7 +10,7 @@ struct HighscoreView: View {
     @ObservedObject var highscoreManager = HighscoreManager.shared
 
     var body: some View {
-        HStack(spacing: 20) {
+        HStack {
             HighscoreListView(title: "Highscore Time", highscores: highscoreManager.highScoreTime)
             HighscoreListView(title: "Highscore ActivityCount", highscores: highscoreManager.highScoreActivityCount)
         }
@@ -28,34 +28,35 @@ struct HighscoreListView: View {
                 .font(.title)
                 .foregroundColor(.blue)
                 .padding(.bottom, 10)
+            ScrollView {
+                ForEach(highscores.indices, id: \.self) { index in
+                    HStack {
+                        Text("\(index + 1).") // Anzeigen des Platzes
+                            .font(.headline)
+                            .foregroundColor(.primary)
 
-            ForEach(highscores.indices, id: \.self) { index in
-                HStack {
-                    Text("\(index + 1).") // Anzeigen des Platzes
-                        .font(.headline)
-                        .foregroundColor(.primary)
+                        Text(highscores[index][0])
+                            .font(.headline)
+                            .foregroundColor(.primary)
 
-                    Text(highscores[index][0])
-                        .font(.headline)
-                        .foregroundColor(.primary)
+                        Spacer()
 
-                    Spacer()
+                        Text(highscores[index][1])
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color(.systemGray6))
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color(.systemGray4), lineWidth: 1)
+                    )
 
-                    Text(highscores[index][1])
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                    Divider().padding(.horizontal, 16) // Subtile Trennlinie nach jedem Eintrag
                 }
-                .padding(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color(.systemGray6))
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color(.systemGray4), lineWidth: 1)
-                )
-
-                Divider().padding(.horizontal, 16) // Subtile Trennlinie nach jedem Eintrag
             }
         }
         .padding()

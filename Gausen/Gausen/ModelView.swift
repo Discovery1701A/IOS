@@ -19,7 +19,7 @@ class ViewModel: ObservableObject {
     @Published private var model: Model = createSetGame(rowCount: 2)
     @Published var draggedColumn: Int?
     @Published var draggedRow: Int?
-    @Published var status: String = "start"
+    @Published var gameStatus: GameStatus = .start
  @Published var playerName: String = ""
     @Published var faktor = 1.0
     @Published var rowCount = 3.0
@@ -49,8 +49,12 @@ class ViewModel: ObservableObject {
         isEditing = value
     }
     
+    func updateFieldSize(_ size: CGSize) {
+            fieldSize = size
+        }
+    
     func updateTime() {
-        if status == "play" {
+        if gameStatus == .play {
             time = model.timeTracking()
         }
     }
@@ -127,4 +131,8 @@ class ViewModel: ObservableObject {
         model.updateSelection(item: item, selection: selection, axe: axe)
     }
 //    }
+    enum GameStatus {
+        case start, play, winning, highScore
+    }
+
 }

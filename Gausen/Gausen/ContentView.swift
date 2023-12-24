@@ -12,24 +12,30 @@ struct ContentView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            
-            if modelView.status == "start" {
+            switch modelView.gameStatus {
+            case .start:
                 start()
-                
-            } else if modelView.status == "play" {
+
+            case .play:
                 play(size: geometry.size)
-            } else if modelView.status == "winning" {
+
+            case .winning:
                 ZStack {
                     play(size: geometry.size)
+                        .ignoresSafeArea(.keyboard)
+                    
                     VStack {
                         Text("Gewonnen").font(.largeTitle)
+                        
                         TextField("Name eingeben", text: $modelView.playerName)
-                            .padding()
+                        
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                        
                         weiterButton()
                     }
                 }
-            } else if modelView.status == "highScore" {
+                
+            case .highScore:
                 VStack {
                     HighscoreView(highscoreManager: modelView.highscoreManager)
                     backButton()
@@ -48,7 +54,7 @@ struct ContentView: View {
             Spacer()
             
             slider(from: 2, to: 6, for: $modelView.rowCount, name: "Wie Viele Zeilen")
-                .padding([.leading, .trailing, .bottom])
+               
                 .padding([.leading, .trailing, .bottom]) // Padding auf der linken, rechten und unteren Seite
             
             Spacer()
@@ -65,8 +71,8 @@ struct ContentView: View {
     func play(size: CGSize) -> some View {
         if size.width < size.height {
             VStack {
-                Text(String(modelView.activityCount))
-                Text(modelView.time)
+                Text("Anzahl der Aktionen: " + String(modelView.activityCount))
+                Text("Zeit: " + modelView.time + "min")
                     .onAppear {
                         // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
                         modelView.updateTime()
@@ -77,7 +83,7 @@ struct ContentView: View {
                         }
                     }
                 matrixView()
-                    .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
+//                    .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
                     
                 Spacer()
                 controller()
@@ -97,7 +103,7 @@ struct ContentView: View {
                     }
                 HStack {
                     matrixView()
-                        .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
+//                        .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
                     Spacer()
                     controller()
                 }
@@ -112,20 +118,24 @@ struct ContentView: View {
                 matrixRowView(row: row)
             }
         }
-        .padding(1)
+//        .padding(1)
     }
     
     func matrixCellView(row: Int, column: Int) -> some View {
         if row >= 0 {
             return AnyView(createFieldView(row: row, column: column))
         } else {
-            return AnyView(createSelectionView(column: column))
+            return AnyView(createSelectionView(item: column, axis: .horizontal))
         }
     }
 
     func createFieldView(row: Int, column: Int) -> some View {
-        FieldView(field: modelView.matrix[row][column])
+      FieldView(field: modelView.matrix[row][column])
+        
             .fieldSize($modelView.fieldSize)
+           
+//            .fieldSize($modelView.fieldSize)
+            .rotationEffect(Angle.degrees(modelView.matrix[row][column].winning ? 360 : 0))
             .onChange(of: modelView.selectedRows.contains(row)) { _, newValue in
                 withAnimation {
                     modelView.updateSelection(item: row, selection: newValue, axe: "row")
@@ -135,30 +145,11 @@ struct ContentView: View {
                 withAnimation {
                     if modelView.check() {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            modelView.status = "winning"
+                            modelView.gameStatus = .winning
                         }
                     }
                 }
             }
-    }
-
-    func createSelectionView(column: Int) -> some View {
-        SelectionView(
-            item: column,
-            selectedItems: $modelView.selectedColumns,
-            axis: .horizontal,
-            fieldSize: modelView.fieldSize,
-            onDragChanged: { value in
-                handleDragChangedColumn(
-                    value: value,
-                    column: column,
-                    size: modelView.fieldSize
-                )
-            }, onDragEnded: {
-                handleDragEnded()
-            }
-        )
-        .disabled(modelView.status != "play")
     }
 
     func createSelectionView(item: Int, axis: Axis) -> some View {
@@ -178,7 +169,7 @@ struct ContentView: View {
                 handleDragEnded()
             }
         )
-        .disabled(modelView.status != "play")
+        .disabled(modelView.gameStatus != .play)
     }
 
     func matrixRowView(row: Int) -> some View {
@@ -191,7 +182,7 @@ struct ContentView: View {
 
             createSelectionView(item: row, axis: .vertical)
         }
-        .disabled(modelView.status != "play")
+       
     }
    
     @ViewBuilder
@@ -206,9 +197,10 @@ struct ContentView: View {
                 scaleRowDiv()
                 scaleRowMulti()
             }
-            undo()
-            redo()
-                .padding()
+            HStack {
+                undo()
+                redo()
+            }
             
             slider(from: -10, to: 10, for: $modelView.faktor, name: "faktor")
             backButton()
@@ -239,7 +231,6 @@ struct ContentView: View {
                 .foregroundColor(modelView.getIsEditing() ? .red : .blue)
         }
     }
-
 }
 
 struct ContentView_Previews: PreviewProvider {
