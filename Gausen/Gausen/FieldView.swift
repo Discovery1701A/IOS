@@ -74,6 +74,7 @@ struct FieldView: View {
  
     @Binding var fieldSize: CGSize
     @State private var previousSize: CGSize = .zero
+     @State private var prepreviousSize: CGSize = .zero
     
     func body(content: Content) -> some View {
         content
@@ -81,17 +82,34 @@ struct FieldView: View {
                 GeometryReader { geo in
                     Color.clear
                         .preference(key: SizePreferenceKey.self, value: geo.size)
+                  
                 }
             )
             .onPreferenceChange(SizePreferenceKey.self) { size in
-                // Vergleiche die vorherige Größe mit der aktuellen Größe
-                if size != self.previousSize && size != self.fieldSize {
-                    print(size)
-                    print(content)
+                
+                if size == self.previousSize && size != self.fieldSize {
+                        print(content)
                     self.fieldSize = size
-              
-                    self.previousSize = size
                 }
+                
+                if self.fieldSize == .zero {
+                    self.fieldSize = size
+                }
+                // Vergleiche die vorherige Größe mit der aktuellen Größe
+//                if size != self.previousSize {
+//                   
+////                    print(size)
+//                    self.prepreviousSize = self.previousSize
+//                    self.previousSize = size
+////                    print(self.previousSize)
+//                    
+//                              }
+                self.prepreviousSize = self.previousSize
+                self.previousSize = size
+                
+                print(self.previousSize)
+//                print(size)
+                
             }
     }
  }
