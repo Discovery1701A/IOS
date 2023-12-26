@@ -82,32 +82,42 @@ struct FieldView: View {
                 GeometryReader { geo in
                     Color.clear
                         .preference(key: SizePreferenceKey.self, value: geo.size)
-                  
+                        .onAppear {
+            
+                            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+//                                print("jijijiji")
+                                if geo.size == self.previousSize && geo.size != self.fieldSize {
+//                                                                   print("pikabu")
+                                    self.fieldSize = geo.size
+                                }
+                            }
+                        }
                 }
             )
+
             .onPreferenceChange(SizePreferenceKey.self) { size in
                 
-                if size == self.previousSize && size != self.fieldSize {
-                        print(content)
-                    self.fieldSize = size
-                }
+//                if size == self.previousSize && size != self.fieldSize {
+////                        print(content)
+//                    self.fieldSize = size
+//                }
                 
                 if self.fieldSize == .zero {
                     self.fieldSize = size
                 }
                 // Vergleiche die vorherige Größe mit der aktuellen Größe
-//                if size != self.previousSize {
-//                   
-////                    print(size)
-//                    self.prepreviousSize = self.previousSize
-//                    self.previousSize = size
-////                    print(self.previousSize)
-//                    
-//                              }
-                self.prepreviousSize = self.previousSize
-                self.previousSize = size
+                if size != self.previousSize {
+                   
+//                    print(size)
+                    self.prepreviousSize = self.previousSize
+                    self.previousSize = size
+//                    print(self.previousSize)
+                    
+                              }
+//                self.prepreviousSize = self.previousSize
+//                self.previousSize = size
                 
-                print(self.previousSize)
+//                print(self.previousSize)
 //                print(size)
                 
             }

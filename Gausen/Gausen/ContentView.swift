@@ -94,7 +94,7 @@ struct ContentView: View {
                 Text(modelView.time)
                     .onAppear {
                         // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
-                        modelView.updateTime()
+//                        modelView.updateTime()
                                 
                         // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
                         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
