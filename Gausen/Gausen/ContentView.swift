@@ -32,7 +32,7 @@ struct ContentView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         
                         weiterButton()
-                    }
+                    }.padding(/*@START_MENU_TOKEN@*/EdgeInsets()/*@END_MENU_TOKEN@*/)
                 }
                 
             case .highScore:
@@ -49,22 +49,23 @@ struct ContentView: View {
         VStack {
             Text("Start")
                 .font(.title)
-                .padding(.bottom, 20) // Abstand unterhalb des Texts
+                .padding(.bottom, 20) // Spacing below the text
             
             Spacer()
             
-            slider(from: 2, to: 6, for: $modelView.rowCount, name: "Wie Viele Zeilen")
-               
-                .padding([.leading, .trailing, .bottom]) // Padding auf der linken, rechten und unteren Seite
+            slider(from: 2, to: 6, for: $modelView.rowCount, name: "Wie Viele Reihen")
+                .padding([.leading, .trailing, .bottom]) // Padding on the left, right, and bottom
             
             Spacer()
             
             startButton()
-                .padding() // Standard-Padding für den Startbutton
+                .padding() // Standard padding for the start button
             
             Spacer()
+            Spacer()
+            highScoreButton()
         }
-        .padding() // Padding für den gesamten VStack
+        .padding() // Padding for the entire VStack
     }
     
     @ViewBuilder
@@ -83,6 +84,8 @@ struct ContentView: View {
                         }
                     }
                 matrixView()
+                    
+                    .padding()
 //                    .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
                     
                 Spacer()
@@ -103,6 +106,7 @@ struct ContentView: View {
                     }
                 HStack {
                     matrixView()
+                        .padding()
 //                        .fieldSize($modelView.fieldSize) // Hier wird die Größe übergeben
                     Spacer()
                     controller()
@@ -133,7 +137,7 @@ struct ContentView: View {
       FieldView(field: modelView.matrix[row][column])
         
             .fieldSize($modelView.fieldSize)
-           
+            .ignoresSafeArea(.keyboard)
 //            .fieldSize($modelView.fieldSize)
             .rotationEffect(Angle.degrees(modelView.matrix[row][column].winning ? 360 : 0))
             .onChange(of: modelView.selectedRows.contains(row)) { _, newValue in
@@ -153,23 +157,25 @@ struct ContentView: View {
     }
 
     func createSelectionView(item: Int, axis: Axis) -> some View {
-        SelectionView(
-            item: item,
-            selectedItems: axis == .vertical ? $modelView.selectedRows : $modelView.selectedColumns,
-            axis: axis,
-            fieldSize: modelView.fieldSize,
-            onDragChanged: { value in
-                if axis == .vertical {
-                    handleDragChangedRow(value: value, row: item, size: modelView.fieldSize)
-                } else {
-                    handleDragChangedColumn(value: value, column: item, size: modelView.fieldSize)
+        withAnimation {
+            SelectionView(
+                item: item,
+                selectedItems: axis == .vertical ? $modelView.selectedRows : $modelView.selectedColumns,
+                axis: axis,
+                fieldSize: modelView.fieldSize,
+                onDragChanged: { value in
+                    if axis == .vertical {
+                        handleDragChangedRow(value: value, row: item, size: modelView.fieldSize)
+                    } else {
+                        handleDragChangedColumn(value: value, column: item, size: modelView.fieldSize)
+                    }
+                },
+                onDragEnded: {
+                    handleDragEnded()
                 }
-            },
-            onDragEnded: {
-                handleDragEnded()
-            }
-        )
-        .disabled(modelView.gameStatus != .play)
+            )
+            .disabled(modelView.gameStatus != .play)
+        }
     }
 
     func matrixRowView(row: Int) -> some View {
@@ -189,20 +195,25 @@ struct ContentView: View {
     func controller() -> some View {
         VStack {
             HStack {
-                mix()
-                neu()
-                spalte()
+//                mix()
+//                neu()
+//                spalte()
                 addScaleRowMulti()
                 addScaleRowDiv()
                 scaleRowDiv()
                 scaleRowMulti()
             }
-            HStack {
-                undo()
-                redo()
-            }
+            .padding(.horizontal)
             
-            slider(from: -10, to: 10, for: $modelView.faktor, name: "faktor")
+            slider(from: -10, to: 10, for: $modelView.faktor, name: "Faktor")
+            HStack {
+                Spacer()
+                undo()
+                Spacer()
+                redo()
+                Spacer()
+            }
+            .padding([.leading, .bottom, .trailing])
             backButton()
         }
     }
@@ -220,9 +231,11 @@ struct ContentView: View {
                     in: Double(min) ... Double(max),
                     step: 1.0
                 )
+//                .accentColor(.gray)
                 .onChange(of: value.wrappedValue) { _, _ in
                     modelView.setIsEditing(true)
                 }
+                
                 Text("\(max)")
             }
             .padding(.horizontal)

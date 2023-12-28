@@ -15,9 +15,11 @@ extension ContentView {
             modelView.forwart()
             modelView.resetSelection()
             }, label: {
-            Image(systemName: "arrow.uturn.forward")
+            Image(systemName:
+                    "arrowshape.turn.up.forward").font(.title)
             }
         )
+        .disabled(modelView.currentNode.successor == nil)
         .disabled(modelView.gameStatus != .play)
     }
 
@@ -28,9 +30,10 @@ extension ContentView {
                 modelView.back()
                 modelView.resetSelection()
             },
-            label: { Image(systemName: "arrow.uturn.backward")
+            label: { Image(systemName: "arrowshape.turn.up.backward").font(.title)
             }
         )
+        .disabled(modelView.currentNode.predecessor == nil)
         .disabled(modelView.gameStatus != .play)
     }
 
@@ -55,7 +58,8 @@ extension ContentView {
                 modelView.newMatrix(rowCount: Int(modelView.rowCount))
                 modelView.resetSelection()
                 modelView.gameStatus = .play
-            }, label: {
+            },
+            label: {
                 Text("Start")
             }
         )
@@ -68,7 +72,19 @@ extension ContentView {
                 modelView.checkScore()
                 modelView.gameStatus = .highScore
             }, label: {
-                Text("Weiter")
+                 Text("Weiter")
+            }
+        )
+    }
+    
+    @ViewBuilder
+    func highScoreButton() -> some View {
+        Button(
+            action: {
+//                modelView.checkScore()
+                modelView.gameStatus = .highScore
+            }, label: {
+                Image(systemName:"medal").font(.title)
             }
         )
     }
@@ -114,7 +130,16 @@ extension ContentView {
                 }
                 modelView.resetSelection()
             }, label: {
-                Text("Multiplizieren +")
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(.secondary)
+                        .scaledToFit()
+                        
+                    HStack {
+                        Image(systemName:"multiply").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                        Image(systemName:"plus").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    }
+                }
             }
         )
         .disabled(modelView.gameStatus != .play)
@@ -132,7 +157,16 @@ extension ContentView {
                 }
                 modelView.resetSelection()
             }, label: {
-                Text("Dividieren +")
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(.secondary)
+                        .scaledToFit()
+                        
+                    HStack {
+                        Image(systemName:"divide").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                        Image(systemName:"plus").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    }
+                }
             }
         )
         .disabled(modelView.gameStatus != .play)
@@ -150,7 +184,15 @@ extension ContentView {
                 }
                 modelView.resetSelection()
             }, label: {
-                Text("Dividieren")
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(.secondary)
+                        .scaledToFit()
+                        
+                    HStack {
+                        Image(systemName:"divide").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    }
+                }
             }
         )
         .disabled(modelView.gameStatus != .play)
@@ -169,7 +211,15 @@ extension ContentView {
                 modelView.resetSelection()
             },
             label: {
-                Text("Multiplizieren")
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(.secondary)
+                        .scaledToFit()
+                        
+                    HStack {
+                        Image(systemName:"multiply").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    }
+                }
             }
         )
         .disabled(modelView.gameStatus != .play)

@@ -16,7 +16,7 @@ class ViewModel: ObservableObject {
         Model(rowCount: rowCount)
     }
 
-    @Published private var model: Model = createSetGame(rowCount: 2)
+    @Published private var model: Model = createSetGame(rowCount: 3)
     @Published var draggedColumn: Int?
     @Published var draggedRow: Int?
     @Published var gameStatus: GameStatus = .start
@@ -35,6 +35,10 @@ class ViewModel: ObservableObject {
     
     var matrix: [[Field]] {
         return model.matrix
+    }
+    
+    var currentNode : LinkedList.Node {
+        return model.currentNode
     }
 
     // Getter-Methoden für die einzelnen Eigenschaften

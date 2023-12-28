@@ -196,6 +196,8 @@ struct Model {
             }
         }
         self.linkedList.reset()
+        self.linkedList.add(element: self.matrix)
+        self.currentNode = self.linkedList.lastNode
         self.activityCount = 0
         self.varReset()
     }
