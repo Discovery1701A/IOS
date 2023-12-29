@@ -7,6 +7,7 @@
 // Die Ansicht, die angezeigt wird, wenn der Spieler das Spiel gewonnen hat.
 import SwiftUI
 
+// Die Ansicht für den Gewinnzustand des Spiels.
 struct WinningView: View {
     @ObservedObject var modelView: ViewModel
     var buttons: Buttons
@@ -20,16 +21,30 @@ struct WinningView: View {
     // Body der Ansicht, der die Struktur und das Layout definiert.
     var body: some View {
         VStack {
-            // Titel "Gewonnen" mit großer Schrift.
-            Text("Gewonnen").font(.largeTitle)
-
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(hex: 0xfcbb51, alpha: 0.75))
+                    .frame(maxHeight: 100) // Dynamische Höhe
+                    .padding(.horizontal, 20) // Optionale horizontale Polsterung
+                Text("🎉Gewonnen🎉")
+                    .font(.largeTitle)
+            }
+            .padding(.bottom, 20)
+            Spacer()
             // Textfeld für die Eingabe des Spielernamens mit abgerundetem Rand.
-            TextField("Name eingeben", text: $modelView.playerName)
+                   TextField("Name eingeben", text: $modelView.playerName)
+                      
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-
-            // Button zum Fortsetzen (Weiter).
+                       .background(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 3)) // Rahmen mit abgerundeten Ecken
+                       .padding([.leading, .trailing], 20)
+                       .padding(.vertical, 10) // Vertikale Polsterung
+            Spacer()
+            Spacer()
+            // Button zur HighScoreView.
             buttons.weiterButton()
+                .padding()
         }
-        .padding(EdgeInsets())
+        .padding()
     }
+
 }

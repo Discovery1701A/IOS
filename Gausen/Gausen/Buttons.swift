@@ -324,6 +324,7 @@ struct Buttons {
                     in: Double(min) ... Double(max),
                     step: 1.0
                 )
+                .disabled(modelView.gameStatus != .play)
                 // Aktivierung der onChange-Methode, um Änderungen am Slider-Wert zu überwachen
                 .onChange(of: value.wrappedValue) { _, _ in
                     // Aktualisierung des Bearbeitungsstatus im ViewModel, um anzuzeigen, dass der Wert bearbeitet wird
