@@ -142,6 +142,7 @@ extension ContentView {
                 }
             }
         )
+        .disabled(modelView.selectedRows.count != 2)
         .disabled(modelView.gameStatus != .play)
     }
 
@@ -169,6 +170,7 @@ extension ContentView {
                 }
             }
         )
+        .disabled(modelView.selectedRows.count != 2)
         .disabled(modelView.gameStatus != .play)
     }
 
@@ -195,6 +197,7 @@ extension ContentView {
                 }
             }
         )
+        .disabled(modelView.selectedRows.count != 1)
         .disabled(modelView.gameStatus != .play)
     }
 
@@ -222,6 +225,7 @@ extension ContentView {
                 }
             }
         )
+        .disabled(modelView.selectedRows.count != 1)
         .disabled(modelView.gameStatus != .play)
     }
 

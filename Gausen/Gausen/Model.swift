@@ -167,8 +167,10 @@ struct Model {
 //        let randomRow2 = Int.random(in: 0 ..< self.matrix.count)
 //        let randomColumn1 = Int.random(in: 0 ..< self.matrix[0].count)
 //        let randomColumn2 = Int.random(in: 0 ..< self.matrix[0].count)
-        for _ in 0 ..< howMany {
+        for j in 0 ..< howMany {
+            print("j", j)
             for i in 0 ..< self.matrix.count {
+                print("i", i)
                 let randomValue = Int.random(in: -range ..< range)
 //                let randomValue2 = Int.random(in: -range ..< range)
                 var randomRow2 = Int.random(in: 0 ..< self.matrix.count)
@@ -240,7 +242,7 @@ struct Model {
         //        for row in matrix {
         // print(row)
         //        }
-        self.mixMatrix(howMany: 1, range: 3)
+        self.mixMatrix(howMany: 2, range: 10)
     }
 
     mutating func drag(row: Int = -1, column: Int = -1, bool: Bool) {

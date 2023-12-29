@@ -7,13 +7,13 @@ struct FieldView: View {
         GeometryReader { geometry in
             ZStack {
                 let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-//                    
+//
 //                shape
 //                      .background(
 //                GeometryReader { geo in
 //                    Color.clear
 //                        .preference(key: SizePreferenceKey.self, value: geo.size)
-//                    
+//
 //                }
 //            )
 //            .onPreferenceChange(SizePreferenceKey.self) { size in
@@ -21,7 +21,7 @@ struct FieldView: View {
 //                if size != self.fieldSize {
 //                    print(size)
 //                    self.fieldSize = size
-//                    
+//
 //                }
 //            }
                 
@@ -37,7 +37,6 @@ struct FieldView: View {
                 }
 //                Text(String(Double(geometry.size.width)))
             }
-            
         }
         .ignoresSafeArea(.keyboard)
     }
@@ -71,78 +70,71 @@ struct FieldView: View {
     }
 }
 
- struct FieldSizeModifier: ViewModifier {
- 
+struct FieldSizeModifier: ViewModifier {
     @Binding var fieldSize: CGSize
     @State private var previousSize: CGSize = .zero
-     @State private var prepreviousSize: CGSize = .zero
+    @State private var prepreviousSize: CGSize = .zero
     
-     func body(content: Content) -> some View {
-         content
-             .background(
+    func body(content: Content) -> some View {
+        content
+            .background(
                 GeometryReader { geo in
                     Color.clear
                         .preference(key: SizePreferenceKey.self, value: geo.size)
                         .onAppear {
-                            
                             Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-                                print(self.fieldSize)
+                                // print(self.fieldSize)
                                 if self.fieldSize == .zero {
                                     self.fieldSize = geo.size
                                 }
                                 if geo.size == self.previousSize && geo.size != self.fieldSize {
-                                 
-                                        if (geo.size.width > self.fieldSize.width + 0.5)
-                                            || (geo.size.width < self.fieldSize.width - 0.5) {
-                                            
-                                            if geo.size.height > self.fieldSize.height + 0.5
-                                                || geo.size.height < self.fieldSize.height - 0.5 {
-                                                if geo.size.width != 0.0 {
-                                                    //                                                print("pikabu", geo.size, self.fieldSize)
-                                                    self.fieldSize = self.previousSize
-                                                }
-                                       
+                                    if (geo.size.width > self.fieldSize.width + 0.5)
+                                        || (geo.size.width < self.fieldSize.width - 0.5) {
+                                        if geo.size.height > self.fieldSize.height + 0.5
+                                            || geo.size.height < self.fieldSize.height - 0.5 {
+                                            if geo.size.width != 0.0 {
+                                                //                                                print("pikabu", geo.size, self.fieldSize)
+                                                self.fieldSize = self.previousSize
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
                 }
-             )
-             .ignoresSafeArea(.keyboard)
+            )
+            .ignoresSafeArea(.keyboard)
          
-             .onPreferenceChange(SizePreferenceKey.self) { size in
+            .onPreferenceChange(SizePreferenceKey.self) { size in
                  
-                 //                if size == self.previousSize && size != self.fieldSize {
-                 ////                        print(content)
-                 //                    self.fieldSize = size
-                 //                }
+                //                if size == self.previousSize && size != self.fieldSize {
+                ////                        print(content)
+                //                    self.fieldSize = size
+                //                }
                  
-                 if self.fieldSize == .zero {
-                     self.fieldSize = size
-                 }
-                 // Vergleiche die vorherige Größe mit der aktuellen Größe
-                 //                if size != self.previousSize {
+                if self.fieldSize == .zero {
+                    self.fieldSize = size
+                }
+                // Vergleiche die vorherige Größe mit der aktuellen Größe
+                //                if size != self.previousSize {
                  
-                 //                    print(size)
+                //                    print(size)
 //                 Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-                 if  size != self.fieldSize {
-                     if (size.width > self.fieldSize.width + 0.5)
-                            || (size.width < self.fieldSize.width - 0.5) {
-                         
-                         if size.height > self.fieldSize.height + 0.5
-                                || size.height < self.fieldSize.height - 0.5 {
-                             self.prepreviousSize = self.previousSize
-                             self.previousSize = size
+                if size != self.fieldSize {
+                    if (size.width > self.fieldSize.width + 0.5)
+                        || (size.width < self.fieldSize.width - 0.5) {
+                        if size.height > self.fieldSize.height + 0.5
+                            || size.height < self.fieldSize.height - 0.5 {
+                            self.prepreviousSize = self.previousSize
+                            self.previousSize = size
 //                             fieldSize = size
 //                             print(self.previousSize)
-                             //                print(self.prepreviousSize)
-                         }
-                     }
+                            //                print(self.prepreviousSize)
+                        }
+                    }
 //                     }
-                 }
-    
-                              }
+                }
+            }
 //                self.prepreviousSize = self.previousSize
 //                self.previousSize = size
                 
@@ -151,7 +143,7 @@ struct FieldView: View {
                 
 //            }
     }
- }
+}
 
 struct SizePreferenceKey: PreferenceKey {
     static var defaultValue: CGSize = .zero
@@ -161,11 +153,11 @@ struct SizePreferenceKey: PreferenceKey {
     }
 }
 
- extension View {
+extension View {
     func fieldSize(_ fieldSize: Binding<CGSize>) -> some View {
         modifier(FieldSizeModifier(fieldSize: fieldSize))
     }
- }
+}
 
 extension Color {
     init(hex: UInt, alpha: Double = 1.0) {
