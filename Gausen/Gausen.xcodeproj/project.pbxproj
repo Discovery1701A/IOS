@@ -10,6 +10,9 @@
 		586A7B1F2B2B43AE0034BA36 /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A7B1E2B2B43AE0034BA36 /* SelectionView.swift */; };
 		586A7B212B2B43F80034BA36 /* FieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A7B202B2B43F80034BA36 /* FieldView.swift */; };
 		586A7B232B2C94280034BA36 /* LinkedList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586A7B222B2C94280034BA36 /* LinkedList.swift */; };
+		58AA73392B3F025C0036D388 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58AA73382B3F025C0036D388 /* StartView.swift */; };
+		58AA733B2B3F05900036D388 /* PlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58AA733A2B3F05900036D388 /* PlayView.swift */; };
+		58AA733D2B3F0A140036D388 /* WinningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58AA733C2B3F0A140036D388 /* WinningView.swift */; };
 		58BECE522B36E54E0020F5E2 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BECE512B36E54E0020F5E2 /* Buttons.swift */; };
 		58BECE542B371D070020F5E2 /* HighScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BECE532B371D070020F5E2 /* HighScoreManager.swift */; };
 		58BECE562B372A8A0020F5E2 /* HighScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BECE552B372A8A0020F5E2 /* HighScoreView.swift */; };
@@ -26,6 +29,9 @@
 		586A7B1E2B2B43AE0034BA36 /* SelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionView.swift; sourceTree = "<group>"; };
 		586A7B202B2B43F80034BA36 /* FieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldView.swift; sourceTree = "<group>"; };
 		586A7B222B2C94280034BA36 /* LinkedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
+		58AA73382B3F025C0036D388 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
+		58AA733A2B3F05900036D388 /* PlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayView.swift; sourceTree = "<group>"; };
+		58AA733C2B3F0A140036D388 /* WinningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WinningView.swift; sourceTree = "<group>"; };
 		58BECE512B36E54E0020F5E2 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		58BECE532B371D070020F5E2 /* HighScoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighScoreManager.swift; sourceTree = "<group>"; };
 		58BECE552B372A8A0020F5E2 /* HighScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighScoreView.swift; sourceTree = "<group>"; };
@@ -72,6 +78,9 @@
 				58BF9CE32B0FC1DC002D5DCC /* GausenApp.swift */,
 				58BECE572B3816650020F5E2 /* HandelDrag.swift */,
 				58BF9CE52B0FC1DC002D5DCC /* ContentView.swift */,
+				58AA733C2B3F0A140036D388 /* WinningView.swift */,
+				58AA733A2B3F05900036D388 /* PlayView.swift */,
+				58AA73382B3F025C0036D388 /* StartView.swift */,
 				58BECE552B372A8A0020F5E2 /* HighScoreView.swift */,
 				58BECE512B36E54E0020F5E2 /* Buttons.swift */,
 				586A7B202B2B43F80034BA36 /* FieldView.swift */,
@@ -189,10 +198,13 @@
 				58BF9CF22B0FC357002D5DCC /* ModelView.swift in Sources */,
 				586A7B212B2B43F80034BA36 /* FieldView.swift in Sources */,
 				58BF9CE62B0FC1DC002D5DCC /* ContentView.swift in Sources */,
+				58AA73392B3F025C0036D388 /* StartView.swift in Sources */,
 				58BF9CE42B0FC1DC002D5DCC /* GausenApp.swift in Sources */,
+				58AA733B2B3F05900036D388 /* PlayView.swift in Sources */,
 				58BF9CF42B0FC3AB002D5DCC /* Model.swift in Sources */,
 				58BECE542B371D070020F5E2 /* HighScoreManager.swift in Sources */,
 				586A7B1F2B2B43AE0034BA36 /* SelectionView.swift in Sources */,
+				58AA733D2B3F0A140036D388 /* WinningView.swift in Sources */,
 				586A7B232B2C94280034BA36 /* LinkedList.swift in Sources */,
 				58BECE522B36E54E0020F5E2 /* Buttons.swift in Sources */,
 				58BECE562B372A8A0020F5E2 /* HighScoreView.swift in Sources */,

@@ -4,24 +4,32 @@
 //
 //  Created by Anna Rieckmann on 23.12.23.
 //
+
 import Foundation
 
+// Klasse zum Verwalten und Speichern von Highscores
 class HighscoreManager:  ObservableObject {
     static let shared = HighscoreManager()
     
+    // Dateinamen für die gespeicherten Highscores
     private let highscoreFileNameTime = "highscore_time.plist"
     private let highscoreFileNameActivityCount = "highscore_activityCount.plist"
     
+    // Arrays zur Speicherung der Highscores für Zeit und Aktivitätszählung
     var highScoreTime: [[String]] = []
     var highScoreActivityCount: [[String]] = []
     
+    // Private Initialisierung, um sicherzustellen, dass nur eine Instanz existiert
     private init() {
+        // Beim Initialisieren werden die gespeicherten Highscores geladen
         loadHighscore(for: .time)
         loadHighscore(for: .activityCount)
     }
     
+    // Funktion zum Speichern von Highscores für eine bestimmte Kategorie
     func saveHighscore(for category: HighscoreCategory) {
         do {
+            // Datenobjekt zum Codieren der Highscores
             let data: Data
             switch category {
             case .time:
@@ -30,6 +38,7 @@ class HighscoreManager:  ObservableObject {
                 data = try PropertyListEncoder().encode(highScoreActivityCount)
             }
             
+            // Dateiname entsprechend der Highscore-Kategorie
             let fileName: String
             switch category {
             case .time:
@@ -38,16 +47,21 @@ class HighscoreManager:  ObservableObject {
                 fileName = highscoreFileNameActivityCount
             }
             
+            // Pfad zum Speichern der Daten im Dokumentenverzeichnis
             if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName) {
+                // Schreibe die codierten Daten in die Datei
                 try data.write(to: url)
             }
         } catch {
+            // Bei einem Fehler, gib eine Fehlermeldung aus
             print("Failed to save highscore for \(category): \(error)")
         }
     }
     
+    // Funktion zum Laden von Highscores für eine bestimmte Kategorie
     func loadHighscore(for category: HighscoreCategory) {
         do {
+            // Dateiname entsprechend der Highscore-Kategorie
             let fileName: String
             switch category {
             case .time:
@@ -56,9 +70,11 @@ class HighscoreManager:  ObservableObject {
                 fileName = highscoreFileNameActivityCount
             }
             
+            // Laden der Daten aus dem Dokumentenverzeichnis
             if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName),
                let data = try? Data(contentsOf: url) {
                 
+                // Dekodieren der Daten basierend auf der Highscore-Kategorie
                 switch category {
                 case .time:
                     highScoreTime = try PropertyListDecoder().decode([[String]].self, from: data)
@@ -66,7 +82,7 @@ class HighscoreManager:  ObservableObject {
                     highScoreActivityCount = try PropertyListDecoder().decode([[String]].self, from: data)
                 }
             } else {
-                // Use default values if no saved data is found
+                // Verwende Standardwerte, wenn keine gespeicherten Daten gefunden wurden
                 switch category {
                 case .time:
                     highScoreTime = [
@@ -97,66 +113,83 @@ class HighscoreManager:  ObservableObject {
                 }
             }
         } catch {
-            print("Failed to load highscore for \(category): \(error)")
+                // Bei einem Fehler, gib eine Fehlermeldung aus
+                print("Failed to load highscore for \(category): \(error)")
+            }
         }
-    }
     
+    // Funktion zum Konvertieren eines Zeit-Strings in eine Double-Zahl
     func convertTimeStringToDouble(_ timeString: String) -> Double? {
+        // Zerlegen des Zeit-Strings in Minuten und Sekunden
         let components = timeString.components(separatedBy: ":")
         
+        // Überprüfung, ob der String das erwartete Format (zwei Teile) hat und ob diese Teile in Double umgewandelt werden können
         guard components.count == 2,
               let minutes = Double(components[0]),
               let seconds = Double(components[1]) else {
-            return nil // Fehlerhafte Zeichenkette oder falsches Format
+            return nil // Rückgabe von nil im Falle einer fehlerhaften Zeichenkette oder eines falschen Formats
         }
         
+        // Berechnung der Gesamtzeit in Sekunden
         let totalTimeInSeconds = minutes * 60 + seconds
-        return totalTimeInSeconds
+        return totalTimeInSeconds // Rückgabe der berechneten Gesamtzeit als Double-Wert
     }
-    
+
+    // Funktion zum Hinzufügen eines neuen Zeit-Highscores
     func newScoreTime (time : String, personName : String) {
-        print(highScoreTime)
+        // Standardwert für den zu speichernden Score
         var saveScoreRow = [" ", "99:99"]
+        // Flag, um zu überprüfen, ob der neue Score bereits eingefügt wurde
         var isIn = false
+        // Durchlaufe alle vorhandenen Highscores
         for i in 0 ..< highScoreTime.count {
+            // Vergleiche den neuen Score mit dem aktuellen Highscore
             if convertTimeStringToDouble(saveScoreRow[1])! < convertTimeStringToDouble(highScoreTime[i][1])! {
+                // Verschiebe den aktuellen Score, um Platz für den neuen zu machen
                 let saveScoreRow2 = highScoreTime[i]
                 highScoreTime[i] = saveScoreRow
                 saveScoreRow = saveScoreRow2
             }
+            // Füge den neuen Score an der richtigen Stelle ein
             if convertTimeStringToDouble(time)! < convertTimeStringToDouble(highScoreTime[i][1])! && isIn == false {
-               saveScoreRow = highScoreTime[i]
+                saveScoreRow = highScoreTime[i]
                 highScoreTime[i] = [personName, time]
                 isIn = true
             }
-            
         }
+        // Speichern der aktualisierten Highscores
         saveHighscore(for: .time)
     }
-    
+
+    // Funktion zum Hinzufügen eines neuen Aktivitätszählung-Highscores
     func newScoreActivityCount(activityCount : Int, personName : String) {
-      print(highScoreActivityCount)
+        // Standardwert für den zu speichernden Score
         var saveScoreRow = [" ", "9223372036854775807"]
+        // Flag, um zu überprüfen, ob der neue Score bereits eingefügt wurde
         var isIn = false
+        // Durchlaufe alle vorhandenen Highscores
         for i in 0 ..< highScoreTime.count {
-            print(highScoreActivityCount[i][1])
+            // Vergleiche den neuen Score mit dem aktuellen Highscore
             if Int(saveScoreRow[1])! < Int(highScoreActivityCount[i][1])! {
+                // Verschiebe den aktuellen Score, um Platz für den neuen zu machen
                 let saveScoreRow2 = highScoreActivityCount[i]
                 highScoreActivityCount[i] = saveScoreRow
                 saveScoreRow = saveScoreRow2
             }
+            // Füge den neuen Score an der richtigen Stelle ein
             if activityCount < Int(highScoreActivityCount[i][1])! && isIn == false {
-               saveScoreRow = highScoreActivityCount[i]
+                saveScoreRow = highScoreActivityCount[i]
                 highScoreActivityCount[i] = [personName, String(activityCount)]
                 isIn = true
             }
-           
         }
+        // Speichern der aktualisierten Highscores
         saveHighscore(for: .activityCount)
     }
-    
+
 }
 
+// Aufzählung für die verschiedenen Highscore-Kategorien
 enum HighscoreCategory {
     case time
     case activityCount

@@ -7,53 +7,81 @@
 
 import Foundation
 
+// Modellstruktur für das Set-Spiel
 struct Model {
-    private(set) var rowCount: Int
-    private(set) var matrix: [[Field]]
-    private(set) var unitMatrix: [[Field]]
-    var linkedList: LinkedList
-    var currentNode: LinkedList.Node
-    var activityCount: Int
-    var startTime = Date()
-    var time: Double
-    
-    init(rowCount: Int) {
-        self.linkedList = LinkedList()
-        self.currentNode = self.linkedList.emptyNode
-        self.rowCount = rowCount
-        self.matrix = []
-        self.unitMatrix = []
-        self.time = 0.0
-        self.activityCount = 0
-        self.generatMatrix()
-        self.linkedList.add(element: self.matrix)
-        self.currentNode = self.linkedList.lastNode
+    // Struktur für ein Feld im Spiel
+    struct Field: Identifiable, Hashable {
+        var content: Int // Der Inhalt des Feldes
+        let id: Int // Eindeutige Identifikationsnummer des Feldes
+        var notDiv = false // Gibt an, ob der Inhalt nicht durch den Faktor teilbar ist
+        var selection = false // Gibt an, ob das Feld ausgewählt ist
+        var draged = false // Gibt an, ob das Feld gezogen wird
+        var winning = false // Gibt an, ob das Feld Teil der Gewinnkombination ist
+
+        init(content: Int, id: Int) {
+            self.content = content
+            self.id = id
+        }
     }
-    
+
+    // Eigenschaften des Modells
+    private(set) var rowCount: Int // Anzahl der Zeilen in der Matrix
+    private(set) var matrix: [[Field]] // Die Hauptspielmatrix
+    private(set) var unitMatrix: [[Field]] // Die Einheitsmatrix für den Vergleich mit dem Spielergebnis
+    var linkedList: LinkedList // Verkettete Liste zum Speichern der Zustandsänderungen des Spiels
+    var currentNode: LinkedList.Node // Aktueller Knoten in der verketteten Liste
+    var activityCount: Int // Anzahl der Aktionen/Schritte des Spielers
+    var startTime = Date() // Startzeit des aktuellen Spiels
+    var time: Double // Gespielte Zeit seit dem Start
+
+    // Initialisierung des Modells mit einer bestimmten Anzahl von Zeilen
+    init(rowCount: Int) {
+        self.linkedList = LinkedList() // Initialisierung der verketteten Liste
+        self.currentNode = self.linkedList.emptyNode // Der aktuelle Knoten wird auf den leeren Knoten gesetzt
+        self.rowCount = rowCount // Festlegen der Anzahl der Zeilen
+        self.matrix = [] // Initialisierung der Hauptspielmatrix
+        self.unitMatrix = [] // Initialisierung der Einheitsmatrix
+        self.time = 0.0 // Initialisierung der Spielzeit
+        self.activityCount = 0 // Initialisierung der Aktionsanzahl
+        self.generatMatrix() // Generierung der Anfangsmatrix
+        self.linkedList.add(element: self.matrix) // Hinzufügen der Matrix zum Anfang der verketteten Liste
+        self.currentNode = self.linkedList.lastNode // Der aktuelle Knoten wird auf den letzten Knoten gesetzt
+    }
+
+    // Funktion zur Verfolgung der vergangenen Spielzeit als formatierten String
     mutating func timeTracking() -> String {
+        // Aktuelle Zeit abrufen
         let timeNow = Date()
+        // Berechne die vergangene Spielzeit
         self.time = timeNow.timeIntervalSince(self.startTime)
+
+        // Formatter für die Darstellung der Spielzeit
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .positional
         formatter.allowedUnits = [.minute, .second]
         formatter.zeroFormattingBehavior = .pad
-        //        time = formatter.string(from: elapsedTime)!
-//        print(formatter.string(from: time))
+
+        // Rückgabe der formatierten Spielzeit
         return formatter.string(from: self.time) ?? "00"
     }
-    
+
+    // Funktion zum Aktualisieren des aktuellen Matrixknotens bei Änderungen
     mutating func updateMatrixNode() {
+        // Überprüfen, ob der aktuelle Matrixknoten gültig ist
         if let currentNodeMatrix = currentNode.element as? [[Field]] {
+            // Iteration über die Zeilen der Matrix
             for i in 0 ..< self.matrix.count where i < currentNodeMatrix.count {
+                // Iteration über die Spalten der Matrix
                 for j in 0 ..< self.matrix[i].count where j < currentNodeMatrix[i].count {
+                    // Überprüfen, ob der Inhalt des Feldes unterschiedlich ist
                     if currentNodeMatrix[i][j].content != self.matrix[i][j].content {
-                        // Update the element or perform any other actions
+                        // Wenn unterschiedlich, lösche den Verlauf ab diesem Punkt
                         self.linkedList.removeAllBehinde(currentNode: self.currentNode)
-                       
+                        // Setze das Modell zurück und speichere den aktuellen Zustand erneut
                         self.varReset()
                         self.linkedList.add(element: self.matrix)
                         self.currentNode = self.linkedList.lastNode
-                        
+                        // Wenn die Anzahl der gespeicherten Zustände mehr als 20 beträgt, entferne den ältesten Zustand
                         if self.linkedList.numberOfElements > 20 {
                             self.linkedList.remove(index: 0)
                         }
@@ -64,170 +92,214 @@ struct Model {
         }
     }
 
+    // Funktion zum Zurückgehen zu einem vorherigen Zustand in der verketteten Liste
     mutating func back() {
+        // Überprüfen, ob es einen vorherigen Zustand gibt
         if self.linkedList.back(currentNode: self.currentNode).element != nil {
+            // Aktualisiere den aktuellen Knoten und die Matrix
             self.currentNode = self.linkedList.back(currentNode: self.currentNode)
             self.matrix = self.currentNode.element as! [[Field]]
         }
     }
-    
+
+    // Funktion zum Vorwärtsgehen zu einem nachfolgenden Zustand in der verketteten Liste
     mutating func forwart() {
+        // Überprüfen, ob es einen nachfolgenden Zustand gibt
         if self.linkedList.forwart(currentNode: self.currentNode).element != nil {
+            // Aktualisiere den aktuellen Knoten und die Matrix
             self.currentNode = self.linkedList.forwart(currentNode: self.currentNode)
             self.matrix = self.currentNode.element as! [[Field]]
         }
     }
-    
+
+    // Funktion zum Vertauschen von zwei Zeilen in der Matrix
     mutating func rowSwitch(row1: Int, row2: Int) {
-        // print(row1, self.matrix.count)
+        // Überprüfen, ob die übergebenen Zeilenindizes gültig sind
         if self.matrix[0].count > row1, row1 >= 0, self.matrix[0].count > row2, row2 >= 0 {
+            // Vertausche die Zeilen
             let rowSaver: [Field] = self.matrix[row2]
             self.matrix[row2] = self.matrix[row1]
             self.matrix[row1] = rowSaver
         }
+        // Inkrementiere die Aktivitätszählung und aktualisiere den Matrixknoten
         self.activityCount += 1
         self.updateMatrixNode()
     }
-    
+
+    // Funktion zum Vertauschen von zwei Spalten in der Matrix
     mutating func columnSwitch(column1: Int, column2: Int) {
+        // Überprüfen, ob die übergebenen Spaltenindizes gültig sind
         if self.matrix[0].count > column1, column1 >= 0, self.matrix[0].count > column2, column2 >= 0 {
-            print(column1, column2)
+            // Vertausche die Spalten
             for i in 0 ..< self.matrix.count {
                 let columnSaver: Field = self.matrix[i][column2]
                 self.matrix[i][column2] = self.matrix[i][column1]
                 self.matrix[i][column1] = columnSaver
             }
         }
+        // Inkrementiere die Aktivitätszählung und aktualisiere den Matrixknoten
         self.activityCount += 1
         self.updateMatrixNode()
     }
-    
+
+    // Funktion zum Skalieren einer Zeile in der Matrix
     mutating func scaleRow(faktor: Int, row: Int, multi: Bool) {
-        print(self.controllScale(row: row, faktor: faktor, multi: multi))
+        // Überprüfen, ob die Skalierung gültig ist
         if self.controllScale(row: row, faktor: faktor, multi: multi) {
+            // Skaliere die Zeile
             for i in 0 ..< self.matrix[row].count {
                 if multi == true {
                     self.matrix[row][i].content *= faktor
-                    print(self.matrix[row][i].content)
                 } else {
                     self.matrix[row][i].content /= faktor
-                    print(self.matrix[row][i].content)
                 }
             }
+            // Ausgabe für den Fall, dass der Faktor 0 ist
             if faktor == 0 {
                 print(0)
             }
         }
+        // Inkrementiere die Aktivitätszählung und aktualisiere den Matrixknoten
         self.activityCount += 1
         self.updateMatrixNode()
     }
-    
+
+    // Funktion zum Hinzufügen und Skalieren einer Zeile zu einer anderen in der Matrix
     mutating func addScaleRow(faktor: Int, row1: Int, row2: Int, multi: Bool) {
+        // Überprüfen, ob die Skalierung gültig ist
         if self.controllScale(row: row1, faktor: faktor, multi: multi) {
+            // Hinzufügen und Skalieren der Zeile zu einer anderen
             for i in 0 ..< self.matrix[row1].count {
                 if multi == true {
                     self.matrix[row2][i].content += self.matrix[row1][i].content * faktor
                     self.matrix[row1][i].notDiv = false
-                    //                    print(self.matrix[row2][i].content)
                 } else {
                     self.matrix[row2][i].content += self.matrix[row1][i].content / faktor
                     self.matrix[row1][i].notDiv = false
-                    //                    print(self.matrix[row2][i].content)
                 }
             }
+            // Ausgabe für den Fall, dass der Faktor 0 ist
             if faktor == 0 {
                 print(0)
             }
         }
+        // Inkrementiere die Aktivitätszählung und aktualisiere den Matrixknoten
         self.activityCount += 1
         self.updateMatrixNode()
     }
-    
+
+    // Funktion zur Überprüfung, ob eine Skalierung in einer Zeile gültig ist
     mutating func controllScale(row: Int, faktor: Int, multi: Bool) -> Bool {
+        // Überprüfen, ob der Faktor nicht 0 ist
         if faktor != 0 {
+            // Überprüfen, ob die Skalierung in jedem Element der Zeile gültig ist
             for i in 0 ..< self.matrix[row].count {
                 self.matrix[row][i].notDiv = false
                 if multi == false {
-                    // print("ssss", self.matrix[row][i].content % faktor, self.matrix[row][i].content)
                     if !(self.matrix[row][i].content.isMultiple(of: faktor)) {
                         self.matrix[row][i].notDiv = true
                     }
                 }
             }
+            // Überprüfen, ob es ein Element mit notDiv = true gibt
             for j in 0 ..< self.matrix[row].count where self.matrix[row][j].notDiv == true {
                 return false
             }
+            // Rückgabe, dass die Skalierung gültig ist
             return true
         }
+        // Rückgabe, dass die Skalierung ungültig ist (Faktor ist 0)
         return false
     }
-    
+
+    // Funktion zum Mischen der Matrix
     mutating func mixMatrix(howMany: Int, range: Int) {
-//        let randomRow1 = Int.random(in: 0 ..< self.matrix.count)
-//        let randomRow2 = Int.random(in: 0 ..< self.matrix.count)
-//        let randomColumn1 = Int.random(in: 0 ..< self.matrix[0].count)
-//        let randomColumn2 = Int.random(in: 0 ..< self.matrix[0].count)
+        // Iteration über die Anzahl der Mischvorgänge
         for j in 0 ..< howMany {
-            print("j", j)
+            // Iteration über jede Zeile der Matrix
             for i in 0 ..< self.matrix.count {
-                print("i", i)
+                // Zufällige Werte für den Mischvorgang
                 let randomValue = Int.random(in: -range ..< range)
-//                let randomValue2 = Int.random(in: -range ..< range)
                 var randomRow2 = Int.random(in: 0 ..< self.matrix.count)
                 var randomBool = Bool.random()
+
+                // Überprüfen, ob die Skalierung gültig ist, andernfalls den Multiplikator umkehren
                 if !self.controllScale(row: i, faktor: randomValue, multi: randomBool) {
                     randomBool.toggle()
                 }
+                // Überprüfen, dass die Zeilenindizes unterschiedlich sind
                 if i == randomRow2 {
                     randomRow2 = Int.random(in: 0 ..< self.matrix.count)
                 }
+
+                // Skaliere die aktuelle Zeile und füge sie zu einer anderen Zeile hinzu
                 self.scaleRow(faktor: randomValue, row: i, multi: randomBool)
                 self.addScaleRow(faktor: 1, row1: i, row2: randomRow2, multi: randomBool)
             }
+
+            // Iteration über jede Zeile der Matrix
             for i in 0 ..< self.matrix.count {
                 var randomRow2 = Int.random(in: 0 ..< self.matrix.count)
                 var randomColumn2 = Int.random(in: 0 ..< self.matrix[0].count)
+
+                // Überprüfen, dass die Zeilen- und Spaltenindizes unterschiedlich sind
                 if i == randomRow2 {
                     randomRow2 = Int.random(in: 0 ..< self.matrix.count)
                 }
+
                 if i == randomColumn2 {
                     randomColumn2 = Int.random(in: 0 ..< self.matrix.count)
                 }
+
+                // Vertausche zwei Zeilen und zwei Spalten
                 self.rowSwitch(row1: i, row2: randomRow2)
                 self.columnSwitch(column1: i, column2: randomColumn2)
             }
         }
+
+        // Zurücksetzen des Verlaufs und Aktualisierung des Zustands
         self.linkedList.reset()
         self.linkedList.add(element: self.matrix)
         self.currentNode = self.linkedList.lastNode
         self.activityCount = 0
         self.varReset()
     }
-    
+
+    // Funktion zum Überprüfen, ob das Spiel gewonnen wurde
     mutating func check() -> Bool {
+        // Iteration über die Einheitsmatrix, um zu überprüfen, ob die Matrix gewonnen wurde
         for i in 0 ..< self.unitMatrix.count {
             for j in 0 ..< self.unitMatrix.count where self.unitMatrix[i][j].content != self.matrix[i][j].content {
+                // Rückgabe, dass das Spiel nicht gewonnen wurde
                 return false
             }
         }
+        // Markiere die gewonnene Kombination und Rückgabe, dass das Spiel gewonnen wurde
         self.markWinnig()
         return true
     }
-    
+
+    // Funktion zum Markieren der gewonnenen Kombination in der Matrix
     mutating func markWinnig() {
+        // Markiere die Diagonalelemente als gewonnen
         for i in 0 ..< self.matrix.count {
             self.matrix[i][i].winning = true
         }
     }
-    
+
+    // Funktion zur Generierung der Anfangsmatrix
     mutating func generatMatrix() {
+        // Initialisiere eine leere Matrix und eine ID
         var ddmatrix: [[Field]] = []
         var id = 0
+
+        // Erstelle die Anfangsmatrix, wenn sie noch nicht erstellt wurde
         if ddmatrix.count < self.rowCount {
             for i in 0 ..< self.rowCount {
                 ddmatrix.append([])
                 for j in 0 ..< self.rowCount {
                     id += 1
+                    // Setze 1 auf der Hauptdiagonale, sonst 0
                     if j == i {
                         ddmatrix[i].append(Field(content: 1, id: id))
                     } else {
@@ -236,121 +308,68 @@ struct Model {
                 }
             }
         }
+
+        // Setze die Matrix, die Einheitsmatrix und starte die Mischung
         self.matrix = ddmatrix
         self.unitMatrix = ddmatrix
         self.startTime = Date()
-        //        for row in matrix {
-        // print(row)
-        //        }
         self.mixMatrix(howMany: 2, range: 10)
     }
 
+    // Funktion zum Aktivieren/Deaktivieren des "Drag"-Zustands für eine Zeile oder Spalte
     mutating func drag(row: Int = -1, column: Int = -1, bool: Bool) {
         print("drag", row, self.matrix.count)
+        // Aktiviere/Deaktiviere "Draged"-Zustand für eine Zeile
         if row >= 0, row < self.matrix.count {
             for i in 0 ..< self.matrix.count {
                 self.matrix[row][i].draged = bool
                 print(self.matrix[row][i].draged)
             }
         }
+        // Aktiviere/Deaktiviere "Draged"-Zustand für eine Spalte
         if column >= 0, column < self.matrix[0].count {
             for i in 0 ..< self.matrix.count {
                 self.matrix[i][column].draged = bool
             }
         }
+        // Aktualisiere den Matrixknoten
         self.updateMatrixNode()
     }
-    
+
+    // Funktion zum Zurücksetzen verschiedener Zustände in der Matrix
     mutating func varReset() {
         print(self.matrix.count)
         for i in 0 ..< self.matrix.count {
+            // Setze den "notDiv"-Zustand auf "false" für alle Zellen
             for j in 0 ..< self.matrix[i].count where self.matrix[i][j].notDiv == true {
                 self.matrix[i][j].notDiv = false
             }
+            // Setze den "selection"-Zustand auf "false" für alle Zellen
             for j in 0 ..< self.matrix[i].count where self.matrix[i][j].selection == true {
                 self.matrix[i][j].selection = false
             }
+            // Setze den "draged"-Zustand auf "false" für alle Zellen
             for j in 0 ..< self.matrix[i].count where self.matrix[i][j].draged == true {
                 print("off")
                 self.matrix[i][j].draged = false
             }
         }
     }
-    
+
+    // Funktion zum Aktualisieren des "selection"-Zustands für eine Zeile oder Spalte
     mutating func updateSelection(item: Int, selection: Bool, axe: String) {
         guard item >= 0, item < self.matrix.count else {
             return
         }
         for i in 0 ..< self.matrix.count {
+            // Aktualisiere den "selection"-Zustand für eine Zeile
             if axe == "row" {
                 self.matrix[item][i].selection = selection
             }
+            // Aktualisiere den "selection"-Zustand für eine Spalte
             if axe == "column" {
                 self.matrix[i][item].selection = selection
             }
-        }
-    }
-    
-    func isConvertibleToIdentity(matrix: [[Field]]) -> Bool {
-        let rowCount = matrix.count
-        let columnCount = matrix[0].count
-
-        // Überprüfe, ob die Matrix quadratisch ist
-        guard rowCount == columnCount else {
-            return false
-        }
-
-        // Berechne den Rang der Matrix
-        let rank = self.calculateRank(matrix: matrix)
-
-        // Überprüfe, ob der Rang gleich der Anzahl der Zeilen/Spalten ist
-        return rank == rowCount
-    }
-
-    func calculateRank(matrix: [[Field]]) -> Int {
-        var augmentedMatrix = matrix
-        let rowCount = matrix.count
-        let columnCount = matrix[0].count
-        var rank = 0
-        for col in 0 ..< columnCount {
-            var foundPivot = false
-
-            // Suche nach einem nicht-null Element in der aktuellen Spalte
-            for row in rank ..< rowCount where augmentedMatrix[row][col].content != 0 {
-                // Tausche die Zeilen aus, um ein Nicht-Null-Element als Pivot zu erhalten
-                augmentedMatrix.swapAt(rank, row)
-                foundPivot = true
-                break
-            }
-            // Wenn kein Pivot gefunden wurde, gehe zur nächsten Spalte
-            if !foundPivot {
-                continue
-            }
-
-            // Setze alle Elemente über und unter dem Pivot auf null
-            let pivot = augmentedMatrix[rank][col].content
-            for i in 0 ..< rowCount where i != rank {
-                let factor = -augmentedMatrix[i][col].content / pivot
-                for j in 0 ..< columnCount {
-                    augmentedMatrix[i][j].content += factor * augmentedMatrix[rank][j].content
-                }
-            }
-            // Inkrementiere den Rang
-            rank += 1
-        }
-        return rank
-    }
-    
-    struct Field: Identifiable, Hashable {
-        var content: Int
-        let id: Int
-        var notDiv = false
-        var selection = false
-        var draged = false
-        var winning = false
-        init(content: Int, id: Int) {
-            self.content = content
-            self.id = id
         }
     }
 }
