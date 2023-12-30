@@ -167,10 +167,12 @@ struct PlayView: View {
                 buttons.scaleRowMulti()
             }
             .padding(.horizontal)
-
-            // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
-            buttons.slider(from: -10, to: 10, for: $modelView.faktor, name: "Faktor")
-
+            HStack {
+                // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
+                buttons.slider(from: 1, to: 10, for: $modelView.faktor, name: "Faktor")
+                buttons.positivnegativCheckBox(isChecked: $modelView.positivNegativ)
+                
+            }
             // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
             HStack {
                 Spacer()

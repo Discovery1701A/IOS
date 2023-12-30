@@ -33,6 +33,7 @@ class ViewModel: ObservableObject {
     @Published var selectedRows: [Int] = []
     @Published var selectedColumns: [Int] = []
     @Published var fieldSize: CGSize = .zero
+    @Published var positivNegativ = false
     @Published private(set) var time: String = ""
     
     // Berechneigenschaft, die die Anzahl der Aktivitäten im Modell zurückgibt
@@ -100,11 +101,11 @@ class ViewModel: ObservableObject {
 
     // Funktionen zum Hinzufügen und Skalieren von Zeilen im Modell
     func addScaleRow(faktor: Int, row1: Int, row2: Int, multi: Bool) {
-        model.addScaleRow(faktor: faktor, row1: row1, row2: row2, multi: multi)
+        model.addScaleRow(faktor: faktor, row1: row1, row2: row2, multi: multi, positivNegativ: self.positivNegativ)
     }
     
     func scaleRow(faktor: Int, row: Int, multi: Bool) {
-        model.scaleRow(faktor: faktor, row: row, multi: multi)
+        model.scaleRow(faktor: faktor, row: row, multi: multi, positivNegativ: self.positivNegativ)
     }
     
     // Funktion zur Überprüfung der Skalierung im Modell

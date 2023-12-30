@@ -143,20 +143,20 @@ struct Model {
     }
 
     // Funktion zum Skalieren einer Zeile in der Matrix
-    mutating func scaleRow(faktor: Int, row: Int, multi: Bool) {
+    mutating func scaleRow(faktor: Int, row: Int, multi: Bool, positivNegativ: Bool) {
         // Überprüfen, ob die Skalierung gültig ist
         if self.controllScale(row: row, faktor: faktor, multi: multi) {
             // Skaliere die Zeile
+            if positivNegativ {}
             for i in 0 ..< self.matrix[row].count {
+                if positivNegativ {
+                    self.matrix[row][i].content *= -1
+                }
                 if multi == true {
                     self.matrix[row][i].content *= faktor
                 } else {
                     self.matrix[row][i].content /= faktor
                 }
-            }
-            // Ausgabe für den Fall, dass der Faktor 0 ist
-            if faktor == 0 {
-                print(0)
             }
         }
         // Inkrementiere die Aktivitätszählung und aktualisiere den Matrixknoten
@@ -165,22 +165,24 @@ struct Model {
     }
 
     // Funktion zum Hinzufügen und Skalieren einer Zeile zu einer anderen in der Matrix
-    mutating func addScaleRow(faktor: Int, row1: Int, row2: Int, multi: Bool) {
+    mutating func addScaleRow(faktor: Int, row1: Int, row2: Int, multi: Bool, positivNegativ: Bool) {
         // Überprüfen, ob die Skalierung gültig ist
         if self.controllScale(row: row1, faktor: faktor, multi: multi) {
             // Hinzufügen und Skalieren der Zeile zu einer anderen
+            var rowSaver: [Int] = []
             for i in 0 ..< self.matrix[row1].count {
                 if multi == true {
-                    self.matrix[row2][i].content += self.matrix[row1][i].content * faktor
+                    rowSaver.append(self.matrix[row1][i].content * faktor)
                     self.matrix[row1][i].notDiv = false
                 } else {
-                    self.matrix[row2][i].content += self.matrix[row1][i].content / faktor
+                    rowSaver.append(self.matrix[row1][i].content / faktor)
                     self.matrix[row1][i].notDiv = false
                 }
-            }
-            // Ausgabe für den Fall, dass der Faktor 0 ist
-            if faktor == 0 {
-                print(0)
+                if positivNegativ {
+                    self.matrix[row2][i].content -= rowSaver[i]
+                } else {
+                    self.matrix[row2][i].content += rowSaver[i]
+                }
             }
         }
         // Inkrementiere die Aktivitätszählung und aktualisiere den Matrixknoten
@@ -215,17 +217,18 @@ struct Model {
     // Funktion zum Mischen der Matrix
     mutating func mixMatrix(howMany: Int, range: Int) {
         // Iteration über die Anzahl der Mischvorgänge
-        for j in 0 ..< howMany {
+        for _ in 0 ..< howMany {
             // Iteration über jede Zeile der Matrix
             for i in 0 ..< self.matrix.count {
                 // Zufällige Werte für den Mischvorgang
-                let randomValue = Int.random(in: -range ..< range)
+                let randomValue = Int.random(in: 1 ..< range)
                 var randomRow2 = Int.random(in: 0 ..< self.matrix.count)
-                var randomBool = Bool.random()
+                var randomMulti = Bool.random()
+                let randomPositivNegativ = Bool.random()
 
                 // Überprüfen, ob die Skalierung gültig ist, andernfalls den Multiplikator umkehren
-                if !self.controllScale(row: i, faktor: randomValue, multi: randomBool) {
-                    randomBool.toggle()
+                if !self.controllScale(row: i, faktor: randomValue, multi: randomMulti) {
+                    randomMulti.toggle()
                 }
                 // Überprüfen, dass die Zeilenindizes unterschiedlich sind
                 if i == randomRow2 {
@@ -233,8 +236,10 @@ struct Model {
                 }
 
                 // Skaliere die aktuelle Zeile und füge sie zu einer anderen Zeile hinzu
-                self.scaleRow(faktor: randomValue, row: i, multi: randomBool)
-                self.addScaleRow(faktor: 1, row1: i, row2: randomRow2, multi: randomBool)
+                self.scaleRow(faktor: randomValue, row: i, multi: randomMulti, positivNegativ: randomPositivNegativ)
+                if randomRow2 != i {
+                    self.addScaleRow(faktor: 1, row1: i, row2: randomRow2, multi: randomMulti, positivNegativ: randomPositivNegativ)
+                }
             }
 
             // Iteration über jede Zeile der Matrix

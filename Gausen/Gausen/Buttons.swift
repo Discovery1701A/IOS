@@ -324,12 +324,16 @@ struct Buttons {
                     in: Double(min) ... Double(max),
                     step: 1.0
                 )
-                .disabled(modelView.gameStatus != .play)
+                .disabled(modelView.gameStatus != .play && modelView.gameStatus != .start)
                 // Aktivierung der onChange-Methode, um Änderungen am Slider-Wert zu überwachen
-                .onChange(of: value.wrappedValue) { _, _ in
-                    // Aktualisierung des Bearbeitungsstatus im ViewModel, um anzuzeigen, dass der Wert bearbeitet wird
-                    modelView.setIsEditing(true)
-                }
+//                .onChange(of: value.wrappedValue) { _, _ in
+//                    // Aktualisierung des Bearbeitungsstatus im ViewModel, um anzuzeigen, dass der Wert bearbeitet wird
+//                    if modelView.getIsEditing() {
+//                        modelView.setIsEditing(false)
+//                    } else {
+//                        modelView.setIsEditing(true)
+//                    }
+//                }
 
                 // Anzeige des Max-Werts
                 Text("\(max)")
@@ -338,7 +342,15 @@ struct Buttons {
 
             // Anzeige des aktuellen Slider-Werts mit entsprechender Textfarbe
             Text("\(Int(value.wrappedValue))")
-                .foregroundColor(modelView.getIsEditing() ? .red : .blue)
+//                .foregroundColor(modelView.getIsEditing() ? .red : .blue)
+        }
+    }
+
+    func positivnegativCheckBox(isChecked: Binding<Bool>) -> some View {
+        HStack {
+            Image(systemName: isChecked.wrappedValue ? "minus" : "plus")
+            Toggle("", isOn: isChecked)
+                .labelsHidden()
         }
     }
 }
