@@ -29,7 +29,7 @@ class ViewModel: ObservableObject {
     @Published var playerName: String = ""
     @Published var faktor = 1.0
     @Published var rowCount = 3.0
-    @Published var isEditing = false
+//    @Published var isEditing = false
     @Published var selectedRows: [Int] = []
     @Published var selectedColumns: [Int] = []
     @Published var fieldSize: CGSize = .zero
@@ -51,14 +51,14 @@ class ViewModel: ObservableObject {
         return model.currentNode
     }
 
-    // Funktion, um den Wert von isEditing abzurufen
-    func getIsEditing() -> Bool {
-        return isEditing
+    // Funktion, um den Wert von positivNegativ abzurufen
+    func getpositivNegativ() -> Bool {
+        return positivNegativ
     }
 
-    // Funktion, um den Wert von isEditing zu setzen
-    func setIsEditing(_ value: Bool) {
-        isEditing = value
+    // Funktion, um den Wert von positivNegativ zu setzen
+    func setpositivNegativ(_ value: Bool) {
+        positivNegativ = value
     }
     
     // Funktion zum Aktualisieren der Feldgröße im Modell

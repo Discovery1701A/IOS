@@ -172,7 +172,7 @@ struct PlayView: View {
                 buttons.slider(from: 1, to: 10, for: $modelView.faktor, name: "Faktor")
                 buttons.positivnegativCheckBox(isChecked: $modelView.positivNegativ)
                 
-            }
+            }.padding(.horizontal)
             // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
             HStack {
                 Spacer()

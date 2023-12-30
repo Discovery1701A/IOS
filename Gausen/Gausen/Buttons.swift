@@ -170,16 +170,13 @@ struct Buttons {
                 modelView.resetSelection()
             }, label: {
                 // Darstellung des Buttons mit dem Symbol für Multiplikation und Plus
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(.secondary)
-                        .scaledToFit()
-
+                roundRecButtonLayout(
+                    content:
                     HStack {
                         Image(systemName: "multiply").font(.title)
                         Image(systemName: "plus").font(.title)
                     }
-                }
+                )
             }
         )
         // Deaktiviert den Button, wenn nicht genau zwei Zeilen ausgewählt sind oder das Spiel beendet ist
@@ -204,16 +201,13 @@ struct Buttons {
                 modelView.resetSelection()
             }, label: {
                 // Darstellung des Buttons mit dem Symbol für Division und Plus
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(.secondary)
-                        .scaledToFit()
-
+                roundRecButtonLayout(
+                    content:
                     HStack {
                         Image(systemName: "divide").font(.title)
                         Image(systemName: "plus").font(.title)
                     }
-                }
+                )
             }
         )
         // Deaktiviert den Button, wenn nicht genau zwei Zeilen ausgewählt sind oder das Spiel beendet ist
@@ -238,15 +232,7 @@ struct Buttons {
                 modelView.resetSelection()
             }, label: {
                 // Darstellung des Buttons mit dem Symbol für Division
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(.secondary)
-                        .scaledToFit()
-
-                    HStack {
-                        Image(systemName: "divide").font(.title)
-                    }
-                }
+                roundRecButtonLayout(content: Image(systemName: "divide").font(.title))
             }
         )
         // Deaktiviert den Button, wenn nicht genau eine Zeile ausgewählt ist oder das Spiel beendet ist
@@ -272,15 +258,7 @@ struct Buttons {
             },
             label: {
                 // Darstellung des Buttons mit dem Symbol für Multiplikation
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(.secondary)
-                        .scaledToFit()
-
-                    HStack {
-                        Image(systemName: "multiply").font(.title)
-                    }
-                }
+                roundRecButtonLayout(content: Image(systemName: "multiply").font(.title))
             }
         )
         // Deaktiviert den Button, wenn nicht genau eine Zeile ausgewählt ist oder das Spiel beendet ist
@@ -347,10 +325,31 @@ struct Buttons {
     }
 
     func positivnegativCheckBox(isChecked: Binding<Bool>) -> some View {
-        HStack {
-            Image(systemName: isChecked.wrappedValue ? "minus" : "plus")
-            Toggle("", isOn: isChecked)
-                .labelsHidden()
+        Button(
+            action: {
+                if modelView.getpositivNegativ() {
+                    modelView.setpositivNegativ(false)
+                } else {
+                    modelView.setpositivNegativ(true)
+                }
+               
+            },
+            label: {
+                roundRecButtonLayout(content: Image(systemName: isChecked.wrappedValue ? "minus" : "plus").font(.largeTitle)) 
+                    .frame(maxWidth: 80, maxHeight: 80)
+            }
+            )
+        
+    }
+
+    func roundRecButtonLayout(content: some View) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(.secondary)
+            
+                .scaledToFit()
+
+            content
         }
     }
 }
