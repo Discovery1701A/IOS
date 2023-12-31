@@ -324,31 +324,30 @@ struct Buttons {
         }
     }
 
+    // Funktion für die Erstellung einer Checkbox, die zwischen positiv (+) und negativ (-) wechselt
     func positivnegativCheckBox(isChecked: Binding<Bool>) -> some View {
         Button(
             action: {
-                if modelView.getpositivNegativ() {
-                    modelView.setpositivNegativ(false)
-                } else {
-                    modelView.setpositivNegativ(true)
-                }
-               
+                // Toggle-Funktion für die Umkehrung des aktuellen Zustands der Checkbox
+                isChecked.wrappedValue.toggle()
             },
             label: {
-                roundRecButtonLayout(content: Image(systemName: isChecked.wrappedValue ? "minus" : "plus").font(.largeTitle)) 
+                // Benutzerdefinierte Schaltfläche mit einem gerundeten Rechteck und einem Symbol (Plus oder Minus)
+                roundRecButtonLayout(content: Image(systemName: isChecked.wrappedValue ? "minus" : "plus").font(.largeTitle))
                     .frame(maxWidth: 80, maxHeight: 80)
             }
-            )
-        
+        )
     }
 
+    // Funktion für das Layout einer runden Rechteck-Schaltfläche mit einem angegebenen Inhalt
     func roundRecButtonLayout(content: some View) -> some View {
         ZStack {
+            // Gerundetes Rechteck als Hintergrund der Schaltfläche
             RoundedRectangle(cornerRadius: 8)
                 .fill(.secondary)
-            
                 .scaledToFit()
 
+            // Inhalt der Schaltfläche (z. B. ein Symbol)
             content
         }
     }
