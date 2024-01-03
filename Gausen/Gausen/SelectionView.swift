@@ -16,41 +16,43 @@ struct SelectionView: View {
     var onDragEnded: (() -> Void)? // Ein Closure, das aufgerufen wird, wenn die Geste beendet wird (optional, Standard-Closure vorhanden)
 
     var body: some View {
-        Button(
-            action: {
-                // Wenn die Ausrichtung vertikal ist, die Auswahl umschalten
-                if axis == .vertical {
-                    toggleSelection(item: item)
-                }
-            },
-            label: {
-                // Ansicht für jedes Element
-                if item >= 0 {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .frame(
-                                width: axis == .vertical ? fieldSize.width / 4 : fieldSize.width,
-                                height: axis == .vertical ? fieldSize.height : fieldSize.height / 4
-                            )
-                            .opacity(0.5)
-                            .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.75))
-
-                        Text("\(item + 1)")
-                            .foregroundColor(selectedItems.contains(item) ? .white : .gray)
+      
+            Button(
+                action: {
+                    // Wenn die Ausrichtung vertikal ist, die Auswahl umschalten
+                    if axis == .vertical {
+                        toggleSelection(item: item)
                     }
-                    .gesture(
-                        // Geste für Drag-and-Drop
-                        DragGesture().onChanged { value in
-                            onDragChanged?(value)
+                },
+                label: {
+                    // Ansicht für jedes Element
+                    if item >= 0 {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .frame(
+                                    width: axis == .vertical ? fieldSize.width / 4 : fieldSize.width,
+                                    height: axis == .vertical ? fieldSize.height : fieldSize.height / 4
+                                )
+                                .opacity(0.5)
+                                .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.75))
+                            
+                            Text("\(item + 1)")
+                                .foregroundColor(selectedItems.contains(item) ? .white : .gray)
                         }
-                        .onEnded { _ in
-                            // Aufruf des onDragEnded Closure oder Standard-Closure, falls onDragEnded nil ist
-                            onDragEnded?() ?? {}()
-                        }
-                    )
+                        .gesture(
+                            // Geste für Drag-and-Drop
+                            DragGesture().onChanged { value in
+                                onDragChanged?(value)
+                            }
+                                .onEnded { _ in
+                                    // Aufruf des onDragEnded Closure oder Standard-Closure, falls onDragEnded nil ist
+                                    onDragEnded?() ?? {}()
+                                }
+                        )
+                    }
                 }
-            }
-        )
+            )
+        
     }
 
     // Funktion zum Umschalten der Auswahl für das übergebene Element

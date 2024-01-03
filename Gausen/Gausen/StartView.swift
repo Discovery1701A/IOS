@@ -18,10 +18,7 @@ struct StartView: View {
     }
     
     var body: some View {
-        ZStack {
-            LinearGradient(gradient: Gradient(colors: [.blue, .white]), startPoint: .top, endPoint: .bottom)
-                .edgesIgnoringSafeArea(.all)
-            
+       
             VStack {
                 
                 // Titel der Startansicht
@@ -50,5 +47,5 @@ struct StartView: View {
             }
             .padding() // Einfügeabstand für den gesamten Inhalt der Ansicht
         }
-    }
+    
 }

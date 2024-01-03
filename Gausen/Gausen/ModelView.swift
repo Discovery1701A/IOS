@@ -28,11 +28,12 @@ class ViewModel: ObservableObject {
     @Published var draggedRow: Int?
     @Published var gameStatus: GameStatus = .start
     @Published var playerName: String = ""
-    @Published var faktor = 1.0
+    @Published var faktor = 1
     @Published var rowCount = 3
     @Published var selectedRows: [Int] = []
     @Published var selectedColumns: [Int] = []
     @Published var fieldSize: CGSize = .zero
+    @Published var gradiendColors :[Color] = [Color.blue, Color.white]
     var positivNegativ = false
     
     // Eigenschaft, die die Anzahl der Aktivitäten im Modell zurückgibt
@@ -158,6 +159,20 @@ class ViewModel: ObservableObject {
     // Funktion zum Aktualisieren der Auswahl von Zeilen oder Spalten im Modell
     func updateSelection(item: Int, selection: Bool, axe: String) {
         model.updateSelection(item: item, selection: selection, axe: axe)
+    }
+    
+    func colorSwitch() {
+        switch gameStatus {
+        case .start:
+            gradiendColors = [Color.blue, Color.white]
+        case .play:
+            gradiendColors = [Color.white, Color.green]
+        case .winning:
+            gradiendColors = [Color.white, Color.yellow]
+        case .highScore:
+            gradiendColors = [Color.blue, Color.white]
+        }
+        
     }
 
     // Enum für verschiedene Spielstatus

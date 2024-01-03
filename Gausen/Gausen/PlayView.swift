@@ -23,39 +23,41 @@ struct PlayView: View {
     }
 
     var body: some View {
-        VStack {
-            Text("Anzahl der Aktionen: " + String(modelView.activityCount))
-            Text("Zeit: " + modelView.time + "min")
-                .onAppear {
-                    // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
-                    modelView.updateTime()
-
-                    // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
-                    Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+        
+            VStack {
+                Text("Anzahl der Aktionen: " + String(modelView.activityCount))
+                Text("Zeit: " + modelView.time + "min")
+                    .onAppear {
+                        // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
                         modelView.updateTime()
+                        
+                        // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
+                        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                            modelView.updateTime()
+                        }
                     }
-                }
-
-            if size.width < size.height {
-                // Vertikales Layout für schmalere Ansicht
-
-                matrixView()
-                    .padding()
-
-                Spacer()
-                controller()
-
-            } else {
-                // Horizontales Layout für breitere Ansicht
-
-                HStack {
+                
+                if size.width < size.height {
+                    // Vertikales Layout für schmalere Ansicht
+                    
                     matrixView()
                         .padding()
+                    
                     Spacer()
                     controller()
+                    
+                } else {
+                    // Horizontales Layout für breitere Ansicht
+                    
+                    HStack {
+                        matrixView()
+                            .padding()
+                        Spacer()
+                        controller()
+                    }
                 }
             }
-        }
+        
     }
 
     // Erzeugt die Ansicht für die Spielmatrix. Verwendet eine `VStack`, um die Reihen der Matrix zu stapeln.
@@ -163,7 +165,7 @@ struct PlayView: View {
             .padding(.horizontal)
             HStack {
                 // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
-                buttons.slider(from: 1, to: 10, for: $modelView.faktor, name: "Faktor")
+                buttons.intPicker(size: $modelView.faktor, from: 1, to: 10, label: "Faktor")
                 buttons.positivnegativCheckBox(isChecked: $modelView.positivNegativ)
 
             }.padding(.horizontal)
