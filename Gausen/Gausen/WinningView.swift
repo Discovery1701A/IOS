@@ -59,6 +59,7 @@ struct WinningView: View {
             // Button zur HighScoreView.
             buttons.weiterButton()
                 .padding()
+            Spacer()
         }
         .padding()
     }

@@ -115,7 +115,7 @@ struct Buttons {
                 modelView.gameStatus = .highScore
             },
             label: {
-                Image(systemName: "medal").font(.title)
+                Image(systemName: "medal").font(.largeTitle)
             }
         )
     }

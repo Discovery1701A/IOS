@@ -43,7 +43,7 @@ struct HighscoreListView: View {
             // Anzeigen des Titels mit speziellen Formatierungen
             Text(title)
                 .font(.title)
-                .foregroundColor(.blue)
+//                .foregroundColor(.blue)
                 .padding(.bottom, 10)
 
             // Eine ScrollView für die Highscore-Einträge
