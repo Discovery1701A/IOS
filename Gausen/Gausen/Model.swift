@@ -358,7 +358,7 @@ struct Model {
 
     // Funktion zum Zurücksetzen verschiedener Zustände in der Matrix
     mutating func varReset() {
-        print(self.matrix.count)
+//        print(self.matrix.count)
         for i in 0 ..< self.matrix.count {
             // Setze den "notDiv"-Zustand auf "false" für alle Zellen
             for j in 0 ..< self.matrix[i].count where self.matrix[i][j].notDiv == true {
