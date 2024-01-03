@@ -22,9 +22,9 @@ struct WinningView: View {
     var body: some View {
         VStack {
             ZStack {
-                RoundedRectangle(cornerRadius: ConstantWinningView.cornerRadiusRec)
+                RoundedRectangle(cornerRadius: ConstantWinning.cornerRadiusRec)
                     .fill(Color(hex: 0xfcbb51, alpha: 0.75))
-                    .frame(maxHeight: ConstantWinningView.frameMaxHeight) // Dynamische Höhe
+                    .frame(maxHeight: ConstantWinning.frameMaxHeight) // Dynamische Höhe
                     .padding(.horizontal, 20) // Optionale horizontale Polsterung
                 Text("🎉Gewonnen🎉")
                     .font(.largeTitle)
@@ -32,12 +32,28 @@ struct WinningView: View {
             .padding(.bottom, 20)
             Spacer()
             // Textfeld für die Eingabe des Spielernamens mit abgerundetem Rand.
-            TextField("Name eingeben", text: $modelView.playerName)
-
+            TextField("Name eingeben", text: $modelView.playerName).font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .background(RoundedRectangle(cornerRadius: ConstantWinningView.cornerRadiusTextfield).stroke(Color.black, lineWidth: ConstantWinningView.lineWidthTextField)) // Rahmen mit abgerundeten Ecken
+                .background(
+                    RoundedRectangle(cornerRadius: ConstantWinning.cornerRadiusText)
+                        .stroke(Color.black, lineWidth: ConstantWinning.lineWidthText)
+                )
+                .frame(maxWidth: 400)
                 .padding([.leading, .trailing], 20)
-                .padding(.vertical, 10) // Vertikale Polsterung
+                .padding(.vertical, 10)
+//                .onTapGesture {
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                        hideKeyboard()
+//                    }
+//                }
+               
+                .onAppear {
+                    print("WinningView appeared")
+                }
+                .onDisappear {
+                    print("WinningView disappeared")
+                }
+
             Spacer()
             Spacer()
             // Button zur HighScoreView.
@@ -47,11 +63,21 @@ struct WinningView: View {
         .padding()
     }
 
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
     // Konstanten für die WinningView
-    enum ConstantWinningView {
+    enum ConstantWinning {
         static let cornerRadiusRec: CGFloat = 10
         static let frameMaxHeight: CGFloat = 100
-        static let cornerRadiusTextfield: CGFloat = 5
-        static let lineWidthTextField: CGFloat = 3
+        static let cornerRadiusText: CGFloat = 5
+        static let lineWidthText: CGFloat = 3
+    }
+}
+
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }

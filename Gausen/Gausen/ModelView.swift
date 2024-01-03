@@ -29,7 +29,7 @@ class ViewModel: ObservableObject {
     @Published var gameStatus: GameStatus = .start
     @Published var playerName: String = ""
     @Published var faktor = 1.0
-    @Published var rowCount = 3.0
+    @Published var rowCount = 3
     @Published var selectedRows: [Int] = []
     @Published var selectedColumns: [Int] = []
     @Published var fieldSize: CGSize = .zero
@@ -65,6 +65,14 @@ class ViewModel: ObservableObject {
         if gameStatus == .play {
             time = model.timeTracking()
         }
+    }
+    
+    func valueArray (from value1 : Int, to value2 : Int) -> [Int] {
+        var array: [Int] = []
+        for i in value1 ..< value2 + 1 {
+            array.append(i)
+        }
+        return array
     }
     
     // Funktion zum Überprüfen und Aktualisieren des Highscores

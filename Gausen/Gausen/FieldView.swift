@@ -28,7 +28,7 @@ struct FieldView: View {
                 }
             }
         }
-        .ignoresSafeArea(.keyboard)
+//        .ignoresSafeArea(.keyboard)
     }
 
     // Bestimmt die Hintergrundfarbe basierend auf den Feldattributen

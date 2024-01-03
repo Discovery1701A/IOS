@@ -18,30 +18,37 @@ struct StartView: View {
     }
     
     var body: some View {
-        VStack {
-            // Titel der Startansicht
-            Text("Start")
-                .font(.title)
-                .padding(.bottom, 20)
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: [.blue, .white]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
             
-            Spacer() // Platzhalter für flexiblen Raum, um die Elemente zu zentrieren
-            
-            // Slider für die Auswahl der Anzahl der Reihen mit entsprechendem Label und Anzeigetext
-            buttons.slider(from: 2, to: 6, for: $modelView.rowCount, name: "Wie Viele Reihen")
-                .padding([.leading, .trailing, .bottom])
-            
-            Spacer() // Platzhalter für flexiblen Raum
-            
-            // Start-Button für den Spielbeginn
-            buttons.startButton()
-                .padding()
-            
-            Spacer() // Platzhalter für flexiblen Raum
-            Spacer() // Platzhalter für flexiblen Raum
-            
-            // Button für den Zugriff auf die Highscore-Ansicht
-            buttons.highScoreButton()
+            VStack {
+                
+                // Titel der Startansicht
+                Text("Start")
+                    .font(.title)
+                    .padding(.bottom, 20)
+                
+                Spacer() // Platzhalter für flexiblen Raum, um die Elemente zu zentrieren
+                
+                // Slider für die Auswahl der Anzahl der Reihen mit entsprechendem Label und Anzeigetext
+                //            buttons.slider(from: 2, to: 6, for: $modelView.rowCount, name: "Wie Viele Reihen")
+                buttons.intPicker(size: $modelView.rowCount, from: 2, to: 6, label: "Wie viele Reihen")
+                    .padding([.leading, .trailing, .bottom])
+                
+                Spacer() // Platzhalter für flexiblen Raum
+                
+                // Start-Button für den Spielbeginn
+                buttons.startButton()
+                    .padding()
+                
+                Spacer() // Platzhalter für flexiblen Raum
+                Spacer() // Platzhalter für flexiblen Raum
+                
+                // Button für den Zugriff auf die Highscore-Ansicht
+                buttons.highScoreButton()
+            }
+            .padding() // Einfügeabstand für den gesamten Inhalt der Ansicht
         }
-        .padding() // Einfügeabstand für den gesamten Inhalt der Ansicht
     }
 }

@@ -82,6 +82,10 @@ struct Buttons {
             },
             label: {
                 Text("Start")
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(8)
+                
             }
         )
     }
@@ -176,6 +180,7 @@ struct Buttons {
                         Image(systemName: "multiply").font(.title)
                         Image(systemName: modelView.positivNegativ ? "minus" : "plus").font(.largeTitle)
                     }
+                   
                 )
             }
         )
@@ -207,6 +212,7 @@ struct Buttons {
                         Image(systemName: "divide").font(.title)
                         Image(systemName: modelView.positivNegativ ? "minus" : "plus").font(.largeTitle)
                     }
+                   
                 )
             }
         )
@@ -328,15 +334,33 @@ struct Buttons {
             }
         )
     }
+    
+    // Funktion, um einen benutzerdefinierten Picker mit einer Auswahl von 1 bis 6 zu erstellen und das ausgewählte Element blau zu färben
+    func intPicker(size: Binding<Int>, from value1: Int, to value2: Int, label : String) -> some View {
+        Picker(label, selection: size) {
+            // Iteriere durch die Werte von value1 bis value2
+            ForEach(self.modelView.valueArray(from: value1, to: value2), id: \.self) { value in
+                // Benutzerdefinierte Textansicht für jedes Element im Picker
+                Text("\(value)")
+                               .tag(value) // Setze den Tag-Wert für jedes Element
+                    .foregroundColor(size.wrappedValue == value ? .blue : .primary) // Blau für ausgewähltes Element, sonst primäre Textfarbe
+                    .onTapGesture {
+                        size.wrappedValue = value // Aktualisiere die ausgewählte Größe bei Tap
+                    }
+            }
+        }
+        .pickerStyle(SegmentedPickerStyle()) // Verwende den Segmented Picker Style
+    }
 
     // Funktion für das Layout einer runden Rechteck-Schaltfläche mit einem angegebenen Inhalt
     func roundRecButtonLayout(content: some View) -> some View {
         ZStack {
             // Gerundetes Rechteck als Hintergrund der Schaltfläche
-            RoundedRectangle(cornerRadius: 8)
+           
+                RoundedRectangle(cornerRadius: 8)
                 .fill(.secondary)
                 .scaledToFit()
-
+           
             // Inhalt der Schaltfläche (z. B. ein Symbol)
             content
         }

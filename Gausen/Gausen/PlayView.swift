@@ -86,7 +86,7 @@ struct PlayView: View {
         // Verwendet die FieldView-Ansicht und konfiguriert sie mit den Daten aus der Matrix.
         FieldView(field: modelView.matrix[row][column])
             .fieldSize($modelView.fieldSize) // Bindet die Größe des Feldes an das ViewModel.
-            .ignoresSafeArea(.keyboard) // Ignoriert die sichere Bereichstastatur.
+//            .ignoresSafeArea(.keyboard) // Ignoriert die sichere Bereichstastatur.
             .rotationEffect(Angle.degrees(modelView.matrix[row][column].winning ? 360 : 0)) // Fügt eine Rotation für gewinnende Felder hinzu.
             .onChange(of: modelView.selectedRows.contains(row)) { _, newValue in
                 // Wenn eine Auswahl in einer Reihe geändert wird, aktualisiert das ViewModel die Auswahl und animiert die Änderung.
