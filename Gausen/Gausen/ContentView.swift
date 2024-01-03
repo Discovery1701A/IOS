@@ -14,14 +14,16 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                LinearGradient(
-                    gradient: Gradient(
-                        colors: modelView.gradiendColors
-                    ),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .edgesIgnoringSafeArea(.all)
+                withAnimation {
+                    LinearGradient(
+                        gradient: Gradient(
+                            colors: modelView.gradiendColors
+                        ),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .edgesIgnoringSafeArea(.all)
+                }
                 // Switch-Anweisung, um den aktuellen Spielstatus zu überprüfen und die entsprechende Ansicht anzuzeigen.
                 switch modelView.gameStatus {
                 case .start:
@@ -31,7 +33,7 @@ struct ContentView: View {
                 case .play:
                     // PlayView wird angezeigt, wenn das Spiel im Playstatus ist.
                     PlayView(modelView: modelView, size: geometry.size)
-
+                        
                 case .winning:
                     // ZStack, um PlayView und WinningView zu überlagern, wenn das Spiel im Winningstatus ist.
                     ZStack {
@@ -47,6 +49,7 @@ struct ContentView: View {
             }
             .ignoresSafeArea(.keyboard)
         }
+        
         .onChange(of: modelView.gameStatus) { _, _ in
             modelView.colorSwitch()
         }

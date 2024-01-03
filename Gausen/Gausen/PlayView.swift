@@ -23,41 +23,49 @@ struct PlayView: View {
     }
 
     var body: some View {
-        
-            VStack {
-                Text("Anzahl der Aktionen: " + String(modelView.activityCount))
-                Text("Zeit: " + modelView.time + "min")
-                    .onAppear {
-                        // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
-                        modelView.updateTime()
-                        
-                        // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
-                        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+        VStack {
+            HStack {
+                buttons.backButton()
+                Spacer()
+            }
+            .overlay(
+                VStack {
+                    Text("Anzahl der Aktionen: " + String(modelView.activityCount))
+                    Text("Zeit: " + modelView.time + "min")
+                        .onAppear {
+                            // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
                             modelView.updateTime()
+                            // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
+                            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                                modelView.updateTime()
+                            }
                         }
-                    }
-                
-                if size.width < size.height {
-                    // Vertikales Layout für schmalere Ansicht
-                    
+                }
+            )
+            Spacer()
+            if UIDevice.current.orientation.isLandscape {
+                // Horizontales Layout für breitere Ansicht
+                Spacer()
+                HStack {
                     matrixView()
-                        .padding()
-                    
-                    Spacer()
                     controller()
-                    
-                } else {
-                    // Horizontales Layout für breitere Ansicht
-                    
-                    HStack {
-                        matrixView()
-                            .padding()
-                        Spacer()
-                        controller()
-                    }
+                }
+            } else {
+                // Vertikales Layout für schmalere Ansicht
+                VStack {
+                    matrixView()
+                    controller()
                 }
             }
+            Spacer()
+        }
+        .padding()
         
+        //        FieldSize wird so besser bestimmt
+                .onChange(of: UIDevice.current.orientation.isLandscape) { _, _ in
+        //            print("wölfchen")
+                    modelView.fieldSize = .zero
+                }
     }
 
     // Erzeugt die Ansicht für die Spielmatrix. Verwendet eine `VStack`, um die Reihen der Matrix zu stapeln.
@@ -86,9 +94,11 @@ struct PlayView: View {
     // Erzeugt die Ansicht für ein Spielfeld in der Spielmatrix.
     func createFieldView(row: Int, column: Int) -> some View {
         // Verwendet die FieldView-Ansicht und konfiguriert sie mit den Daten aus der Matrix.
+
         FieldView(field: modelView.matrix[row][column])
+
             .fieldSize($modelView.fieldSize) // Bindet die Größe des Feldes an das ViewModel.
-//            .ignoresSafeArea(.keyboard) // Ignoriert die sichere Bereichstastatur.
+            .ignoresSafeArea(.keyboard) // Ignoriert die sichere Bereichstastatur.
             .rotationEffect(Angle.degrees(modelView.matrix[row][column].winning ? 360 : 0)) // Fügt eine Rotation für gewinnende Felder hinzu.
             .onChange(of: modelView.selectedRows.contains(row)) { _, newValue in
                 // Wenn eine Auswahl in einer Reihe geändert wird, aktualisiert das ViewModel die Auswahl und animiert die Änderung.
@@ -180,7 +190,7 @@ struct PlayView: View {
             .padding([.leading, .bottom, .trailing])
 
             // Erzeugt den "Zurück" Button am unteren Rand.
-            buttons.backButton()
+//            buttons.backButton()
         }
     }
 

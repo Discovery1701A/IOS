@@ -87,6 +87,7 @@ struct FieldSizeModifier: ViewModifier {
                     Color.clear
                         // Aktualisiert die Größenpräferenz mit der aktuellen Größe des Feldes
                         .preference(key: SizePreferenceKey.self, value: geo.size)
+                        
                         .onAppear {
                             // Ein Timer wird verwendet, um regelmäßig die Größe des Feldes zu überprüfen
                             Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
@@ -94,18 +95,21 @@ struct FieldSizeModifier: ViewModifier {
                                 if self.fieldSize == .zero {
                                     self.fieldSize = geo.size
                                 }
+//                                print(geo.size, fieldSize, previousSize)
                                 // Überprüft, ob sich die aktuelle Größe von der vorherigen unterscheidet
-                                if geo.size == self.previousSize && geo.size != self.fieldSize {
+                                if  geo.size != self.fieldSize {
+//                                    print("aspera")
                                     // Überprüft auf signifikante Größenänderungen in Breite oder Höhe
                                     if (geo.size.width > self.fieldSize.width + 0.5)
-                                        || (geo.size.width < self.fieldSize.width - 0.5) {
-                                        if geo.size.height > self.fieldSize.height + 0.5
+                                        || (geo.size.width < self.fieldSize.width - 0.5) || geo.size.height > self.fieldSize.height + 0.5
                                             || geo.size.height < self.fieldSize.height - 0.5 {
+//                                        print("dupdidu")
                                             // Setzt die Feldgröße auf die vorherige Größe zurück
                                             if geo.size.width != 0.0 {
-                                                self.fieldSize = self.previousSize
+                                                print("pikabu")
+                                                self.fieldSize = geo.size
                                             }
-                                        }
+                                        
                                     }
                                 }
                             }
@@ -116,20 +120,20 @@ struct FieldSizeModifier: ViewModifier {
             // Reagiert auf Änderungen der Größenpräferenz
             .onPreferenceChange(SizePreferenceKey.self) { size in
                 // Setzt die Feldgröße, wenn sie zuvor noch nicht gesetzt wurde
-                if self.fieldSize == .zero {
-                    self.fieldSize = size
-                }
+//                if self.fieldSize == .zero {
+//                    self.fieldSize = size
+//                }
                 // Überprüft auf signifikante Größenänderungen in Breite oder Höhe
                 if size != self.fieldSize {
-                    if (size.width > self.fieldSize.width + 0.5)
-                        || (size.width < self.fieldSize.width - 0.5) {
-                        if size.height > self.fieldSize.height + 0.5
-                            || size.height < self.fieldSize.height - 0.5 {
+                    
+//                    if (size.width > self.fieldSize.width + 0.5)
+//                        || (size.width < self.fieldSize.width - 0.5) || size.height > self.fieldSize.height + 0.5
+//                            || size.height < self.fieldSize.height - 0.5 {
                             // Aktualisiert die vorherigen Größen, um den Änderungsverlauf zu verfolgen
                             self.prepreviousSize = self.previousSize
                             self.previousSize = size
-                        }
-                    }
+//                        }
+//                    }
                 }
             }
     }

@@ -77,6 +77,7 @@ struct Buttons {
                 modelView.newMatrix(rowCount: Int(modelView.rowCount))
                 // Setzt die Auswahl zurück
                 modelView.resetSelection()
+                modelView.fieldSize = .zero
                 // Setzt den Spielstatus auf "Spielen"
                 modelView.gameStatus = .play
             },
@@ -129,7 +130,7 @@ struct Buttons {
                 modelView.gameStatus = .start
             },
             label: {
-                Text("Zurück")
+                Image(systemName: "house").font(.largeTitle)
             }
         )
         // Deaktiviert den Button, wenn das Spiel nicht im Play Status ist oder sich im Highscore-Status befindet

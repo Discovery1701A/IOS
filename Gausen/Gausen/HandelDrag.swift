@@ -14,6 +14,7 @@ struct HandelDrag {
     func handleDragChangedColumn(value: DragGesture.Value, column: Int, size: CGSize) {
         // Zurücksetzen aller Zustände im ViewModel, die mit dem Dragging in Verbindung stehen
         modelView.varReset()
+        modelView.resetSelection()
         // Markieren der gezogenen Spalte im ViewModel
         modelView.drag(column: column, bool: true)
         
@@ -52,6 +53,7 @@ struct HandelDrag {
     func handleDragChangedRow(value: DragGesture.Value, row: Int, size: CGSize) {
         // Zurücksetzen aller Zustände im ViewModel, die mit dem Dragging in Verbindung stehen
         modelView.varReset()
+        modelView.resetSelection()
         // Berechnen der Translation und des Index der gezogenen Zeile
         let translation = value.translation.height
         let rowHeight = size.height
