@@ -8,7 +8,7 @@
 import Foundation
 
 // Klasse zum Verwalten und Speichern von Highscores
-class HighscoreManager:  ObservableObject {
+class HighscoreManager: ObservableObject {
     static let shared = HighscoreManager()
     
     // Dateinamen für die gespeicherten Highscores
@@ -73,7 +73,6 @@ class HighscoreManager:  ObservableObject {
             // Laden der Daten aus dem Dokumentenverzeichnis
             if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName),
                let data = try? Data(contentsOf: url) {
-                
                 // Dekodieren der Daten basierend auf der Highscore-Kategorie
                 switch category {
                 case .time:
@@ -113,10 +112,10 @@ class HighscoreManager:  ObservableObject {
                 }
             }
         } catch {
-                // Bei einem Fehler, gib eine Fehlermeldung aus
-                print("Failed to load highscore for \(category): \(error)")
-            }
+            // Bei einem Fehler, gib eine Fehlermeldung aus
+            print("Failed to load highscore for \(category): \(error)")
         }
+    }
     
     // Funktion zum Konvertieren eines Zeit-Strings in eine Double-Zahl
     func convertTimeStringToDouble(_ timeString: String) -> Double? {
@@ -126,7 +125,8 @@ class HighscoreManager:  ObservableObject {
         // Überprüfung, ob der String das erwartete Format (zwei Teile) hat und ob diese Teile in Double umgewandelt werden können
         guard components.count == 2,
               let minutes = Double(components[0]),
-              let seconds = Double(components[1]) else {
+              let seconds = Double(components[1])
+        else {
             return nil // Rückgabe von nil im Falle einer fehlerhaften Zeichenkette oder eines falschen Formats
         }
         
@@ -136,7 +136,7 @@ class HighscoreManager:  ObservableObject {
     }
 
     // Funktion zum Hinzufügen eines neuen Zeit-Highscores
-    func newScoreTime (time : String, personName : String) {
+    func newScoreTime(time: String, personName: String) {
         // Standardwert für den zu speichernden Score
         var saveScoreRow = [" ", "99:99"]
         // Flag, um zu überprüfen, ob der neue Score bereits eingefügt wurde
@@ -162,8 +162,8 @@ class HighscoreManager:  ObservableObject {
     }
 
     // Funktion zum Hinzufügen eines neuen Aktivitätszählung-Highscores
-    func newScoreActivityCount(activityCount : Int, personName : String) {
-        // Standardwert für den zu speichernden Score
+    func newScoreActivityCount(activityCount: Int, personName: String) {
+        // Standardwert für den zu speichernden Score Laut recerce größter Int fürs iphone
         var saveScoreRow = [" ", "9223372036854775807"]
         // Flag, um zu überprüfen, ob der neue Score bereits eingefügt wurde
         var isIn = false
@@ -186,7 +186,6 @@ class HighscoreManager:  ObservableObject {
         // Speichern der aktualisierten Highscores
         saveHighscore(for: .activityCount)
     }
-
 }
 
 // Aufzählung für die verschiedenen Highscore-Kategorien

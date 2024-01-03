@@ -5,13 +5,13 @@
 //  Created by Anna Rieckmann on 15.12.23.
 //
 import Foundation
-
+// Klasse für einen Linked List, Grundidee aus Aloritmen und Datenstrukturen
 class LinkedList {
     // Innere Klasse für einen Listknoten
     class Node {
-        var element: Any?          // Das gespeicherte Element im Knoten
-        var successor: Node?       // Der nachfolgende Knoten in der Liste
-        var predecessor: Node?     // Der vorherige Knoten in der Liste
+        var element: Any? // Das gespeicherte Element im Knoten
+        var successor: Node? // Der nachfolgende Knoten in der Liste
+        var predecessor: Node? // Der vorherige Knoten in der Liste
         
         // Initialisierung eines Knotens mit einem gegebenen Element
         init(element: Any?) {
@@ -21,10 +21,10 @@ class LinkedList {
         }
     }
     
-    var emptyNode = Node(element: nil)  // Ein leerer Knoten, der als Markierung für leere Liste dient
-    var firstNode: Node                // Der erste Knoten in der Liste
-    var lastNode: Node                 // Der letzte Knoten in der Liste
-    var numberOfElements: Int          // Die Anzahl der Elemente in der Liste
+    var emptyNode = Node(element: nil) // Ein leerer Knoten, der als Markierung für leere Liste dient
+    var firstNode: Node // Der erste Knoten in der Liste
+    var lastNode: Node // Der letzte Knoten in der Liste
+    var numberOfElements: Int // Die Anzahl der Elemente in der Liste
     
     // Initialisierung der verketteten Liste
     init() {

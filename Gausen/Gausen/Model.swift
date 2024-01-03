@@ -13,10 +13,11 @@ struct Model {
     struct Field: Identifiable, Hashable {
         var content: Int // Der Inhalt des Feldes
         let id: Int // Eindeutige Identifikationsnummer des Feldes
+        // Hauptsächlich zum markiren
         var notDiv = false // Gibt an, ob der Inhalt nicht durch den Faktor teilbar ist
         var selection = false // Gibt an, ob das Feld ausgewählt ist
         var draged = false // Gibt an, ob das Feld gezogen wird
-        var winning = false // Gibt an, ob das Feld Teil der Gewinnkombination ist
+        var winning = false // Gibt an, ob das Feld Teil der Einsen ist
 
         init(content: Int, id: Int) {
             self.content = content
@@ -75,9 +76,9 @@ struct Model {
                 for j in 0 ..< self.matrix[i].count where j < currentNodeMatrix[i].count {
                     // Überprüfen, ob der Inhalt des Feldes unterschiedlich ist
                     if currentNodeMatrix[i][j].content != self.matrix[i][j].content {
-                        // Wenn unterschiedlich, lösche den Verlauf ab diesem Punkt
+                        // Wenn unterschiedlich, lösche den Verlauf ab diesem Punkt  in die Richtung->
                         self.linkedList.removeAllBehinde(currentNode: self.currentNode)
-                        // Setze das Modell zurück und speichere den aktuellen Zustand erneut
+                        // Setze Makierungen zurück und speichere den aktuellen Zustand erneut
                         self.varReset()
                         self.linkedList.add(element: self.matrix)
                         self.currentNode = self.linkedList.lastNode
@@ -92,7 +93,7 @@ struct Model {
         }
     }
 
-    // Funktion zum Zurückgehen zu einem vorherigen Zustand in der verketteten Liste
+    // Funktion zum Zurückgehen zu einem vorherigen Zustand in der verketteten Liste (undo)
     mutating func back() {
         // Überprüfen, ob es einen vorherigen Zustand gibt
         if self.linkedList.back(currentNode: self.currentNode).element != nil {
@@ -102,7 +103,7 @@ struct Model {
         }
     }
 
-    // Funktion zum Vorwärtsgehen zu einem nachfolgenden Zustand in der verketteten Liste
+    // Funktion zum Vorwärtsgehen zu einem nachfolgenden Zustand in der verketteten Liste (redo)
     mutating func forwart() {
         // Überprüfen, ob es einen nachfolgenden Zustand gibt
         if self.linkedList.forwart(currentNode: self.currentNode).element != nil {
@@ -147,7 +148,6 @@ struct Model {
         // Überprüfen, ob die Skalierung gültig ist
         if self.controllScale(row: row, faktor: faktor, multi: multi) {
             // Skaliere die Zeile
-            if positivNegativ {}
             for i in 0 ..< self.matrix[row].count {
                 if positivNegativ {
                     self.matrix[row][i].content *= -1
@@ -213,6 +213,43 @@ struct Model {
         // Rückgabe, dass die Skalierung ungültig ist (Faktor ist 0)
         return false
     }
+    
+    // Funktion zur Generierung der Einheitsmatrix
+    mutating func generatMatrix() {
+        // Initialisiere eine leere Matrix und eine ID
+        var generatedMatrix: [[Field]] = []
+        var id = 0
+
+        // Erstelle die Einheitsmatrix, wenn sie noch nicht erstellt wurde
+        if generatedMatrix.count < self.rowCount {
+            for i in 0 ..< self.rowCount {
+                generatedMatrix.append([])
+                for j in 0 ..< self.rowCount {
+                    id += 1
+                    // Setze 1 auf der Hauptdiagonale, sonst 0
+                    if j == i {
+                        generatedMatrix[i].append(Field(content: 1, id: id))
+                    } else {
+                        generatedMatrix[i].append(Field(content: 0, id: id))
+                    }
+                }
+            }
+        }
+
+        // Setze die Matrix, die Einheitsmatrix und mischt die Spielmatrix
+        self.matrix = generatedMatrix
+        self.unitMatrix = generatedMatrix
+        self.startTime = Date()
+        self.mixMatrix(howMany: 2, range: 10)
+    }
+    
+    // Funktion zum Markieren der gewonnenen Kombination in der Matrix
+    mutating func markWinnig() {
+        // Markiere die Einsen als gewonnen
+        for i in 0 ..< self.matrix.count {
+            self.matrix[i][i].winning = true
+        }
+    }
 
     // Funktion zum Mischen der Matrix
     mutating func mixMatrix(howMany: Int, range: Int) {
@@ -262,7 +299,7 @@ struct Model {
             }
         }
 
-        // Zurücksetzen des Verlaufs und Aktualisierung des Zustands
+        // Zurücksetzen des Verlaufs und des Zustands
         self.linkedList.reset()
         self.linkedList.add(element: self.matrix)
         self.currentNode = self.linkedList.lastNode
@@ -284,51 +321,12 @@ struct Model {
         return true
     }
 
-    // Funktion zum Markieren der gewonnenen Kombination in der Matrix
-    mutating func markWinnig() {
-        // Markiere die Diagonalelemente als gewonnen
-        for i in 0 ..< self.matrix.count {
-            self.matrix[i][i].winning = true
-        }
-    }
-
-    // Funktion zur Generierung der Anfangsmatrix
-    mutating func generatMatrix() {
-        // Initialisiere eine leere Matrix und eine ID
-        var ddmatrix: [[Field]] = []
-        var id = 0
-
-        // Erstelle die Anfangsmatrix, wenn sie noch nicht erstellt wurde
-        if ddmatrix.count < self.rowCount {
-            for i in 0 ..< self.rowCount {
-                ddmatrix.append([])
-                for j in 0 ..< self.rowCount {
-                    id += 1
-                    // Setze 1 auf der Hauptdiagonale, sonst 0
-                    if j == i {
-                        ddmatrix[i].append(Field(content: 1, id: id))
-                    } else {
-                        ddmatrix[i].append(Field(content: 0, id: id))
-                    }
-                }
-            }
-        }
-
-        // Setze die Matrix, die Einheitsmatrix und starte die Mischung
-        self.matrix = ddmatrix
-        self.unitMatrix = ddmatrix
-        self.startTime = Date()
-        self.mixMatrix(howMany: 2, range: 10)
-    }
-
     // Funktion zum Aktivieren/Deaktivieren des "Drag"-Zustands für eine Zeile oder Spalte
     mutating func drag(row: Int = -1, column: Int = -1, bool: Bool) {
-        print("drag", row, self.matrix.count)
         // Aktiviere/Deaktiviere "Draged"-Zustand für eine Zeile
         if row >= 0, row < self.matrix.count {
             for i in 0 ..< self.matrix.count {
                 self.matrix[row][i].draged = bool
-                print(self.matrix[row][i].draged)
             }
         }
         // Aktiviere/Deaktiviere "Draged"-Zustand für eine Spalte
@@ -339,6 +337,23 @@ struct Model {
         }
         // Aktualisiere den Matrixknoten
         self.updateMatrixNode()
+    }
+    
+    // Funktion zum Aktualisieren des "selection"-Zustands für eine Zeile oder Spalte
+    mutating func updateSelection(item: Int, selection: Bool, axe: String) {
+        guard item >= 0, item < self.matrix.count else {
+            return
+        }
+        for i in 0 ..< self.matrix.count {
+            // Aktualisiere den "selection"-Zustand für eine Zeile
+            if axe == "row" {
+                self.matrix[item][i].selection = selection
+            }
+            // Aktualisiere den "selection"-Zustand für eine Spalte
+            if axe == "column" {
+                self.matrix[i][item].selection = selection
+            }
+        }
     }
 
     // Funktion zum Zurücksetzen verschiedener Zustände in der Matrix
@@ -355,25 +370,7 @@ struct Model {
             }
             // Setze den "draged"-Zustand auf "false" für alle Zellen
             for j in 0 ..< self.matrix[i].count where self.matrix[i][j].draged == true {
-                print("off")
                 self.matrix[i][j].draged = false
-            }
-        }
-    }
-
-    // Funktion zum Aktualisieren des "selection"-Zustands für eine Zeile oder Spalte
-    mutating func updateSelection(item: Int, selection: Bool, axe: String) {
-        guard item >= 0, item < self.matrix.count else {
-            return
-        }
-        for i in 0 ..< self.matrix.count {
-            // Aktualisiere den "selection"-Zustand für eine Zeile
-            if axe == "row" {
-                self.matrix[item][i].selection = selection
-            }
-            // Aktualisiere den "selection"-Zustand für eine Spalte
-            if axe == "column" {
-                self.matrix[i][item].selection = selection
             }
         }
     }

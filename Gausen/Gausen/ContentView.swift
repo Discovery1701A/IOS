@@ -9,13 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var modelView: ViewModel
-    var buttons: Buttons
-
-    // Initialisierung der ContentView mit dem ViewModel und den Buttons.
-    init(modelView: ViewModel) {
-        self.modelView = modelView
-        self.buttons = Buttons(modelView: modelView)
-    }
 
     // Der Body der Ansicht, die die Spiellogik steuert und die entsprechenden Unteransichten anzeigt.
     var body: some View {

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+// Struct für das Verschieben der Reihen und Spalten
 struct HandelDrag {
     @ObservedObject var modelView: ViewModel
     

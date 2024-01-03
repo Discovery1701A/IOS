@@ -4,7 +4,7 @@
 //
 //  Created by Anna Rieckmann on 29.12.23.
 //
-// Die `StartView` ist eine SwiftUI-Ansicht, die den Startbildschirm der App repräsentiert.
+// Die StartView ist eine SwiftUI-Ansicht, die den Startbildschirm der App repräsentiert.
 import SwiftUI
 
 struct StartView: View {

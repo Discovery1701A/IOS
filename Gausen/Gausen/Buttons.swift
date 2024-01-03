@@ -11,7 +11,7 @@ import SwiftUI
 
 struct Buttons {
     @ObservedObject var modelView: ViewModel
-    // Button für das Wiederholen (Redo) des Spiels
+    // Button für das Vorgehen (Redo) im Spiel
     @ViewBuilder
     func redo() -> some View {
         Button(
@@ -25,7 +25,7 @@ struct Buttons {
                 Image(systemName: "arrowshape.turn.up.forward").font(.title)
             }
         )
-        // Deaktiviert den Button, wenn es keinen nächsten Zustand gibt oder das Spiel beendet ist
+        // Deaktiviert den Button, wenn es keinen nächsten Zustand gibt oder das Spiel nicht im Play Status ist
         .disabled(modelView.currentNode.successor == nil)
         .disabled(modelView.gameStatus != .play)
     }
@@ -44,12 +44,12 @@ struct Buttons {
                 Image(systemName: "arrowshape.turn.up.backward").font(.title)
             }
         )
-        // Deaktiviert den Button, wenn es keinen vorherigen Zustand gibt oder das Spiel beendet ist
+        // Deaktiviert den Button, wenn es keinen vorherigen Zustand gibt oder das Spiel nicht im Play Status ist
         .disabled(modelView.currentNode.predecessor == nil)
         .disabled(modelView.gameStatus != .play)
     }
 
-    // Button zum Mischen der Matrix
+    // Button zum Mischen der Matrix grade nicht auf der Benutzeroberfläche
     @ViewBuilder
     func mix() -> some View {
         Button(
@@ -128,11 +128,11 @@ struct Buttons {
                 Text("Zurück")
             }
         )
-        // Deaktiviert den Button, wenn das Spiel beendet ist oder sich im Highscore-Bildschirm befindet
+        // Deaktiviert den Button, wenn das Spiel nicht im Play Status ist oder sich im Highscore-Status befindet
         .disabled(modelView.gameStatus != .play && modelView.gameStatus != .highScore)
     }
 
-    // Button zum Vertauschen von Spalten
+    // Button zum Vertauschen von Spalten grade nicht auf der Benutzeroberfläche
     @ViewBuilder
     func spalte() -> some View {
         Button(
@@ -151,7 +151,7 @@ struct Buttons {
                 Text("Spalte")
             }
         )
-        // Deaktiviert den Button, wenn das Spiel beendet ist
+        // Deaktiviert den Button, wenn das Spiel nicht im Play Status ist
         .disabled(modelView.gameStatus != .play)
     }
 
@@ -174,12 +174,12 @@ struct Buttons {
                     content:
                     HStack {
                         Image(systemName: "multiply").font(.title)
-                        Image(systemName: "plus").font(.title)
+                        Image(systemName: modelView.positivNegativ ? "minus" : "plus").font(.largeTitle)
                     }
                 )
             }
         )
-        // Deaktiviert den Button, wenn nicht genau zwei Zeilen ausgewählt sind oder das Spiel beendet ist
+        // Deaktiviert den Button, wenn nicht genau zwei Zeilen ausgewählt sind oder das Spiel nicht im Play Status ist
         .disabled(modelView.selectedRows.count != 2)
         .disabled(modelView.gameStatus != .play)
     }
@@ -205,12 +205,12 @@ struct Buttons {
                     content:
                     HStack {
                         Image(systemName: "divide").font(.title)
-                        Image(systemName: "plus").font(.title)
+                        Image(systemName: modelView.positivNegativ ? "minus" : "plus").font(.largeTitle)
                     }
                 )
             }
         )
-        // Deaktiviert den Button, wenn nicht genau zwei Zeilen ausgewählt sind oder das Spiel beendet ist
+        // Deaktiviert den Button, wenn nicht genau zwei Zeilen ausgewählt sind oder das Spiel nicht im Play Status ist
         .disabled(modelView.selectedRows.count != 2)
         .disabled(modelView.gameStatus != .play)
     }
@@ -235,7 +235,7 @@ struct Buttons {
                 roundRecButtonLayout(content: Image(systemName: "divide").font(.title))
             }
         )
-        // Deaktiviert den Button, wenn nicht genau eine Zeile ausgewählt ist oder das Spiel beendet ist
+        // Deaktiviert den Button, wenn nicht genau eine Zeile ausgewählt ist oder das Spiel nicht im Play Status ist
         .disabled(modelView.selectedRows.count != 1)
         .disabled(modelView.gameStatus != .play)
     }
@@ -261,12 +261,12 @@ struct Buttons {
                 roundRecButtonLayout(content: Image(systemName: "multiply").font(.title))
             }
         )
-        // Deaktiviert den Button, wenn nicht genau eine Zeile ausgewählt ist oder das Spiel beendet ist
+        // Deaktiviert den Button, wenn nicht genau eine Zeile ausgewählt ist oder das Spiel nicht im Play Status ist
         .disabled(modelView.selectedRows.count != 1)
         .disabled(modelView.gameStatus != .play)
     }
 
-    // Button zum Erstellen einer neuen Matrix
+    // Button zum Erstellen einer neuen Matrix grade nicht auf der Benutzeroberfläche
     @ViewBuilder
     func neu() -> some View {
         Button(
@@ -302,25 +302,15 @@ struct Buttons {
                     in: Double(min) ... Double(max),
                     step: 1.0
                 )
+                // Deaktiviert den Slider, wenn das Spiel nicht im Play oder Start Status ist
                 .disabled(modelView.gameStatus != .play && modelView.gameStatus != .start)
-                // Aktivierung der onChange-Methode, um Änderungen am Slider-Wert zu überwachen
-//                .onChange(of: value.wrappedValue) { _, _ in
-//                    // Aktualisierung des Bearbeitungsstatus im ViewModel, um anzuzeigen, dass der Wert bearbeitet wird
-//                    if modelView.getIsEditing() {
-//                        modelView.setIsEditing(false)
-//                    } else {
-//                        modelView.setIsEditing(true)
-//                    }
-//                }
-
                 // Anzeige des Max-Werts
                 Text("\(max)")
             }
             .padding(.horizontal)
 
-            // Anzeige des aktuellen Slider-Werts mit entsprechender Textfarbe
+            // Anzeige des aktuellen Slider-Werts
             Text("\(Int(value.wrappedValue))")
-//                .foregroundColor(modelView.getIsEditing() ? .red : .blue)
         }
     }
 

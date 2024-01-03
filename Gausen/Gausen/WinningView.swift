@@ -22,9 +22,9 @@ struct WinningView: View {
     var body: some View {
         VStack {
             ZStack {
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: ConstantWinningView.cornerRadiusRec)
                     .fill(Color(hex: 0xfcbb51, alpha: 0.75))
-                    .frame(maxHeight: 100) // Dynamische Höhe
+                    .frame(maxHeight: ConstantWinningView.frameMaxHeight) // Dynamische Höhe
                     .padding(.horizontal, 20) // Optionale horizontale Polsterung
                 Text("🎉Gewonnen🎉")
                     .font(.largeTitle)
@@ -32,12 +32,12 @@ struct WinningView: View {
             .padding(.bottom, 20)
             Spacer()
             // Textfeld für die Eingabe des Spielernamens mit abgerundetem Rand.
-                   TextField("Name eingeben", text: $modelView.playerName)
-                      
+            TextField("Name eingeben", text: $modelView.playerName)
+
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                       .background(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 3)) // Rahmen mit abgerundeten Ecken
-                       .padding([.leading, .trailing], 20)
-                       .padding(.vertical, 10) // Vertikale Polsterung
+                .background(RoundedRectangle(cornerRadius: ConstantWinningView.cornerRadiusTextfield).stroke(Color.black, lineWidth: ConstantWinningView.lineWidthTextField)) // Rahmen mit abgerundeten Ecken
+                .padding([.leading, .trailing], 20)
+                .padding(.vertical, 10) // Vertikale Polsterung
             Spacer()
             Spacer()
             // Button zur HighScoreView.
@@ -47,4 +47,11 @@ struct WinningView: View {
         .padding()
     }
 
+    // Konstanten für die WinningView
+    enum ConstantWinningView {
+        static let cornerRadiusRec: CGFloat = 10
+        static let frameMaxHeight: CGFloat = 100
+        static let cornerRadiusTextfield: CGFloat = 5
+        static let lineWidthTextField: CGFloat = 3
+    }
 }

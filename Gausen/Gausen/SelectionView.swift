@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-
+// Struct für die vertikalen und horizontalen Buttons
 struct SelectionView: View {
-    var item: Int                    // Das Element, das in der Ansicht repräsentiert wird
+    var item: Int // Das Element, das in der Ansicht repräsentiert wird
     @Binding var selectedItems: [Int] // Ein Array, das die ausgewählten Elemente enthält (über Binding aktualisiert)
-    var axis: Axis                   // Die Ausrichtung der Auswahlansicht (horizontal oder vertikal)
-    var fieldSize: CGSize            // Die Größe der einzelnen Felder in der Auswahlansicht
+    var axis: Axis // Die Ausrichtung der Auswahlansicht (horizontal oder vertikal)
+    var fieldSize: CGSize // Die Größe der einzelnen Felder in der Auswahlansicht
     var onDragChanged: ((DragGesture.Value) -> Void)? // Ein Closure, das aufgerufen wird, wenn die Geste geändert wird
-    var onDragEnded: (() -> Void)?   // Ein Closure, das aufgerufen wird, wenn die Geste beendet wird (optional, Standard-Closure vorhanden)
+    var onDragEnded: (() -> Void)? // Ein Closure, das aufgerufen wird, wenn die Geste beendet wird (optional, Standard-Closure vorhanden)
 
     var body: some View {
         Button(
@@ -34,7 +34,7 @@ struct SelectionView: View {
                             )
                             .opacity(0.5)
                             .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.75))
-                        
+
                         Text("\(item + 1)")
                             .foregroundColor(selectedItems.contains(item) ? .white : .gray)
                     }
@@ -52,14 +52,14 @@ struct SelectionView: View {
             }
         )
     }
-    
+
     // Funktion zum Umschalten der Auswahl für das übergebene Element
     private func toggleSelection(item: Int) {
         // Wenn bereits 2 oder mehr Elemente ausgewählt sind und das ausgewählte Element nicht das erste ist, entferne das erste Element
         if selectedItems.count >= 2 && selectedItems[0] != item {
             selectedItems.remove(at: 0)
         }
-        
+
         // Wenn das ausgewählte Element bereits ausgewählt ist, entferne es; sonst füge es hinzu
         if let index = selectedItems.firstIndex(where: { $0 == item }) {
             selectedItems.remove(at: index)

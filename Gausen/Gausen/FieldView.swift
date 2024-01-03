@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+// Struct für ein Zahlenfeld
 struct FieldView: View {
     let field: ViewModel.Field // Datenmodell für das Feld
 
@@ -40,7 +40,7 @@ struct FieldView: View {
         } else if field.notDiv {
             return Color.red
         } else if field.selection {
-            return Color(hex: 0x2080A5) // Benutzerdefinierte Farbe aus Hex-Wert
+            return Color(hex: 0x2080A5) // Benutzerdefinierte Farbe aus Hex-Wert ein Blauton
         } else {
             return .orange
         }
@@ -73,7 +73,7 @@ struct FieldView: View {
 struct FieldSizeModifier: ViewModifier {
     // Bindung an die Größe des Feldes
     @Binding var fieldSize: CGSize
-    
+
     // Zustandsvariablen zur Verfolgung der vorherigen Feldgrößen
     @State private var previousSize: CGSize = .zero
     @State private var prepreviousSize: CGSize = .zero
@@ -112,7 +112,6 @@ struct FieldSizeModifier: ViewModifier {
                         }
                 }
             )
-            // Ignoriert den sicheren Bereich, um auf Tastatureingaben reagieren zu können
             .ignoresSafeArea(.keyboard)
             // Reagiert auf Änderungen der Größenpräferenz
             .onPreferenceChange(SizePreferenceKey.self) { size in
@@ -135,6 +134,7 @@ struct FieldSizeModifier: ViewModifier {
             }
     }
 }
+
 // Schlüssel für die Größenpräferenz in der Ansichtshierarchie
 struct SizePreferenceKey: PreferenceKey {
     // Der Standardwert für die Größenpräferenz ist CGSize.zero

@@ -21,9 +21,9 @@ struct HighscoreView: View {
         VStack {
             HStack {
                 // Anzeigen des HighscoreListView für die Zeit
-                HighscoreListView(title: "Highscore Time", highscores: highscoreManager.highScoreTime)
+                HighscoreListView(title: "Highscore Zeit", highscores: highscoreManager.highScoreTime)
                 // Anzeigen des HighscoreListView für die Aktivitätszählung
-                HighscoreListView(title: "Highscore ActivityCount", highscores: highscoreManager.highScoreActivityCount)
+                HighscoreListView(title: "Highscore Aktions Zähler", highscores: highscoreManager.highScoreActivityCount)
             }
             buttons.backButton()
         }

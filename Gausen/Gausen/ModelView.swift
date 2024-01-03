@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-// Definiere eine ViewModel-Klasse, die von ObservableObject erbt
+// Definiere eine ViewModel-Klasse
 class ViewModel: ObservableObject {
     // Definiere einen Typalias für das Field-Modell
     typealias Field = Model.Field
@@ -21,32 +21,31 @@ class ViewModel: ObservableObject {
         Model(rowCount: rowCount)
     }
 
-    // @Published-Eigenschaften, die den Zustand des ViewModels verfolgen
+    // Eigenschaften, die den Zustand des ViewModels verfolgen
     @Published private var model: Model = createSetGame(rowCount: 3)
+    @Published private(set) var time: String = ""
     @Published var draggedColumn: Int?
     @Published var draggedRow: Int?
     @Published var gameStatus: GameStatus = .start
     @Published var playerName: String = ""
     @Published var faktor = 1.0
     @Published var rowCount = 3.0
-//    @Published var isEditing = false
     @Published var selectedRows: [Int] = []
     @Published var selectedColumns: [Int] = []
     @Published var fieldSize: CGSize = .zero
-    @Published var positivNegativ = false
-    @Published private(set) var time: String = ""
+    var positivNegativ = false
     
-    // Berechneigenschaft, die die Anzahl der Aktivitäten im Modell zurückgibt
+    // Eigenschaft, die die Anzahl der Aktivitäten im Modell zurückgibt
     var activityCount: Int {
         return model.activityCount
     }
     
-    // Berechneigenschaft, die die Matrix im Modell zurückgibt
+    // Eigenschaft, die die Matrix im Modell zurückgibt
     var matrix: [[Field]] {
         return model.matrix
     }
     
-    // Berechneigenschaft, die den aktuellen Knoten in der verketteten Liste im Modell zurückgibt
+    // Eigenschaft, die den aktuellen Knoten in der verketteten Liste im Modell zurückgibt
     var currentNode: LinkedList.Node {
         return model.currentNode
     }
@@ -59,11 +58,6 @@ class ViewModel: ObservableObject {
     // Funktion, um den Wert von positivNegativ zu setzen
     func setpositivNegativ(_ value: Bool) {
         positivNegativ = value
-    }
-    
-    // Funktion zum Aktualisieren der Feldgröße im Modell
-    func updateFieldSize(_ size: CGSize) {
-        fieldSize = size
     }
     
     // Funktion zum Aktualisieren der Spielzeit, wenn das Spiel läuft
@@ -101,11 +95,11 @@ class ViewModel: ObservableObject {
 
     // Funktionen zum Hinzufügen und Skalieren von Zeilen im Modell
     func addScaleRow(faktor: Int, row1: Int, row2: Int, multi: Bool) {
-        model.addScaleRow(faktor: faktor, row1: row1, row2: row2, multi: multi, positivNegativ: self.positivNegativ)
+        model.addScaleRow(faktor: faktor, row1: row1, row2: row2, multi: multi, positivNegativ: positivNegativ)
     }
     
     func scaleRow(faktor: Int, row: Int, multi: Bool) {
-        model.scaleRow(faktor: faktor, row: row, multi: multi, positivNegativ: self.positivNegativ)
+        model.scaleRow(faktor: faktor, row: row, multi: multi, positivNegativ: positivNegativ)
     }
     
     // Funktion zur Überprüfung der Skalierung im Modell
@@ -113,7 +107,7 @@ class ViewModel: ObservableObject {
         model.controllScale(row: row, faktor: faktor, multi: multi)
     }
     
-    // Funktion zum Ziehen von Zeilen oder Spalten im Modell
+    // Funktion zum Makieren von gezogenen Zeilen oder Spalten im Modell
     func drag(row: Int = -1, column: Int = -1, bool: Bool) {
         model.drag(row: row, column: column, bool: bool)
     }
@@ -124,12 +118,12 @@ class ViewModel: ObservableObject {
         model.generatMatrix()
     }
     
-    // Funktion zum Zurücksetzen von Variablen im Modell
+    // Funktion zum Zurücksetzen von Variablen der Fields im Modell
     func varReset() {
         model.varReset()
     }
     
-    // Funktionen zum Zurück- und Vorgehen der Matrixen im Modell
+    // Funktionen zum Zurück- und Vorgehen der Matrixen im Modell (undo und redo)
     func back() {
         model.back()
     }
@@ -138,7 +132,7 @@ class ViewModel: ObservableObject {
         model.forwart()
     }
     
-    // Funktion zum Aktualisieren der Matrixnotens im Modell
+    // Funktion zum Aktualisieren der Matrixknoten im Modell
     func updateMatrixNode() {
         model.updateMatrixNode()
     }
