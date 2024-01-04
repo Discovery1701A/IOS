@@ -12,17 +12,17 @@ import SwiftUI
 class ViewModel: ObservableObject {
     // Definiere einen Typalias für das Field-Modell
     typealias Field = Model.Field
-    
+    typealias Difficulty = Model.Difficulty
     // Instanz des HighscoreManagers, der mit dem ViewModel geteilt wird
     var highScoreManager = HighscoreManager.shared
     
     // Statische Funktion zum Erstellen eines Set-Game-Modells mit einer bestimmten Zeilenanzahl
-    private static func createSetGame(rowCount: Int) -> Model {
-        Model(rowCount: rowCount)
+    private static func createSetGame(rowCount: Int, difficulty : Model.Difficulty ) -> Model {
+        Model(rowCount: rowCount, difficulty : difficulty)
     }
 
     // Eigenschaften, die den Zustand des ViewModels verfolgen
-    @Published private var model: Model = createSetGame(rowCount: 3)
+    
     @Published private(set) var time: String = ""
     @Published var draggedColumn: Int?
     @Published var draggedRow: Int?
@@ -30,10 +30,13 @@ class ViewModel: ObservableObject {
     @Published var playerName: String = ""
     @Published var faktor = 1
     @Published var rowCount = 3
+    @Published var difficultyArray : [ Model.Difficulty] = [.easy, .normal, .hard]
+    @Published var difficulty : Model.Difficulty = .easy
+    @Published private var model: Model = createSetGame(rowCount: 3, difficulty: .easy)
     @Published var selectedRows: [Int] = []
     @Published var selectedColumns: [Int] = []
     @Published var fieldSize: CGSize = .zero
-    @Published var gradiendColors :[Color] = [Color.blue, Color.white]
+    @Published var gradiendColors: [Color] = [Color.blue, Color.white]
     var positivNegativ = false
     
     // Eigenschaft, die die Anzahl der Aktivitäten im Modell zurückgibt
@@ -68,7 +71,7 @@ class ViewModel: ObservableObject {
         }
     }
     
-    func valueArray (from value1 : Int, to value2 : Int) -> [Int] {
+    func valueArray(from value1: Int, to value2: Int) -> [Int] {
         var array: [Int] = []
         for i in value1 ..< value2 + 1 {
             array.append(i)
@@ -122,8 +125,8 @@ class ViewModel: ObservableObject {
     }
     
     // Funktion zum Erstellen einer neuen Matrix mit einer bestimmten Zeilenanzahl
-    func newMatrix(rowCount: Int) {
-        model = ViewModel.createSetGame(rowCount: rowCount)
+    func newMatrix(rowCount: Int, difficulty : Model.Difficulty) {
+        model = ViewModel.createSetGame(rowCount: rowCount, difficulty: difficulty)
         model.generatMatrix()
     }
     
@@ -172,11 +175,27 @@ class ViewModel: ObservableObject {
         case .highScore:
             gradiendColors = [Color.blue, Color.white]
         }
-        
     }
 
     // Enum für verschiedene Spielstatus
     enum GameStatus {
         case start, play, winning, highScore
     }
+//
+//    // enum für Schwirigkeitsgrad
+//    enum Difficulty: String {
+//        case easy, normal, hard
+//
+//        // Funktion zur Umwandlung des Enum-Cases in einen String
+//        func stringValue() -> String {
+//            switch self {
+//                    case .easy:
+//                        return "Leicht"
+//                    case .normal:
+//                        return "Normal"
+//                    case .hard:
+//                        return "Schwer"
+//                    }
+//        }
+//    }
 }

@@ -23,11 +23,11 @@ struct StartView: View {
                 
                 // Titel der Startansicht
                 Text("Start")
-                    .font(.title)
+                    .font(.largeTitle)
                     .padding(.bottom, 20)
                 
                 Spacer() // Platzhalter für flexiblen Raum, um die Elemente zu zentrieren
-                
+                buttons.difficutltyPicker(difficulty: $modelView.difficulty, array: modelView.difficultyArray, label: "Schwierigkeitsgrad")
                 // Slider für die Auswahl der Anzahl der Reihen mit entsprechendem Label und Anzeigetext
                 //            buttons.slider(from: 2, to: 6, for: $modelView.rowCount, name: "Wie Viele Reihen")
                 buttons.intPicker(size: $modelView.rowCount, from: 2, to: 6, label: "Wie viele Reihen")

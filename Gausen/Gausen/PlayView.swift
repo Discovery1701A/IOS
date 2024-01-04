@@ -59,7 +59,7 @@ struct PlayView: View {
             }
             Spacer()
         }
-        .padding()
+//        .padding()
         
         //        FieldSize wird so besser bestimmt
                 .onChange(of: UIDevice.current.orientation.isLandscape) { _, _ in
@@ -78,6 +78,7 @@ struct PlayView: View {
                 matrixRowView(row: row)
             }
         }
+        .padding()
     }
 
     // Erzeugt die Ansicht für eine Zelle in der Spielmatrix.

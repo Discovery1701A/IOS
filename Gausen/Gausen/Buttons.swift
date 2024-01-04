@@ -74,7 +74,7 @@ struct Buttons {
         Button(
             action: {
                 // Erstellt eine neue Matrix basierend auf der angegebenen Zeilenanzahl
-                modelView.newMatrix(rowCount: Int(modelView.rowCount))
+                modelView.newMatrix(rowCount: Int(modelView.rowCount), difficulty: modelView.difficulty)
                 // Setzt die Auswahl zurück
                 modelView.resetSelection()
                 modelView.fieldSize = .zero
@@ -279,7 +279,7 @@ struct Buttons {
         Button(
             action: {
                 // Erstellt eine neue Matrix mit einer festgelegten Anzahl von Zeilen
-                modelView.newMatrix(rowCount: 4)
+                modelView.newMatrix(rowCount: 4, difficulty: modelView.difficulty)
                 // Setzt die Auswahl zurück
                 modelView.resetSelection()
             },
@@ -336,21 +336,40 @@ struct Buttons {
         )
     }
     
-    // Funktion, um einen benutzerdefinierten Picker mit einer Auswahl von 1 bis 6 zu erstellen und das ausgewählte Element blau zu färben
+    // Funktion, um einen benutzerdefinierten Picker für ints
     func intPicker(size: Binding<Int>, from value1: Int, to value2: Int, label : String) -> some View {
-        Picker(label, selection: size) {
-            // Iteriere durch die Werte von value1 bis value2
-            ForEach(self.modelView.valueArray(from: value1, to: value2), id: \.self) { value in
-                // Benutzerdefinierte Textansicht für jedes Element im Picker
-                Text("\(value)")
-                               .tag(value) // Setze den Tag-Wert für jedes Element
-                    .foregroundColor(size.wrappedValue == value ? .blue : .primary) // Blau für ausgewähltes Element, sonst primäre Textfarbe
-                    .onTapGesture {
-                        size.wrappedValue = value // Aktualisiere die ausgewählte Größe bei Tap
-                    }
+        VStack {
+            Text(label).font(.title)
+            Picker(label, selection: size) {
+                // Iteriere durch die Werte von value1 bis value2
+                ForEach(self.modelView.valueArray(from: value1, to: value2), id: \.self) { value in
+                    // Benutzerdefinierte Textansicht für jedes Element im Picker
+                    Text("\(value)")
+                        .tag(value) // Setze den Tag-Wert für jedes Element
+                        .foregroundColor(size.wrappedValue == value ? .blue : .primary) // Blau für ausgewähltes Element, sonst primäre Textfarbe
+                        .onTapGesture {
+                            size.wrappedValue = value // Aktualisiere die ausgewählte Größe bei Tap
+                        }
+                }
             }
+            .pickerStyle(SegmentedPickerStyle()) // Verwende den Segmented Picker Style
         }
-        .pickerStyle(SegmentedPickerStyle()) // Verwende den Segmented Picker Style
+    }
+    
+    // Funktion, um einen benutzerdefinierten Picker für Difficulty
+    func difficutltyPicker(difficulty: Binding<ViewModel.Difficulty>, array : [ViewModel.Difficulty], label : String) -> some View {
+        VStack {
+            Text(label).font(.title)
+            Picker(label, selection: difficulty) {
+                // Iteriere durch die Werte von value1 bis value2
+                ForEach(array, id: \.self) { value in
+                    // Benutzerdefinierte Textansicht für jedes Element im Picker
+                    Text(value.stringValue())
+                      
+                }
+            }
+            .pickerStyle(SegmentedPickerStyle()) // Verwende den Segmented Picker Style
+        }
     }
 
     // Funktion für das Layout einer runden Rechteck-Schaltfläche mit einem angegebenen Inhalt
