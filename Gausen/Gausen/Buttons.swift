@@ -102,6 +102,9 @@ struct Buttons {
             },
             label: {
                 Text("Weiter")
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(8)
             }
         )
     }

@@ -30,13 +30,13 @@ struct ContentView: View {
                 case .play:
                     // PlayView wird angezeigt, wenn das Spiel im Playstatus ist.
                     PlayView(modelView: modelView, size: geometry.size)
-                        .transition(.slide)
+//                        .transition(.slide)
                         .animation(.easeInOut(duration: 2), value: modelView.fieldSize)
 
                 case .winning:
                     // ZStack, um PlayView und WinningView zu überlagern, wenn das Spiel im Winningstatus ist.
                     ZStack {
-                        withAnimation(.easeInOut(duration: 4)) {
+                        withAnimation(.easeInOut(duration: 2)) {
                             PlayView(modelView: modelView, size: geometry.size)
                                 .ignoresSafeArea(.keyboard)
                                 .blur(radius: modelView.blurRadius) // Beispiel für eine Unschärfeanimation in Winningstatus
@@ -56,12 +56,12 @@ struct ContentView: View {
         }
 
         .onChange(of: modelView.gameStatus) { _, _ in
-            withAnimation {
+            withAnimation(.easeInOut(duration: 1)) {
                 modelView.colorSwitchStatus()
             }
         }
         .onChange(of: modelView.difficulty) { _, _ in
-            withAnimation {
+            withAnimation(.easeInOut(duration: 1)) {
                 modelView.colorSwitchStatus()
             }
         }

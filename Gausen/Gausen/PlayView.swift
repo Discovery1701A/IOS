@@ -105,6 +105,7 @@ struct PlayView: View {
             .rotationEffect(Angle.degrees(modelView.matrix[row][column].winning ? 360 : 0)) // Fügt eine Rotation für gewinnende Felder hinzu.
             .onChange(of: modelView.selectedRows.contains(row)) { _, newValue in
                 // Wenn eine Auswahl in einer Reihe geändert wird, aktualisiert das ViewModel die Auswahl und animiert die Änderung.
+
                 withAnimation {
                     modelView.updateSelection(item: row, selection: newValue, axe: "row")
                 }

@@ -81,8 +81,8 @@ class ViewModel: ObservableObject {
     
     // Funktion zum Überprüfen und Aktualisieren des Highscores
     func checkScore() {
-        highScoreManager.newScoreActivityCount(activityCount: activityCount, personName: playerName)
-        highScoreManager.newScoreTime(time: time, personName: playerName)
+        highScoreManager.newScoreActivityCount(activityCount: activityCount, personName: playerName, difficulty: difficulty)
+        highScoreManager.newScoreTime(time: time, personName: playerName, difficulty: difficulty)
     }
 
     // Funktion zum Zurücksetzen der Auswahl von Zeilen und Spalten
