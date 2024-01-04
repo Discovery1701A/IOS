@@ -22,7 +22,6 @@ class ViewModel: ObservableObject {
     }
 
     // Eigenschaften, die den Zustand des ViewModels verfolgen
-    
     @Published private(set) var time: String = ""
     @Published var draggedColumn: Int?
     @Published var draggedRow: Int?

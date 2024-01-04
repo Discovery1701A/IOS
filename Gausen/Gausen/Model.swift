@@ -34,10 +34,10 @@ struct Model {
     var activityCount: Int // Anzahl der Aktionen/Schritte des Spielers
     var startTime = Date() // Startzeit des aktuellen Spiels
     var time: Double // Gespielte Zeit seit dem Start
-    var difficulty : Difficulty
+    var difficulty: Difficulty
 
     // Initialisierung des Modells mit einer bestimmten Anzahl von Zeilen
-    init(rowCount: Int, difficulty : Difficulty) {
+    init(rowCount: Int, difficulty: Difficulty) {
         self.linkedList = LinkedList() // Initialisierung der verketteten Liste
         self.currentNode = self.linkedList.emptyNode // Der aktuelle Knoten wird auf den leeren Knoten gesetzt
         self.difficulty = difficulty
@@ -49,7 +49,6 @@ struct Model {
         self.generatMatrix() // Generierung der Anfangsmatrix
         self.linkedList.add(element: self.matrix) // Hinzufügen der Matrix zum Anfang der verketteten Liste
         self.currentNode = self.linkedList.lastNode // Der aktuelle Knoten wird auf den letzten Knoten gesetzt
-        
     }
 
     // Funktion zur Verfolgung der vergangenen Spielzeit als formatierten String
@@ -216,7 +215,7 @@ struct Model {
         // Rückgabe, dass die Skalierung ungültig ist (Faktor ist 0)
         return false
     }
-    
+
     // Funktion zur Generierung der Einheitsmatrix
     mutating func generatMatrix() {
         // Initialisiere eine leere Matrix und eine ID
@@ -243,9 +242,16 @@ struct Model {
         self.matrix = generatedMatrix
         self.unitMatrix = generatedMatrix
         self.startTime = Date()
-        self.mixMatrix(howMany: 2, range: 10)
+        switch difficulty {
+        case .easy:
+            self.mixMatrix(howMany: 1, range: 10)
+        case .normal:
+            self.mixMatrix(howMany: 2, range: 10)
+        case .hard:
+            self.mixMatrix(howMany: 3, range: 10)
+        }
     }
-    
+
     // Funktion zum Markieren der gewonnenen Kombination in der Matrix
     mutating func markWinnig() {
         // Markiere die Einsen als gewonnen
@@ -301,6 +307,12 @@ struct Model {
                 self.columnSwitch(column1: i, column2: randomColumn2)
             }
         }
+//        for i in 0 ..< self.matrix.count {
+//            let randomValue = Int.random(in: 1 ..< range)
+//            var randomRow2 = Int.random(in: 0 ..< self.matrix.count)
+//            let randomPositivNegativ = Bool.random()
+//            self.scaleRow(faktor: randomValue, row: i, multi: false, positivNegativ: randomPositivNegativ)
+//        }
 
         // Zurücksetzen des Verlaufs und des Zustands
         self.linkedList.reset()
@@ -341,7 +353,7 @@ struct Model {
         // Aktualisiere den Matrixknoten
         self.updateMatrixNode()
     }
-    
+
     // Funktion zum Aktualisieren des "selection"-Zustands für eine Zeile oder Spalte
     mutating func updateSelection(item: Int, selection: Bool, axe: String) {
         guard item >= 0, item < self.matrix.count else {
@@ -377,7 +389,7 @@ struct Model {
             }
         }
     }
-    
+
     // enum für Schwirigkeitsgrad
     enum Difficulty: String {
         case easy, normal, hard
@@ -385,13 +397,13 @@ struct Model {
         // Funktion zur Umwandlung des Enum-Cases in einen String
         func stringValue() -> String {
             switch self {
-                    case .easy:
-                        return "Leicht"
-                    case .normal:
-                        return "Normal"
-                    case .hard:
-                        return "Schwer"
-                    }
+            case .easy:
+                return "Leicht"
+            case .normal:
+                return "Normal"
+            case .hard:
+                return "Schwer"
+            }
         }
     }
 }
