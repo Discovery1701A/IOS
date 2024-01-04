@@ -14,32 +14,37 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                withAnimation {
                     LinearGradient(
-                        gradient: Gradient(
-                            colors: modelView.gradiendColors
-                        ),
+                        gradient: Gradient(colors: modelView.gradiendColors),
                         startPoint: .top,
                         endPoint: .bottom
                     )
                     .edgesIgnoringSafeArea(.all)
-                }
                 // Switch-Anweisung, um den aktuellen Spielstatus zu überprüfen und die entsprechende Ansicht anzuzeigen.
                 switch modelView.gameStatus {
                 case .start:
                     // StartView wird angezeigt, wenn das Spiel im Startstatus ist.
+
                     StartView(modelView: modelView)
 
                 case .play:
                     // PlayView wird angezeigt, wenn das Spiel im Playstatus ist.
                     PlayView(modelView: modelView, size: geometry.size)
-                        
+                        .transition(.slide)
+                        .animation(.easeInOut(duration: 2), value: modelView.fieldSize)
+
                 case .winning:
                     // ZStack, um PlayView und WinningView zu überlagern, wenn das Spiel im Winningstatus ist.
                     ZStack {
-                        PlayView(modelView: modelView, size: geometry.size)
-                            .ignoresSafeArea(.keyboard)
-                        WinningView(modelView: modelView)
+                        withAnimation(.easeInOut(duration: 4)) {
+                            PlayView(modelView: modelView, size: geometry.size)
+                                .ignoresSafeArea(.keyboard)
+                                .blur(radius: modelView.blurRadius) // Beispiel für eine Unschärfeanimation in Winningstatus
+                            //                                                        .animation(.easeInOut)
+                        }
+                        withAnimation(.spring()) {
+                            WinningView(modelView: modelView)
+                        }
                     }
 
                 case .highScore:
@@ -49,7 +54,7 @@ struct ContentView: View {
             }
             .ignoresSafeArea(.keyboard)
         }
-        
+
         .onChange(of: modelView.gameStatus) { _, _ in
             withAnimation {
                 modelView.colorSwitchStatus()

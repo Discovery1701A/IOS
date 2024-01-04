@@ -35,7 +35,8 @@ class ViewModel: ObservableObject {
     @Published var selectedRows: [Int] = []
     @Published var selectedColumns: [Int] = []
     @Published var fieldSize: CGSize = .zero
-    @Published var gradiendColors: [Color] = [Color.blue, Color.white]
+    @Published var gradiendColors: [Color] = [Color.cyan, Color.white]
+    var blurRadius : CGFloat = 5
     var positivNegativ = false
     
     // Eigenschaft, die die Anzahl der Aktivitäten im Modell zurückgibt
@@ -183,7 +184,7 @@ class ViewModel: ObservableObject {
         case .easy:
             return Color.green
         case .normal:
-            return Color.blue
+            return Color.cyan
         case .hard:
             return Color.red
         }

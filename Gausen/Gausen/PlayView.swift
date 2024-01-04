@@ -23,6 +23,7 @@ struct PlayView: View {
     }
 
     var body: some View {
+        
         VStack {
             HStack {
                 buttons.backButton()
@@ -79,6 +80,7 @@ struct PlayView: View {
             }
         }
         .padding()
+        
     }
 
     // Erzeugt die Ansicht für eine Zelle in der Spielmatrix.
@@ -177,7 +179,7 @@ struct PlayView: View {
             HStack {
                 // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
                 buttons.intPicker(size: $modelView.faktor, from: 1, to: 10, label: "Faktor")
-                buttons.positivnegativCheckBox(isChecked: $modelView.positivNegativ)
+                buttons.positivnegativButton(isChecked: $modelView.positivNegativ)
 
             }.padding(.horizontal)
             // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.

@@ -330,7 +330,7 @@ struct Buttons {
     }
 
     // Funktion für die Erstellung einer Checkbox, die zwischen positiv (+) und negativ (-) wechselt
-    func positivnegativCheckBox(isChecked: Binding<Bool>) -> some View {
+    func positivnegativButton(isChecked: Binding<Bool>) -> some View {
         Button(
             action: {
                 // Toggle-Funktion für die Umkehrung des aktuellen Zustands der Checkbox
@@ -340,6 +340,7 @@ struct Buttons {
                 // Benutzerdefinierte Schaltfläche mit einem gerundeten Rechteck und einem Symbol (Plus oder Minus)
                 roundRecButtonLayout(content: Image(systemName: isChecked.wrappedValue ? "minus" : "plus").font(.largeTitle))
                     .frame(maxWidth: 80, maxHeight: 80)
+//                    .foregroundStyle(.purple)
             }
         )
     }
