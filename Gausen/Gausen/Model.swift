@@ -248,7 +248,7 @@ struct Model {
         case .normal:
             self.mixMatrix(howMany: 2, range: 10)
         case .hard:
-            self.mixMatrix(howMany: 3, range: 10)
+            self.mixMatrix(howMany: 4, range: 10)
         }
     }
 

@@ -51,7 +51,14 @@ struct ContentView: View {
         }
         
         .onChange(of: modelView.gameStatus) { _, _ in
-            modelView.colorSwitch()
+            withAnimation {
+                modelView.colorSwitchStatus()
+            }
+        }
+        .onChange(of: modelView.difficulty) { _, _ in
+            withAnimation {
+                modelView.colorSwitchStatus()
+            }
         }
     }
 }

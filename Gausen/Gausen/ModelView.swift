@@ -17,8 +17,8 @@ class ViewModel: ObservableObject {
     var highScoreManager = HighscoreManager.shared
     
     // Statische Funktion zum Erstellen eines Set-Game-Modells mit einer bestimmten Zeilenanzahl
-    private static func createSetGame(rowCount: Int, difficulty : Model.Difficulty ) -> Model {
-        Model(rowCount: rowCount, difficulty : difficulty)
+    private static func createSetGame(rowCount: Int, difficulty: Model.Difficulty) -> Model {
+        Model(rowCount: rowCount, difficulty: difficulty)
     }
 
     // Eigenschaften, die den Zustand des ViewModels verfolgen
@@ -29,8 +29,8 @@ class ViewModel: ObservableObject {
     @Published var playerName: String = ""
     @Published var faktor = 1
     @Published var rowCount = 3
-    @Published var difficultyArray : [ Model.Difficulty] = [.easy, .normal, .hard]
-    @Published var difficulty : Model.Difficulty = .easy
+    @Published var difficultyArray: [Model.Difficulty] = [.easy, .normal, .hard]
+    @Published var difficulty: Model.Difficulty = .normal
     @Published private var model: Model = createSetGame(rowCount: 3, difficulty: .easy)
     @Published var selectedRows: [Int] = []
     @Published var selectedColumns: [Int] = []
@@ -124,7 +124,7 @@ class ViewModel: ObservableObject {
     }
     
     // Funktion zum Erstellen einer neuen Matrix mit einer bestimmten Zeilenanzahl
-    func newMatrix(rowCount: Int, difficulty : Model.Difficulty) {
+    func newMatrix(rowCount: Int, difficulty: Model.Difficulty) {
         model = ViewModel.createSetGame(rowCount: rowCount, difficulty: difficulty)
         model.generatMatrix()
     }
@@ -163,16 +163,29 @@ class ViewModel: ObservableObject {
         model.updateSelection(item: item, selection: selection, axe: axe)
     }
     
-    func colorSwitch() {
+    func colorSwitchStatus() {
         switch gameStatus {
         case .start:
-            gradiendColors = [Color.blue, Color.white]
+     
+            gradiendColors = [colorSwitchDifficulty(), Color.white]
         case .play:
-            gradiendColors = [Color.white, Color.green]
+    
+            gradiendColors = [Color.white, colorSwitchDifficulty()]
         case .winning:
             gradiendColors = [Color.white, Color.yellow]
         case .highScore:
             gradiendColors = [Color.blue, Color.white]
+        }
+    }
+    
+    func colorSwitchDifficulty() -> Color {
+        switch difficulty {
+        case .easy:
+            return Color.green
+        case .normal:
+            return Color.blue
+        case .hard:
+            return Color.red
         }
     }
 

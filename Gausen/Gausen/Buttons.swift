@@ -169,7 +169,9 @@ struct Buttons {
                 modelView.varReset()
                 if let firstRow = modelView.selectedRows.first, let secondRow = modelView.selectedRows.dropFirst().first {
                     // Fügt die beiden ausgewählten Zeilen mit Multiplikation hinzu
-                    modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, multi: true)
+                    withAnimation {
+                        modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, multi: true)
+                    }
                 }
                 // Setzt die Auswahl zurück
                 modelView.resetSelection()
@@ -200,7 +202,9 @@ struct Buttons {
                 if let firstRow = modelView.selectedRows.first, let secondRow = modelView.selectedRows.dropFirst().first {
                     // Überprüft, ob die Division durchführbar ist, und fügt dann die beiden ausgewählten Zeilen hinzu
                     if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: false) {
-                        modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, multi: false)
+                        withAnimation {
+                            modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, multi: false)
+                        }
                     }
                 }
                 // Setzt die Auswahl zurück
@@ -232,7 +236,9 @@ struct Buttons {
                 if let firstRow = modelView.selectedRows.first {
                     // Überprüft, ob die Division durchführbar ist, und skaliert dann die ausgewählte Zeile
                     if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: false) {
-                        modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, multi: false)
+                        withAnimation {
+                            modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, multi: false)
+                        }
                     }
                 }
                 // Setzt die Auswahl zurück
@@ -257,7 +263,9 @@ struct Buttons {
                 if let firstRow = modelView.selectedRows.first {
                     // Überprüft, ob die Multiplikation durchführbar ist, und skaliert dann die ausgewählte Zeile
                     if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: true) {
-                        modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, multi: true)
+                        withAnimation {
+                            modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, multi: true)
+                        }
                     }
                 }
                 // Setzt die Auswahl zurück

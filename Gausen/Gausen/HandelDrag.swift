@@ -39,8 +39,11 @@ struct HandelDrag {
        
         // Überprüfen und Durchführen des Spaltenwechsels im ViewModel
         if draggedColumnIndex != modelView.draggedColumn {
-            modelView.columnSwitch(column1: modelView.draggedColumn ?? column, column2: draggedColumnIndex)
+            withAnimation {
+                modelView.columnSwitch(column1: modelView.draggedColumn ?? column, column2: draggedColumnIndex)
+            }
             modelView.draggedColumn = draggedColumnIndex
+                
         }
         
         // Zurücksetzen des Drag-Zustands für nicht-gezogene Spalten
@@ -75,7 +78,9 @@ struct HandelDrag {
         
         // Überprüfen und Durchführen des Zeilenwechsels im ViewModel
         if draggedRowIndex != modelView.draggedRow {
-            modelView.rowSwitch(row1: modelView.draggedRow ?? row, row2: draggedRowIndex)
+            withAnimation {
+                modelView.rowSwitch(row1: modelView.draggedRow ?? row, row2: draggedRowIndex)
+            }
             modelView.draggedRow = draggedRowIndex
         }
         
