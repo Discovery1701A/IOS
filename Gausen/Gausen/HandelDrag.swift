@@ -16,7 +16,7 @@ struct HandelDrag {
         modelView.varReset()
         modelView.resetSelection()
         // Markieren der gezogenen Spalte im ViewModel
-        modelView.drag(column: column, bool: true)
+        modelView.drag(item: column, bool: true, rowOrColumn: .column)
         
         // Berechnen der Translation und der Index der gezogenen Spalte
         let translation = value.translation.width
@@ -34,7 +34,7 @@ struct HandelDrag {
         }
         
         // Markieren der gezogenen Spalte im ViewModel und Begrenzen der Position auf den erlaubten Bereich
-        modelView.drag(column: draggedColumnIndex, bool: true)
+        modelView.drag(item: draggedColumnIndex, bool: true, rowOrColumn: .column)
         draggedColumnIndex = max(0, min(draggedColumnIndex, modelView.matrix.first?.count ?? 0))
        
         // Überprüfen und Durchführen des Spaltenwechsels im ViewModel
@@ -48,7 +48,7 @@ struct HandelDrag {
         
         // Zurücksetzen des Drag-Zustands für nicht-gezogene Spalten
         for i in 0 ..< modelView.matrix.count where i != draggedColumnIndex {
-            modelView.drag(column: i, bool: false)
+            modelView.drag(item: i, bool: false, rowOrColumn: .column)
         }
     }
 
@@ -73,7 +73,7 @@ struct HandelDrag {
         }
         
         // Markieren der gezogenen Zeile im ViewModel und Begrenzen der Position auf den erlaubten Bereich
-        modelView.drag(row: draggedRowIndex, bool: true)
+        modelView.drag(item: draggedRowIndex, bool: true, rowOrColumn: .row)
         draggedRowIndex = max(0, min(draggedRowIndex, modelView.matrix.first?.count ?? 0))
         
         // Überprüfen und Durchführen des Zeilenwechsels im ViewModel
@@ -86,7 +86,7 @@ struct HandelDrag {
         
         // Zurücksetzen des Drag-Zustands für nicht-gezogene Zeilen
         for i in 0 ..< modelView.matrix.count where i != draggedRowIndex {
-            modelView.drag(row: i, bool: false)
+            modelView.drag(item: i, bool: false, rowOrColumn: .row)
         }
     }
     

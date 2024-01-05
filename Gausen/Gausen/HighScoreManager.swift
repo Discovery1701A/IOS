@@ -14,18 +14,16 @@ class HighscoreManager: ObservableObject {
     // Dateinamen für die gespeicherten Highscores
     private let highscoreFileNameTime = "highscore_time.plist"
     private let highscoreFileNameActivityCount = "highscore_activityCount.plist"
-    
     // Arrays zur Speicherung der Highscores für Zeit und Aktivitätszählung
-    var highScoreTime: [[[String]]] = []
-    var highScoreActivityCount: [[[String]]] = []
-    
+    var highScoreTime: [String: [[String]]] = [:]
+    var highScoreActivityCount: [String: [[String]]] = [:]
     // Private Initialisierung, um sicherzustellen, dass nur eine Instanz existiert
     private init() {
         // Beim Initialisieren werden die gespeicherten Highscores geladen
         loadHighscore(for: .time)
         loadHighscore(for: .activityCount)
     }
-    
+ 
     // Funktion zum Speichern von Highscores für eine bestimmte Kategorie
     func saveHighscore(for category: HighscoreCategory) {
         do {
@@ -76,9 +74,9 @@ class HighscoreManager: ObservableObject {
                 // Dekodieren der Daten basierend auf der Highscore-Kategorie
                 switch category {
                 case .time:
-                    highScoreTime = try PropertyListDecoder().decode([[[String]]].self, from: data)
+                    highScoreTime = try PropertyListDecoder().decode([String: [[String]]].self, from: data)
                 case .activityCount:
-                    highScoreActivityCount = try PropertyListDecoder().decode([[[String]]].self, from: data)
+                    highScoreActivityCount = try PropertyListDecoder().decode([String: [[String]]].self, from: data)
                 }
                 print(highScoreTime)
             } else {
@@ -116,16 +114,7 @@ class HighscoreManager: ObservableObject {
 
     // Funktion zum Hinzufügen eines neuen Zeit-Highscores
     func newScoreTime(time: String, personName: String, difficulty: ViewModel.Difficulty) {
-        var difficultIndex: Int
-        switch difficulty {
-        case .easy:
-            difficultIndex = 0
-        case .normal:
-            difficultIndex = 1
-        case .hard:
-            difficultIndex = 2
-        }
-        
+        let difficultyKey = String(difficulty.stringValue())
         // Standardwert für den zu speichernden Score
         var saveScoreRow = [" ", "99:99"]
         // Flag, um zu überprüfen, ob der neue Score bereits eingefügt wurde
@@ -133,16 +122,16 @@ class HighscoreManager: ObservableObject {
         // Durchlaufe alle vorhandenen Highscores
         for i in 0 ..< highScoreTime.count {
             // Vergleiche den neuen Score mit dem aktuellen Highscore
-            if convertTimeStringToDouble(saveScoreRow[1])! < convertTimeStringToDouble(highScoreTime[difficultIndex][i][1])! {
+            if convertTimeStringToDouble(saveScoreRow[1])! < convertTimeStringToDouble(highScoreTime[difficultyKey]![i][1])! {
                 // Verschiebe den aktuellen Score, um Platz für den neuen zu machen
-                let saveScoreRow2 = highScoreTime[difficultIndex][i]
-                highScoreTime[difficultIndex][i] = saveScoreRow
+                let saveScoreRow2 = highScoreTime[difficultyKey]![i]
+                highScoreTime[difficultyKey]![i] = saveScoreRow
                 saveScoreRow = saveScoreRow2
             }
             // Füge den neuen Score an der richtigen Stelle ein
-            if convertTimeStringToDouble(time)! < convertTimeStringToDouble(highScoreTime[difficultIndex][i][1])! && isIn == false {
-                saveScoreRow = highScoreTime[difficultIndex][i]
-                highScoreTime[difficultIndex][i] = [personName, time]
+            if convertTimeStringToDouble(time)! < convertTimeStringToDouble(highScoreTime[difficultyKey]![i][1])! && isIn == false {
+                saveScoreRow = highScoreTime[difficultyKey]![i]
+                highScoreTime[difficultyKey]![i] = [personName, time]
                 isIn = true
             }
         }
@@ -152,15 +141,7 @@ class HighscoreManager: ObservableObject {
 
     // Funktion zum Hinzufügen eines neuen Aktivitätszählung-Highscores
     func newScoreActivityCount(activityCount: Int, personName: String, difficulty: ViewModel.Difficulty) {
-        var difficultIndex: Int
-        switch difficulty {
-        case .easy:
-            difficultIndex = 0
-        case .normal:
-            difficultIndex = 1
-        case .hard:
-            difficultIndex = 2
-        }
+        let difficultyKey = String(difficulty.stringValue())
         
         // Standardwert für den zu speichernden Score Laut recerce größter Int fürs iphone
         var saveScoreRow = [" ", "9223372036854775807"]
@@ -169,16 +150,16 @@ class HighscoreManager: ObservableObject {
         // Durchlaufe alle vorhandenen Highscores
         for i in 0 ..< highScoreTime.count {
             // Vergleiche den neuen Score mit dem aktuellen Highscore
-            if Int(saveScoreRow[1])! < Int(highScoreActivityCount[difficultIndex][i][1])! {
+            if Int(saveScoreRow[1])! < Int(highScoreActivityCount[difficultyKey]![i][1])! {
                 // Verschiebe den aktuellen Score, um Platz für den neuen zu machen
-                let saveScoreRow2 = highScoreActivityCount[difficultIndex][i]
-                highScoreActivityCount[difficultIndex][i] = saveScoreRow
+                let saveScoreRow2 = highScoreActivityCount[difficultyKey]![i]
+                highScoreActivityCount[difficultyKey]![i] = saveScoreRow
                 saveScoreRow = saveScoreRow2
             }
             // Füge den neuen Score an der richtigen Stelle ein
-            if activityCount < Int(highScoreActivityCount[difficultIndex][i][1])! && isIn == false {
-                saveScoreRow = highScoreActivityCount[difficultIndex][i]
-                highScoreActivityCount[difficultIndex][i] = [personName, String(activityCount)]
+            if activityCount < Int(highScoreActivityCount[difficultyKey]![i][1])! && isIn == false {
+                saveScoreRow = highScoreActivityCount[difficultyKey]![i]
+                highScoreActivityCount[difficultyKey]![i] = [personName, String(activityCount)]
                 isIn = true
             }
         }
@@ -186,86 +167,92 @@ class HighscoreManager: ObservableObject {
         saveHighscore(for: .activityCount)
     }
     
-    func defaultHighScoreList(highscoreCategory: HighscoreCategory) -> [[[String]]] {
+    func defaultHighScoreList(highscoreCategory: HighscoreCategory) -> [String: [[String]]] {
         switch highscoreCategory {
         case .time:
             return [
-                [
-                    ["Spencer", "1:10"],
-                    ["Brennan", "1:34"],
-                    ["Tony", "1:43"],
-                    ["Julian", "2:47"],
-                    ["Emma", "3:13"],
-                    ["James", "5:24"],
-                    ["Alex", "5:49"],
-                    ["Bucky", "6:32"],
-                    ["Maggi", "7:24"],
-                    ["John", "9:36"]
-                ],
-                [
-                    ["Spencer", "02:43"],
-                    ["Tony", "03:53"],
-                    ["Luna", "04:26"],
-                    ["Barry", "05:25"],
-                    ["Blake", "06:36"],
-                    ["Derek", "10:35"],
-                    ["Grace", "10:53"],
-                    ["Alex", "12:34"],
-                    ["Hop", "14:21"],
-                    ["Happy", "20:43"]
-                ],
-                [
-                    ["Spencer", "03:53"],
-                    ["Bad Wolf", "04:12"],
-                    ["Littel Wolf", "05:31"],
-                    ["David", "06:53"],
-                    ["Leo", "07:23"],
-                    ["Enis", "14:12"],
-                    ["Chris", "16:43"],
-                    ["Sam", "18:23"],
-                    ["Clint", "21:32"],
-                    ["Klaus", "31:23"]
-                ]
+                String(Model.Difficulty.easy.stringValue()):
+                    [
+                        ["Spencer", "1:10"],
+                        ["Brennan", "1:34"],
+                        ["Tony", "1:43"],
+                        ["Julian", "2:47"],
+                        ["Emma", "3:13"],
+                        ["James", "5:24"],
+                        ["Alex", "5:49"],
+                        ["Bucky", "6:32"],
+                        ["Maggi", "7:24"],
+                        ["John", "9:36"]
+                    ],
+                String(Model.Difficulty.normal.stringValue()):
+                    [
+                        ["Spencer", "02:43"],
+                        ["Tony", "03:53"],
+                        ["Luna", "04:26"],
+                        ["Barry", "05:25"],
+                        ["Blake", "06:36"],
+                        ["Derek", "10:35"],
+                        ["Grace", "10:53"],
+                        ["Alex", "12:34"],
+                        ["Hope", "14:21"],
+                        ["Happy", "20:43"]
+                    ],
+                String(Model.Difficulty.hard.stringValue()):
+                    [
+                        ["Spencer", "03:53"],
+                        ["Bad Wolf", "04:12"],
+                        ["Littel Wolf", "05:31"],
+                        ["David", "06:53"],
+                        ["Leo", "07:23"],
+                        ["Enis", "14:12"],
+                        ["Chris", "16:43"],
+                        ["Sam", "18:23"],
+                        ["Clint", "21:32"],
+                        ["Klaus", "31:23"]
+                    ]
             ]
             
         case .activityCount:
-            return  [
-                [
-                    ["Tony", "8"],
-                    ["Spencer", "10"],
-                    ["Julian", "14"],
-                    ["Alex", "18"],
-                    ["Jack", "25"],
-                    ["Maggi", "45"],
-                    ["John", "39"],
-                    ["Xaden", "41"],
-                    ["Emma", "42"],
-                    ["James", "80"]
-                ],
-                [
-                    ["Tony", "24"],
-                    ["Spencer", "27"],
-                    ["Elijah", "31"],
-                    ["Bruce", "47"],
-                    ["Ben", "52"],
-                    ["J.J.", "59"],
-                    ["Steve", "63"],
-                    ["Violet", "68"],
-                    ["Pepper", "74"],
-                    ["Der Doktor", "98"]
-                ],
-                [
-                    ["Tony", "32"],
-                    ["Spencer", "34"],
-                    ["Dean", "43"],
-                    ["Peter", "52"],
-                    ["Garcia", "59"],
-                    ["Simon", "67"],
-                    ["Emily", "71"],
-                    ["Ruby", "84"],
-                    ["Amy", "94"],
-                    ["Luke", "100"]
-                ]
+            return [
+                String(Model.Difficulty.easy.stringValue()):
+                    [
+                        ["Tony", "8"],
+                        ["Spencer", "10"],
+                        ["Julian", "14"],
+                        ["Alex", "18"],
+                        ["Jack", "25"],
+                        ["Maggi", "45"],
+                        ["John", "39"],
+                        ["Xaden", "41"],
+                        ["Emma", "42"],
+                        ["James", "80"]
+                    ],
+                String(Model.Difficulty.normal.stringValue()):
+                    [
+                        ["Tony", "24"],
+                        ["Spencer", "27"],
+                        ["Elijah", "31"],
+                        ["Bruce", "47"],
+                        ["Ben", "52"],
+                        ["J.J.", "59"],
+                        ["Steve", "63"],
+                        ["Violet", "68"],
+                        ["Pepper", "74"],
+                        ["Der Doktor", "98"]
+                    ],
+                String(Model.Difficulty.hard.stringValue()):
+                    [
+                        ["Tony", "32"],
+                        ["Spencer", "34"],
+                        ["Dean", "43"],
+                        ["Peter", "52"],
+                        ["Garcia", "59"],
+                        ["Simon", "67"],
+                        ["Emily", "71"],
+                        ["Ruby", "84"],
+                        ["Amy", "94"],
+                        ["Luke", "100"]
+                    ]
             ]
         }
     }

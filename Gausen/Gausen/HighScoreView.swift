@@ -20,7 +20,6 @@ struct HighscoreView: View {
     var body: some View {
         VStack {
             HStack {
-              
                 // Anzeigen des HighscoreListView für die Zeit
                 HighscoreListView(difficulty: modelView.difficulty, title: "Highscore Zeit", highscores: highscoreManager.highScoreTime)
                 // Anzeigen des HighscoreListView für die Aktivitätszählung
@@ -33,21 +32,19 @@ struct HighscoreView: View {
 
 // Die HighscoreListView zeigt die Highscore-Einträge in einer vertikalen ScrollView an
 struct HighscoreListView: View {
-    var difficulty : ViewModel.Difficulty
-    var difficultIndex: Int {
-            switch difficulty {
-            case .easy:
-                return 0
-            case .normal:
-                return 1
-            case .hard:
-                return 2
-            }
-        }
+    var difficulty: ViewModel.Difficulty
+    let difficultyKey: String
     // Der Titel des Highscore-Typs (Zeit oder Aktivitätszählung)
     let title: String
     // Die Liste der Highscore-Einträge als zweidimensionales Array von Strings
-    let highscores: [[[String]]]
+    let highscores: [String: [[String]]]
+
+    init(difficulty: ViewModel.Difficulty, title: String, highscores: [String: [[String]]]) {
+        self.difficulty = difficulty
+        self.title = title
+        self.highscores = highscores
+        self.difficultyKey = String(difficulty.stringValue())
+    }
 
     var body: some View {
         // Eine vertikale Anordnung von Ansichtselementen
@@ -55,14 +52,14 @@ struct HighscoreListView: View {
             // Anzeigen des Titels mit speziellen Formatierungen
             Text(title)
                 .font(.title)
-            Text( difficulty.stringValue())
+            Text(difficulty.stringValue())
 //                .foregroundColor(.blue)
                 .padding(.bottom, 10)
 
             // Eine ScrollView für die Highscore-Einträge
             ScrollView {
                 // Iteration über die Indizes der Highscore-Einträge
-                ForEach(highscores[difficultIndex].indices, id: \.self) { index in
+                ForEach(highscores[difficultyKey]!.indices, id: \.self) { index in
                     // Horizontale Anordnung für jeden Highscore-Eintrag
                     HStack {
                         // Anzeigen der Platznummer
@@ -71,7 +68,7 @@ struct HighscoreListView: View {
                             .foregroundColor(.primary)
 
                         // Anzeigen des Benutzernamens
-                        Text(highscores[difficultIndex][index][0])
+                        Text(highscores[difficultyKey]![index][0])
                             .font(.headline)
                             .foregroundColor(.primary)
 
@@ -79,7 +76,7 @@ struct HighscoreListView: View {
                         Spacer()
 
                         // Anzeigen der Zeit oder Aktivitätszählung
-                        Text(highscores[difficultIndex][index][1])
+                        Text(highscores[difficultyKey]![index][1])
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }

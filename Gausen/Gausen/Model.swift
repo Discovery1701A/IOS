@@ -118,7 +118,7 @@ struct Model {
     // Funktion zum Vertauschen von zwei Zeilen in der Matrix
     mutating func rowSwitch(row1: Int, row2: Int) {
         // Überprüfen, ob die übergebenen Zeilenindizes gültig sind
-        if self.matrix[0].count > row1, row1 >= 0, self.matrix[0].count > row2, row2 >= 0 {
+        if self.matrix[0].count > row1 && row1 >= 0 && self.matrix[0].count > row2 && row2 >= 0 {
             // Vertausche die Zeilen
             let rowSaver: [Field] = self.matrix[row2]
             self.matrix[row2] = self.matrix[row1]
@@ -132,7 +132,7 @@ struct Model {
     // Funktion zum Vertauschen von zwei Spalten in der Matrix
     mutating func columnSwitch(column1: Int, column2: Int) {
         // Überprüfen, ob die übergebenen Spaltenindizes gültig sind
-        if self.matrix[0].count > column1, column1 >= 0, self.matrix[0].count > column2, column2 >= 0 {
+        if self.matrix[0].count > column1 && column1 >= 0 && self.matrix[0].count > column2 && column2 >= 0 {
             // Vertausche die Spalten
             for i in 0 ..< self.matrix.count {
                 let columnSaver: Field = self.matrix[i][column2]
@@ -307,12 +307,6 @@ struct Model {
                 self.columnSwitch(column1: i, column2: randomColumn2)
             }
         }
-//        for i in 0 ..< self.matrix.count {
-//            let randomValue = Int.random(in: 1 ..< range)
-//            var randomRow2 = Int.random(in: 0 ..< self.matrix.count)
-//            let randomPositivNegativ = Bool.random()
-//            self.scaleRow(faktor: randomValue, row: i, multi: false, positivNegativ: randomPositivNegativ)
-//        }
 
         // Zurücksetzen des Verlaufs und des Zustands
         self.linkedList.reset()
@@ -337,17 +331,17 @@ struct Model {
     }
 
     // Funktion zum Aktivieren/Deaktivieren des "Drag"-Zustands für eine Zeile oder Spalte
-    mutating func drag(row: Int = -1, column: Int = -1, bool: Bool) {
-        // Aktiviere/Deaktiviere "Draged"-Zustand für eine Zeile
-        if row >= 0, row < self.matrix.count {
+    mutating func drag(item : Int, bool: Bool, rowOrColumn : RowOrColumn) {
+        // Aktiviere/Deaktiviere "Draged"-Zustand für eine Zeile oder Spalte
+        if item >= 0, item < self.matrix.count {
             for i in 0 ..< self.matrix.count {
-                self.matrix[row][i].draged = bool
-            }
-        }
-        // Aktiviere/Deaktiviere "Draged"-Zustand für eine Spalte
-        if column >= 0, column < self.matrix[0].count {
-            for i in 0 ..< self.matrix.count {
-                self.matrix[i][column].draged = bool
+                switch rowOrColumn {
+                case .row :
+                    self.matrix[item][i].draged = bool
+                case .column:
+                    self.matrix[i][item].draged = bool
+                }
+                
             }
         }
         // Aktualisiere den Matrixknoten
@@ -355,17 +349,16 @@ struct Model {
     }
 
     // Funktion zum Aktualisieren des "selection"-Zustands für eine Zeile oder Spalte
-    mutating func updateSelection(item: Int, selection: Bool, axe: String) {
-        guard item >= 0, item < self.matrix.count else {
+    mutating func updateSelection(item: Int, selection: Bool, rowOrColumn : RowOrColumn) {
+        guard item >= 0 && item < self.matrix.count else {
             return
         }
         for i in 0 ..< self.matrix.count {
-            // Aktualisiere den "selection"-Zustand für eine Zeile
-            if axe == "row" {
+            // Aktualisiere den "selection"-Zustand für eine Zeile oder Spalten
+            switch rowOrColumn {
+            case .row:
                 self.matrix[item][i].selection = selection
-            }
-            // Aktualisiere den "selection"-Zustand für eine Spalte
-            if axe == "column" {
+            case .column:
                 self.matrix[i][item].selection = selection
             }
         }
@@ -375,15 +368,15 @@ struct Model {
     mutating func varReset() {
 //        print(self.matrix.count)
         for i in 0 ..< self.matrix.count {
-            // Setze den "notDiv"-Zustand auf "false" für alle Zellen
+            // Setze den "notDiv"-Zustand auf "false" für alle Felder
             for j in 0 ..< self.matrix[i].count where self.matrix[i][j].notDiv == true {
                 self.matrix[i][j].notDiv = false
             }
-            // Setze den "selection"-Zustand auf "false" für alle Zellen
+            // Setze den "selection"-Zustand auf "false" für alle Felder
             for j in 0 ..< self.matrix[i].count where self.matrix[i][j].selection == true {
                 self.matrix[i][j].selection = false
             }
-            // Setze den "draged"-Zustand auf "false" für alle Zellen
+            // Setze den "draged"-Zustand auf "false" für alle Felder
             for j in 0 ..< self.matrix[i].count where self.matrix[i][j].draged == true {
                 self.matrix[i][j].draged = false
             }
@@ -405,5 +398,9 @@ struct Model {
                 return "Schwer"
             }
         }
+    }
+    // enum für Reihe oder Spalte
+    enum RowOrColumn {
+        case row, column
     }
 }

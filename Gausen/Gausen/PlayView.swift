@@ -107,7 +107,7 @@ struct PlayView: View {
                 // Wenn eine Auswahl in einer Reihe geändert wird, aktualisiert das ViewModel die Auswahl und animiert die Änderung.
 
                 withAnimation {
-                    modelView.updateSelection(item: row, selection: newValue, axe: "row")
+                    modelView.updateSelection(item: row, selection: newValue, rowOrColumn: .row)
                 }
             }
             .onChange(of: modelView.matrix) { _, _ in

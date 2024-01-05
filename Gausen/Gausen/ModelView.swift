@@ -120,8 +120,8 @@ class ViewModel: ObservableObject {
     }
     
     // Funktion zum Makieren von gezogenen Zeilen oder Spalten im Modell
-    func drag(row: Int = -1, column: Int = -1, bool: Bool) {
-        model.drag(row: row, column: column, bool: bool)
+    func drag(item : Int, bool: Bool, rowOrColumn : Model.RowOrColumn) {
+        model.drag(item: item, bool: bool, rowOrColumn: rowOrColumn)
     }
     
     // Funktion zum Erstellen einer neuen Matrix mit einer bestimmten Zeilenanzahl
@@ -160,8 +160,8 @@ class ViewModel: ObservableObject {
     }
 
     // Funktion zum Aktualisieren der Auswahl von Zeilen oder Spalten im Modell
-    func updateSelection(item: Int, selection: Bool, axe: String) {
-        model.updateSelection(item: item, selection: selection, axe: axe)
+    func updateSelection(item: Int, selection: Bool, rowOrColumn : Model.RowOrColumn) {
+        model.updateSelection(item: item, selection: selection, rowOrColumn: rowOrColumn)
     }
     
     func colorSwitchStatus() {
