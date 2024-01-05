@@ -18,34 +18,30 @@ struct StartView: View {
     }
     
     var body: some View {
-       
-            VStack {
+        VStack {
+            // Titel der Startansicht
+            Text("Start")
+                .font(.largeTitle)
+                .padding(.bottom, 20)
                 
-                // Titel der Startansicht
-                Text("Start")
-                    .font(.largeTitle)
-                    .padding(.bottom, 20)
+            Spacer()
+            // Picker für Schwierigkeitsgrad und Größe der Matrix
+            buttons.difficutltyPicker(difficulty: $modelView.difficulty, array: modelView.difficultyArray, label: "Schwierigkeitsgrad")
+            buttons.intPicker(size: $modelView.rowCount, from: 2, to: 6, label: "Wie viele Reihen")
+                .padding([.leading, .trailing, .bottom])
                 
-                Spacer() // Platzhalter für flexiblen Raum, um die Elemente zu zentrieren
-                buttons.difficutltyPicker(difficulty: $modelView.difficulty, array: modelView.difficultyArray, label: "Schwierigkeitsgrad")
-                // Slider für die Auswahl der Anzahl der Reihen mit entsprechendem Label und Anzeigetext
-                //            buttons.slider(from: 2, to: 6, for: $modelView.rowCount, name: "Wie Viele Reihen")
-                buttons.intPicker(size: $modelView.rowCount, from: 2, to: 6, label: "Wie viele Reihen")
-                    .padding([.leading, .trailing, .bottom])
+            Spacer()
                 
-                Spacer() // Platzhalter für flexiblen Raum
+            // Start-Button für den Spielbeginn
+            buttons.startButton()
+                .padding()
                 
-                // Start-Button für den Spielbeginn
-                buttons.startButton()
-                    .padding()
+            Spacer()
+            Spacer()
                 
-                Spacer() // Platzhalter für flexiblen Raum
-                Spacer() // Platzhalter für flexiblen Raum
-                
-                // Button für den Zugriff auf die Highscore-Ansicht
-                buttons.highScoreButton()
-            }
-            .padding() // Einfügeabstand für den gesamten Inhalt der Ansicht
+            // Button für den Zugriff auf die Highscore-Ansicht
+            buttons.highScoreButton()
         }
-    
+        .padding() // Einfügeabstand für den gesamten Inhalt der Ansicht
+    }
 }

@@ -49,25 +49,6 @@ struct Buttons {
         .disabled(modelView.gameStatus != .play)
     }
 
-    // Button zum Mischen der Matrix grade nicht auf der Benutzeroberfläche
-    @ViewBuilder
-    func mix() -> some View {
-        Button(
-            action: {
-                // Setzt das Modell zurück und mischt die Matrix
-                modelView.varReset()
-                modelView.mixMatrix(howMany: modelView.matrix.count - 1, range: 10)
-                // Setzt die Auswahl zurück
-                modelView.resetSelection()
-            },
-            label: {
-                Text("Mischen")
-            }
-        )
-        // Deaktiviert den Button, wenn das Spiel beendet ist
-        .disabled(modelView.gameStatus != .play)
-    }
-
     // Button zum Starten eines neuen Spiels
     @ViewBuilder
     func startButton() -> some View {
@@ -86,7 +67,6 @@ struct Buttons {
                     .padding()
                     .background(Color.white)
                     .cornerRadius(8)
-                
             }
         )
     }
@@ -140,87 +120,31 @@ struct Buttons {
         .disabled(modelView.gameStatus != .play && modelView.gameStatus != .highScore)
     }
 
-    // Button zum Vertauschen von Spalten grade nicht auf der Benutzeroberfläche
+    // Button zum Hinzufügen von zwei ausgewählten Zeilen mit Division oder Multiplikation
     @ViewBuilder
-    func spalte() -> some View {
-        Button(
-            action: {
-                // Setzt das Modell zurück und tauscht die ausgewählten Spalten
-                modelView.varReset()
-                if let firstColumn = modelView.selectedColumns.first, let secondColumn = modelView.selectedColumns.dropFirst().first {
-                    modelView.columnSwitch(column1: firstColumn, column2: secondColumn)
-                    modelView.resetSelection()
-                }
-                // Setzt die ausgewählten Zeilen und Spalten zurück
-                modelView.selectedRows.removeAll()
-                modelView.selectedColumns.removeAll()
-            },
-            label: {
-                Text("Spalte")
-            }
-        )
-        // Deaktiviert den Button, wenn das Spiel nicht im Play Status ist
-        .disabled(modelView.gameStatus != .play)
-    }
-
-    // Button zum Hinzufügen von zwei ausgewählten Zeilen mit Multiplikation
-    @ViewBuilder
-    func addScaleRowMulti() -> some View {
-        Button(
-            action: {
-                // Setzt das Modell zurück und überprüft, ob zwei Zeilen ausgewählt sind
-                modelView.varReset()
-                if let firstRow = modelView.selectedRows.first, let secondRow = modelView.selectedRows.dropFirst().first {
-                    // Fügt die beiden ausgewählten Zeilen mit Multiplikation hinzu
-                    withAnimation {
-                        modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, multi: true)
-                    }
-                }
-                // Setzt die Auswahl zurück
-                modelView.resetSelection()
-            }, label: {
-                // Darstellung des Buttons mit dem Symbol für Multiplikation und Plus
-                roundRecButtonLayout(
-                    content:
-                    HStack {
-                        Image(systemName: "multiply").font(.title)
-                        Image(systemName: modelView.positivNegativ ? "minus" : "plus").font(.largeTitle)
-                    }
-                   
-                )
-            }
-        )
-        // Deaktiviert den Button, wenn nicht genau zwei Zeilen ausgewählt sind oder das Spiel nicht im Play Status ist
-        .disabled(modelView.selectedRows.count != 2)
-        .disabled(modelView.gameStatus != .play)
-    }
-
-    // Button zum Hinzufügen von zwei ausgewählten Zeilen mit Division
-    @ViewBuilder
-    func addScaleRowDiv() -> some View {
+    func addScaleRow(divOrMulty: ViewModel.DivOrMulti) -> some View {
         Button(
             action: {
                 // Setzt das Modell zurück und überprüft, ob zwei Zeilen ausgewählt sind
                 modelView.varReset()
                 if let firstRow = modelView.selectedRows.first, let secondRow = modelView.selectedRows.dropFirst().first {
                     // Überprüft, ob die Division durchführbar ist, und fügt dann die beiden ausgewählten Zeilen hinzu
-                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: false) {
+                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), divOrMulti: divOrMulty) {
                         withAnimation {
-                            modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, multi: false)
+                            modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, divOrMulti: divOrMulty)
                         }
                     }
                 }
                 // Setzt die Auswahl zurück
                 modelView.resetSelection()
             }, label: {
-                // Darstellung des Buttons mit dem Symbol für Division und Plus
+                // Darstellung des Buttons mit dem Symbol für Division oder Multiplikation und Plus oder Minus
                 roundRecButtonLayout(
                     content:
                     HStack {
-                        Image(systemName: "divide").font(.title)
+                        Image(systemName: divOrMulty.stringValue()).font(.title)
                         Image(systemName: modelView.positivNegativ ? "minus" : "plus").font(.largeTitle)
                     }
-                   
                 )
             }
         )
@@ -229,107 +153,31 @@ struct Buttons {
         .disabled(modelView.gameStatus != .play)
     }
 
-    // Button zum Skalieren einer ausgewählten Zeile mit Division
+    // Button zum Skalieren einer ausgewählten Zeile mit Division oder Multiplikation
     @ViewBuilder
-    func scaleRowDiv() -> some View {
+    func scaleRow(divOrMulty: ViewModel.DivOrMulti) -> some View {
         Button(
             action: {
                 // Setzt das Modell zurück und überprüft, ob eine Zeile ausgewählt ist
                 modelView.varReset()
                 if let firstRow = modelView.selectedRows.first {
                     // Überprüft, ob die Division durchführbar ist, und skaliert dann die ausgewählte Zeile
-                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: false) {
+                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), divOrMulti: divOrMulty) {
                         withAnimation {
-                            modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, multi: false)
+                            modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, divOrMulti: divOrMulty)
                         }
                     }
                 }
                 // Setzt die Auswahl zurück
                 modelView.resetSelection()
             }, label: {
-                // Darstellung des Buttons mit dem Symbol für Division
-                roundRecButtonLayout(content: Image(systemName: "divide").font(.title))
+                // Darstellung des Buttons mit dem Symbol für Division oder Multiplikation
+                roundRecButtonLayout(content: Image(systemName: divOrMulty.stringValue()).font(.title))
             }
         )
         // Deaktiviert den Button, wenn nicht genau eine Zeile ausgewählt ist oder das Spiel nicht im Play Status ist
         .disabled(modelView.selectedRows.count != 1)
         .disabled(modelView.gameStatus != .play)
-    }
-
-    // Button zum Skalieren einer ausgewählten Zeile mit Multiplikation
-    @ViewBuilder
-    func scaleRowMulti() -> some View {
-        Button(
-            action: {
-                // Setzt das Modell zurück und überprüft, ob eine Zeile ausgewählt ist
-                modelView.varReset()
-                if let firstRow = modelView.selectedRows.first {
-                    // Überprüft, ob die Multiplikation durchführbar ist, und skaliert dann die ausgewählte Zeile
-                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), multi: true) {
-                        withAnimation {
-                            modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, multi: true)
-                        }
-                    }
-                }
-                // Setzt die Auswahl zurück
-                modelView.resetSelection()
-            },
-            label: {
-                // Darstellung des Buttons mit dem Symbol für Multiplikation
-                roundRecButtonLayout(content: Image(systemName: "multiply").font(.title))
-            }
-        )
-        // Deaktiviert den Button, wenn nicht genau eine Zeile ausgewählt ist oder das Spiel nicht im Play Status ist
-        .disabled(modelView.selectedRows.count != 1)
-        .disabled(modelView.gameStatus != .play)
-    }
-
-    // Button zum Erstellen einer neuen Matrix grade nicht auf der Benutzeroberfläche
-    @ViewBuilder
-    func neu() -> some View {
-        Button(
-            action: {
-                // Erstellt eine neue Matrix mit einer festgelegten Anzahl von Zeilen
-                modelView.newMatrix(rowCount: 4, difficulty: modelView.difficulty)
-                // Setzt die Auswahl zurück
-                modelView.resetSelection()
-            },
-            label: {
-                Text("Neu")
-            }
-        )
-        // Deaktiviert den Button, wenn das Spiel beendet ist
-        .disabled(modelView.gameStatus != .play)
-    }
-
-    // Diese Funktion erstellt eine Slider-Ansicht mit einem Label, einem Slider, einem Wertebereich und einem Anzeigetext.
-    @ViewBuilder
-    func slider(from min: Int, to max: Int, for value: Binding<Double>, name: String) -> some View {
-        VStack {
-            // Label für den Slider
-            Text(name)
-
-            // HStack für den Slider, die Min- und Max-Werte sowie den Anzeigetext
-            HStack {
-                // Anzeige des Min-Werts
-                Text("\(min)")
-
-                // Slider mit dem angegebenen Wertebereich und Schritt
-                Slider(
-                    value: value,
-                    in: Double(min) ... Double(max),
-                    step: 1.0
-                )
-                // Deaktiviert den Slider, wenn das Spiel nicht im Play oder Start Status ist
-                .disabled(modelView.gameStatus != .play && modelView.gameStatus != .start)
-                // Anzeige des Max-Werts
-                Text("\(max)")
-            }
-            .padding(.horizontal)
-
-            // Anzeige des aktuellen Slider-Werts
-            Text("\(Int(value.wrappedValue))")
-        }
     }
 
     // Funktion für die Erstellung einer Checkbox, die zwischen positiv (+) und negativ (-) wechselt
@@ -347,9 +195,9 @@ struct Buttons {
             }
         )
     }
-    
+
     // Funktion, um einen benutzerdefinierten Picker für ints
-    func intPicker(size: Binding<Int>, from value1: Int, to value2: Int, label : String) -> some View {
+    func intPicker(size: Binding<Int>, from value1: Int, to value2: Int, label: String) -> some View {
         VStack {
             Text(label).font(.title)
             Picker(label, selection: size) {
@@ -367,9 +215,9 @@ struct Buttons {
             .pickerStyle(SegmentedPickerStyle()) // Verwende den Segmented Picker Style
         }
     }
-    
+
     // Funktion, um einen benutzerdefinierten Picker für Difficulty
-    func difficutltyPicker(difficulty: Binding<ViewModel.Difficulty>, array : [ViewModel.Difficulty], label : String) -> some View {
+    func difficutltyPicker(difficulty: Binding<ViewModel.Difficulty>, array: [ViewModel.Difficulty], label: String) -> some View {
         VStack {
             Text(label).font(.title)
             Picker(label, selection: difficulty) {
@@ -377,7 +225,6 @@ struct Buttons {
                 ForEach(array, id: \.self) { value in
                     // Benutzerdefinierte Textansicht für jedes Element im Picker
                     Text(value.stringValue())
-                      
                 }
             }
             .pickerStyle(SegmentedPickerStyle()) // Verwende den Segmented Picker Style
@@ -388,11 +235,11 @@ struct Buttons {
     func roundRecButtonLayout(content: some View) -> some View {
         ZStack {
             // Gerundetes Rechteck als Hintergrund der Schaltfläche
-           
-                RoundedRectangle(cornerRadius: 8)
+
+            RoundedRectangle(cornerRadius: 8)
                 .fill(.secondary)
                 .scaledToFit()
-           
+
             // Inhalt der Schaltfläche (z. B. ein Symbol)
             content
         }

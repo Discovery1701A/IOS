@@ -8,7 +8,7 @@
 import SwiftUI
 // Struct für ein Zahlenfeld
 struct FieldView: View {
-    let field: ViewModel.Field // Datenmodell für das Feld
+    let field: ViewModel.Field
 
     var body: some View {
         GeometryReader { geometry in
@@ -28,7 +28,6 @@ struct FieldView: View {
                 }
             }
         }
-//        .ignoresSafeArea(.keyboard)
     }
 
     // Bestimmt die Hintergrundfarbe basierend auf den Feldattributen
@@ -37,10 +36,10 @@ struct FieldView: View {
             return .green
         } else if field.draged {
             return .cyan
-        } else if field.notDiv {
-            return Color.red
         } else if field.selection {
             return Color(hex: 0x2080A5) // Benutzerdefinierte Farbe aus Hex-Wert ein Blauton
+        } else if field.notDiv {
+            return Color.red
         } else {
             return .orange
         }
@@ -51,14 +50,14 @@ struct FieldView: View {
         let fontSize = min(size.width, size.height) * DrawingConstants.fontScale
 
         // Die Anzahl der Ziffern im Inhalt wird ermittelt.
-        let numberOfDigits = content.count
+        let numberCount = content.count
 
         // Wenn mehr als eine Ziffer vorhanden ist, wird die Schriftgröße für jede Ziffer entsprechend reduziert.
         // Andernfalls bleibt die ursprüngliche Basisschriftgröße unverändert.
-        let adjustedFontSize = numberOfDigits > 1 ? fontSize * (1.0 / CGFloat(numberOfDigits)) : fontSize
+        let newFontSize = numberCount > 1 ? fontSize * (1.0 / CGFloat(numberCount)) : fontSize
 
         // Die berechnete Schriftgröße wird als Systemfont mit dem angepassten Wert zurückgegeben.
-        return Font.system(size: adjustedFontSize)
+        return Font.system(size: newFontSize)
     }
 
     // Konstanten für das Zeichnen von Feldern
@@ -87,7 +86,7 @@ struct FieldSizeModifier: ViewModifier {
                     Color.clear
                         // Aktualisiert die Größenpräferenz mit der aktuellen Größe des Feldes
                         .preference(key: SizePreferenceKey.self, value: geo.size)
-                        
+
                         .onAppear {
                             // Ein Timer wird verwendet, um regelmäßig die Größe des Feldes zu überprüfen
                             Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
@@ -96,20 +95,19 @@ struct FieldSizeModifier: ViewModifier {
                                     self.fieldSize = geo.size
                                 }
 //                                print(geo.size, fieldSize, previousSize)
-                                // Überprüft, ob sich die aktuelle Größe von der vorherigen unterscheidet
-                                if  geo.size != self.fieldSize {
+                                // Überprüft, ob sich die aktuelle Größe von der vorherigen Feldgröße unterscheidet
+                                if geo.size != self.fieldSize {
 //                                    print("aspera")
                                     // Überprüft auf signifikante Größenänderungen in Breite oder Höhe
                                     if (geo.size.width > self.fieldSize.width + 0.5)
                                         || (geo.size.width < self.fieldSize.width - 0.5) || geo.size.height > self.fieldSize.height + 0.5
-                                            || geo.size.height < self.fieldSize.height - 0.5 {
+                                        || geo.size.height < self.fieldSize.height - 0.5 {
 //                                        print("dupdidu")
-                                            // Setzt die Feldgröße auf die vorherige Größe zurück
-                                            if geo.size.width != 0.0 {
-                                                print("pikabu")
-                                                self.fieldSize = geo.size
-                                            }
-                                        
+                                        // Setzt die Feldgröße auf die vorherige Größe zurück
+                                        if geo.size.width != 0.0 {
+//                                                print("pikabu")
+                                            self.fieldSize = geo.size
+                                        }
                                     }
                                 }
                             }
@@ -119,21 +117,10 @@ struct FieldSizeModifier: ViewModifier {
             .ignoresSafeArea(.keyboard)
             // Reagiert auf Änderungen der Größenpräferenz
             .onPreferenceChange(SizePreferenceKey.self) { size in
-                // Setzt die Feldgröße, wenn sie zuvor noch nicht gesetzt wurde
-//                if self.fieldSize == .zero {
-//                    self.fieldSize = size
-//                }
-                // Überprüft auf signifikante Größenänderungen in Breite oder Höhe
                 if size != self.fieldSize {
-                    
-//                    if (size.width > self.fieldSize.width + 0.5)
-//                        || (size.width < self.fieldSize.width - 0.5) || size.height > self.fieldSize.height + 0.5
-//                            || size.height < self.fieldSize.height - 0.5 {
-                            // Aktualisiert die vorherigen Größen, um den Änderungsverlauf zu verfolgen
-                            self.prepreviousSize = self.previousSize
-                            self.previousSize = size
-//                        }
-//                    }
+                    // Aktualisiert die vorherigen Größen, um den Änderungsverlauf zu verfolgen
+                    self.prepreviousSize = self.previousSize
+                    self.previousSize = size
                 }
             }
     }

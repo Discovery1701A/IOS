@@ -12,18 +12,15 @@ struct PlayView: View {
     @ObservedObject var modelView: ViewModel // Das ViewModel-Objekt, das die Logik der Ansicht steuert
     var buttons: Buttons // Ein Objekt, das verschiedene wiederverwendbare Buttons für die Ansicht bereitstellt
     var handelDrag: HandelDrag // Ein Objekt, das die Drag-and-Drop-Interaktionen behandelt
-    var size: CGSize // Die Größe der Ansicht
 
     // Initialisierer der PlayView, der das ViewModel, ein Buttons-Objekt und ein HandelDrag-Objekt entgegennimmt
     init(modelView: ViewModel, size: CGSize) {
         self.modelView = modelView
         self.buttons = Buttons(modelView: modelView)
         self.handelDrag = HandelDrag(modelView: modelView)
-        self.size = size
     }
 
     var body: some View {
-        
         VStack {
             HStack {
                 buttons.backButton()
@@ -45,14 +42,14 @@ struct PlayView: View {
             )
             Spacer()
             if UIDevice.current.orientation.isLandscape {
-                // Horizontales Layout für breitere Ansicht
+                // Horizontales Layout
                 Spacer()
                 HStack {
                     matrixView()
                     controller()
                 }
             } else {
-                // Vertikales Layout für schmalere Ansicht
+                // Vertikales Layout
                 VStack {
                     matrixView()
                     controller()
@@ -60,13 +57,12 @@ struct PlayView: View {
             }
             Spacer()
         }
-//        .padding()
-        
+
         //        FieldSize wird so besser bestimmt
-                .onChange(of: UIDevice.current.orientation.isLandscape) { _, _ in
-        //            print("wölfchen")
-                    modelView.fieldSize = .zero
-                }
+        .onChange(of: UIDevice.current.orientation.isLandscape) { _, _ in
+            //            print("wölfchen")
+            modelView.fieldSize = .zero
+        }
     }
 
     // Erzeugt die Ansicht für die Spielmatrix. Verwendet eine `VStack`, um die Reihen der Matrix zu stapeln.
@@ -80,7 +76,6 @@ struct PlayView: View {
             }
         }
         .padding()
-        
     }
 
     // Erzeugt die Ansicht für eine Zelle in der Spielmatrix.
@@ -171,10 +166,10 @@ struct PlayView: View {
         VStack {
             // Erzeugt eine horizontale HStack mit den Buttons für Matrixoperationen.
             HStack {
-                buttons.addScaleRowMulti()
-                buttons.addScaleRowDiv()
-                buttons.scaleRowDiv()
-                buttons.scaleRowMulti()
+                buttons.addScaleRow(divOrMulty: .multiply)
+                buttons.addScaleRow(divOrMulty: .divide)
+                buttons.scaleRow(divOrMulty: .multiply)
+                buttons.scaleRow(divOrMulty: .divide)
             }
             .padding(.horizontal)
             HStack {
@@ -192,9 +187,6 @@ struct PlayView: View {
                 Spacer()
             }
             .padding([.leading, .bottom, .trailing])
-
-            // Erzeugt den "Zurück" Button am unteren Rand.
-//            buttons.backButton()
         }
     }
 

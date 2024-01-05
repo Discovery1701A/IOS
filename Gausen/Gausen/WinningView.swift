@@ -24,8 +24,8 @@ struct WinningView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: ConstantWinning.cornerRadiusRec)
                     .fill(Color(hex: 0xfcbb51, alpha: 0.75))
-                    .frame(maxHeight: ConstantWinning.frameMaxHeight) // Dynamische Höhe
-                    .padding(.horizontal, 20) // Optionale horizontale Polsterung
+                    .frame(maxHeight: ConstantWinning.frameMaxHeight) 
+                    .padding(.horizontal, 20)
                 Text("🎉Gewonnen🎉")
                     .font(.largeTitle)
             }
@@ -41,19 +41,7 @@ struct WinningView: View {
                 .frame(maxWidth: 400)
                 .padding([.leading, .trailing], 20)
                 .padding(.vertical, 10)
-//                .onTapGesture {
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                        hideKeyboard()
-//                    }
-//                }
-               
-                .onAppear {
-                    print("WinningView appeared")
-                }
-                .onDisappear {
-                    print("WinningView disappeared")
-                }
-
+              
             Spacer()
             Spacer()
             // Button zur HighScoreView.

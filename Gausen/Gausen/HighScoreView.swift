@@ -32,6 +32,7 @@ struct HighscoreView: View {
 
 // Die HighscoreListView zeigt die Highscore-Einträge in einer vertikalen ScrollView an
 struct HighscoreListView: View {
+    // Schwirkeitsgrad wird benötigt damit die richtigen Listen angezeigt werden
     var difficulty: ViewModel.Difficulty
     let difficultyKey: String
     // Der Titel des Highscore-Typs (Zeit oder Aktivitätszählung)
@@ -39,6 +40,7 @@ struct HighscoreListView: View {
     // Die Liste der Highscore-Einträge als zweidimensionales Array von Strings
     let highscores: [String: [[String]]]
 
+    // Initailisren
     init(difficulty: ViewModel.Difficulty, title: String, highscores: [String: [[String]]]) {
         self.difficulty = difficulty
         self.title = title
@@ -53,7 +55,6 @@ struct HighscoreListView: View {
             Text(title)
                 .font(.title)
             Text(difficulty.stringValue())
-//                .foregroundColor(.blue)
                 .padding(.bottom, 10)
 
             // Eine ScrollView für die Highscore-Einträge
@@ -72,7 +73,6 @@ struct HighscoreListView: View {
                             .font(.headline)
                             .foregroundColor(.primary)
 
-                        // Ein Leerzeichen, um die Elemente zu trennen
                         Spacer()
 
                         // Anzeigen der Zeit oder Aktivitätszählung
@@ -85,18 +85,13 @@ struct HighscoreListView: View {
                     .background(
                         RoundedRectangle(cornerRadius: 8)
                             .fill(Color(.systemGray6))
+                            .stroke(Color(.systemGray2), lineWidth: 1)
                     )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color(.systemGray4), lineWidth: 1)
-                    )
-
                     // Eine subtile Trennlinie nach jedem Eintrag
                     Divider().padding(.horizontal, 16)
                 }
             }
         }
-        // Ein allgemeines Padding für die gesamte HighscoreListView
         .padding()
     }
 }

@@ -71,7 +71,7 @@ class HighscoreManager: ObservableObject {
             // Laden der Daten aus dem Dokumentenverzeichnis
             if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName),
                let data = try? Data(contentsOf: url) {
-                // Dekodieren der Daten basierend auf der Highscore-Kategorie
+//                // Dekodieren der Daten basierend auf der Highscore-Kategorie
                 switch category {
                 case .time:
                     highScoreTime = try PropertyListDecoder().decode([String: [[String]]].self, from: data)

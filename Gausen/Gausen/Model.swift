@@ -146,15 +146,15 @@ struct Model {
     }
 
     // Funktion zum Skalieren einer Zeile in der Matrix
-    mutating func scaleRow(faktor: Int, row: Int, multi: Bool, positivNegativ: Bool) {
+    mutating func scaleRow(faktor: Int, row: Int, divOrMulti : DivOrMulti, positivNegativ: Bool) {
         // Überprüfen, ob die Skalierung gültig ist
-        if self.controllScale(row: row, faktor: faktor, multi: multi) {
+        if self.controllScale(row: row, faktor: faktor, divOrMulti : divOrMulti) {
             // Skaliere die Zeile
             for i in 0 ..< self.matrix[row].count {
                 if positivNegativ {
                     self.matrix[row][i].content *= -1
                 }
-                if multi == true {
+                if divOrMulti == .multiply {
                     self.matrix[row][i].content *= faktor
                 } else {
                     self.matrix[row][i].content /= faktor
@@ -167,13 +167,13 @@ struct Model {
     }
 
     // Funktion zum Hinzufügen und Skalieren einer Zeile zu einer anderen in der Matrix
-    mutating func addScaleRow(faktor: Int, row1: Int, row2: Int, multi: Bool, positivNegativ: Bool) {
+    mutating func addScaleRow(faktor: Int, row1: Int, row2: Int, divOrMulti : DivOrMulti, positivNegativ: Bool) {
         // Überprüfen, ob die Skalierung gültig ist
-        if self.controllScale(row: row1, faktor: faktor, multi: multi) {
+        if self.controllScale(row: row1, faktor: faktor, divOrMulti : divOrMulti) {
             // Hinzufügen und Skalieren der Zeile zu einer anderen
             var rowSaver: [Int] = []
             for i in 0 ..< self.matrix[row1].count {
-                if multi == true {
+                if divOrMulti == .multiply {
                     rowSaver.append(self.matrix[row1][i].content * faktor)
                     self.matrix[row1][i].notDiv = false
                 } else {
@@ -193,13 +193,13 @@ struct Model {
     }
 
     // Funktion zur Überprüfung, ob eine Skalierung in einer Zeile gültig ist
-    mutating func controllScale(row: Int, faktor: Int, multi: Bool) -> Bool {
+    mutating func controllScale(row: Int, faktor: Int, divOrMulti : DivOrMulti) -> Bool {
         // Überprüfen, ob der Faktor nicht 0 ist
         if faktor != 0 {
             // Überprüfen, ob die Skalierung in jedem Element der Zeile gültig ist
             for i in 0 ..< self.matrix[row].count {
                 self.matrix[row][i].notDiv = false
-                if multi == false {
+                if divOrMulti == .divide {
                     if !(self.matrix[row][i].content.isMultiple(of: faktor)) {
                         self.matrix[row][i].notDiv = true
                     }
@@ -269,12 +269,12 @@ struct Model {
                 // Zufällige Werte für den Mischvorgang
                 let randomValue = Int.random(in: 1 ..< range)
                 var randomRow2 = Int.random(in: 0 ..< self.matrix.count)
-                var randomMulti = Bool.random()
                 let randomPositivNegativ = Bool.random()
+                var randomDivOrMulti: DivOrMulti = Bool.random() ? .multiply : .divide
 
                 // Überprüfen, ob die Skalierung gültig ist, andernfalls den Multiplikator umkehren
-                if !self.controllScale(row: i, faktor: randomValue, multi: randomMulti) {
-                    randomMulti.toggle()
+                if !self.controllScale(row: i, faktor: randomValue, divOrMulti: randomDivOrMulti) {
+                    randomDivOrMulti = .multiply
                 }
                 // Überprüfen, dass die Zeilenindizes unterschiedlich sind
                 if i == randomRow2 {
@@ -282,9 +282,9 @@ struct Model {
                 }
 
                 // Skaliere die aktuelle Zeile und füge sie zu einer anderen Zeile hinzu
-                self.scaleRow(faktor: randomValue, row: i, multi: randomMulti, positivNegativ: randomPositivNegativ)
+                self.scaleRow(faktor: randomValue, row: i, divOrMulti: randomDivOrMulti, positivNegativ: randomPositivNegativ)
                 if randomRow2 != i {
-                    self.addScaleRow(faktor: 1, row1: i, row2: randomRow2, multi: randomMulti, positivNegativ: randomPositivNegativ)
+                    self.addScaleRow(faktor: 1, row1: i, row2: randomRow2, divOrMulti: randomDivOrMulti, positivNegativ: randomPositivNegativ)
                 }
             }
 
@@ -402,5 +402,13 @@ struct Model {
     // enum für Reihe oder Spalte
     enum RowOrColumn {
         case row, column
+    }
+    
+    enum DivOrMulti: String {
+        case multiply, divide
+        
+        func stringValue() -> String {
+               return self.rawValue
+           }
     }
 }

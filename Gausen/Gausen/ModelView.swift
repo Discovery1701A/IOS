@@ -10,9 +10,11 @@ import SwiftUI
 
 // Definiere eine ViewModel-Klasse
 class ViewModel: ObservableObject {
-    // Definiere einen Typalias für das Field-Modell
+    // Definiere  Typalias
     typealias Field = Model.Field
     typealias Difficulty = Model.Difficulty
+    typealias DivOrMulti = Model.DivOrMulti
+    
     // Instanz des HighscoreManagers, der mit dem ViewModel geteilt wird
     var highScoreManager = HighscoreManager.shared
     
@@ -36,7 +38,7 @@ class ViewModel: ObservableObject {
     @Published var selectedColumns: [Int] = []
     @Published var fieldSize: CGSize = .zero
     @Published var gradiendColors: [Color] = [Color.cyan, Color.white]
-    var blurRadius : CGFloat = 5
+    var blurRadius: CGFloat = 5
     var positivNegativ = false
     
     // Eigenschaft, die die Anzahl der Aktivitäten im Modell zurückgibt
@@ -71,6 +73,7 @@ class ViewModel: ObservableObject {
         }
     }
     
+    // Funktion zum erstellen eines Array
     func valueArray(from value1: Int, to value2: Int) -> [Int] {
         var array: [Int] = []
         for i in value1 ..< value2 + 1 {
@@ -106,21 +109,21 @@ class ViewModel: ObservableObject {
     }
 
     // Funktionen zum Hinzufügen und Skalieren von Zeilen im Modell
-    func addScaleRow(faktor: Int, row1: Int, row2: Int, multi: Bool) {
-        model.addScaleRow(faktor: faktor, row1: row1, row2: row2, multi: multi, positivNegativ: positivNegativ)
+    func addScaleRow(faktor: Int, row1: Int, row2: Int, divOrMulti : Model.DivOrMulti) {
+        model.addScaleRow(faktor: faktor, row1: row1, row2: row2, divOrMulti: divOrMulti, positivNegativ: positivNegativ)
     }
     
-    func scaleRow(faktor: Int, row: Int, multi: Bool) {
-        model.scaleRow(faktor: faktor, row: row, multi: multi, positivNegativ: positivNegativ)
+    func scaleRow(faktor: Int, row: Int, divOrMulti : Model.DivOrMulti) {
+        model.scaleRow(faktor: faktor, row: row, divOrMulti: divOrMulti, positivNegativ: positivNegativ)
     }
     
     // Funktion zur Überprüfung der Skalierung im Modell
-    func controllScale(row: Int, faktor: Int, multi: Bool) -> Bool {
-        model.controllScale(row: row, faktor: faktor, multi: multi)
+    func controllScale(row: Int, faktor: Int, divOrMulti : Model.DivOrMulti) -> Bool {
+        model.controllScale(row: row, faktor: faktor, divOrMulti: divOrMulti)
     }
     
     // Funktion zum Makieren von gezogenen Zeilen oder Spalten im Modell
-    func drag(item : Int, bool: Bool, rowOrColumn : Model.RowOrColumn) {
+    func drag(item: Int, bool: Bool, rowOrColumn: Model.RowOrColumn) {
         model.drag(item: item, bool: bool, rowOrColumn: rowOrColumn)
     }
     
@@ -160,10 +163,11 @@ class ViewModel: ObservableObject {
     }
 
     // Funktion zum Aktualisieren der Auswahl von Zeilen oder Spalten im Modell
-    func updateSelection(item: Int, selection: Bool, rowOrColumn : Model.RowOrColumn) {
+    func updateSelection(item: Int, selection: Bool, rowOrColumn: Model.RowOrColumn) {
         model.updateSelection(item: item, selection: selection, rowOrColumn: rowOrColumn)
     }
-    
+
+    // Funktion zum wechseln der Hintergrundfarbe
     func colorSwitchStatus() {
         switch gameStatus {
         case .start:
@@ -175,10 +179,11 @@ class ViewModel: ObservableObject {
         case .winning:
             gradiendColors = [Color.white, Color.yellow]
         case .highScore:
-            gradiendColors = [Color.blue, Color.white]
+            gradiendColors = [colorSwitchDifficulty(), Color.white]
         }
     }
-    
+
+    // Funktion zum wechseln der Farbe jenach Schwirigkeitsgrad
     func colorSwitchDifficulty() -> Color {
         switch difficulty {
         case .easy:
@@ -194,21 +199,4 @@ class ViewModel: ObservableObject {
     enum GameStatus {
         case start, play, winning, highScore
     }
-//
-//    // enum für Schwirigkeitsgrad
-//    enum Difficulty: String {
-//        case easy, normal, hard
-//
-//        // Funktion zur Umwandlung des Enum-Cases in einen String
-//        func stringValue() -> String {
-//            switch self {
-//                    case .easy:
-//                        return "Leicht"
-//                    case .normal:
-//                        return "Normal"
-//                    case .hard:
-//                        return "Schwer"
-//                    }
-//        }
-//    }
 }

@@ -12,7 +12,7 @@ struct SelectionView: View {
     @Binding var selectedItems: [Int] // Ein Array, das die ausgewählten Elemente enthält (über Binding aktualisiert)
     var axis: Axis // Die Ausrichtung der Auswahlansicht (horizontal oder vertikal)
     var fieldSize: CGSize // Die Größe der einzelnen Felder in der Auswahlansicht
-    var onDragChanged: ((DragGesture.Value) -> Void)? // Ein Closure, das aufgerufen wird, wenn die Geste geändert wird
+    var onDragChanged: ((DragGesture.Value) -> Void)? // Ein Closure, das aufgerufen wird, wenn sich die Geste ändert
     var onDragEnded: (() -> Void)? // Ein Closure, das aufgerufen wird, wenn die Geste beendet wird (optional, Standard-Closure vorhanden)
 
     var body: some View {
