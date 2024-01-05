@@ -92,7 +92,7 @@ struct HandelDrag {
     
     // Funktion zum Behandeln des Endes der Drag-Geste
     func handleDragEnded() {
-        // Zurücksetzen aller Zustände im ViewModel, die mit dem Dragging in Verbindung stehen
+        // Zurücksetzen aller Zustände der Felder, die mit dem Dragging in Verbindung stehen
         modelView.varReset()
         // Zurücksetzen der gezogenen Spalten- und Zeilenindizes im ViewModel
         modelView.draggedColumn = nil
