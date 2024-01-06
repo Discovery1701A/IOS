@@ -5,14 +5,16 @@
 //  Created by Anna Rieckmann on 23.12.23.
 //
 // Die HighscoreView zeigt zwei HighscoreListView-Elemente an: einen für die Zeit und einen für die Aktivitätszählung
+
 import SwiftUI
 
 struct HighscoreView: View {
-    // Der ObservedObject highscoreManager wird für die Aktualisierung der Ansicht verwendet
+    // Das ObservedObject highscoreManager wird für die Aktualisierung der Ansicht verwendet
     @ObservedObject var highscoreManager = HighscoreManager.shared
     @ObservedObject var modelView: ViewModel
     var buttons: Buttons
-    init(highScoreManager: HighscoreManager, modelView: ViewModel) {
+
+    init(modelView: ViewModel) {
         self.modelView = modelView
         self.buttons = Buttons(modelView: modelView)
     }
@@ -20,9 +22,9 @@ struct HighscoreView: View {
     var body: some View {
         VStack {
             HStack {
-                // Anzeigen des HighscoreListView für die Zeit
+                // Anzeige des HighscoreListView für die Zeit
                 HighscoreListView(difficulty: modelView.difficulty, title: "Highscore Zeit", highscores: highscoreManager.highScoreTime)
-                // Anzeigen des HighscoreListView für die Aktivitätszählung
+                // Anzeige des HighscoreListView für die Aktivitätszählung
                 HighscoreListView(difficulty: modelView.difficulty, title: "Highscore Aktion", highscores: highscoreManager.highScoreActivityCount)
             }
             buttons.backButton()
@@ -30,17 +32,17 @@ struct HighscoreView: View {
     }
 }
 
-// Die HighscoreListView zeigt die Highscore-Einträge in einer vertikalen ScrollView an
+// Der HighscoreListView zeigt die Highscore-Einträge in einer vertikalen ScrollView an
 struct HighscoreListView: View {
-    // Schwirkeitsgrad wird benötigt damit die richtigen Listen angezeigt werden
-    var difficulty: ViewModel.Difficulty
+    // Schwierigkeitsgrad wird benötigt, damit die richtigen Listen angezeigt werden
+    let difficulty: ViewModel.Difficulty
     let difficultyKey: String
     // Der Titel des Highscore-Typs (Zeit oder Aktivitätszählung)
     let title: String
     // Die Liste der Highscore-Einträge als zweidimensionales Array von Strings
     let highscores: [String: [[String]]]
 
-    // Initailisren
+    // Initialisieren
     init(difficulty: ViewModel.Difficulty, title: String, highscores: [String: [[String]]]) {
         self.difficulty = difficulty
         self.title = title
@@ -51,7 +53,7 @@ struct HighscoreListView: View {
     var body: some View {
         // Eine vertikale Anordnung von Ansichtselementen
         VStack {
-            // Anzeigen des Titels mit speziellen Formatierungen
+            // Anzeige des Titels mit speziellen Formatierungen
             Text(title)
                 .font(.title)
             Text(difficulty.stringValue())
@@ -63,19 +65,19 @@ struct HighscoreListView: View {
                 ForEach(highscores[difficultyKey]!.indices, id: \.self) { index in
                     // Horizontale Anordnung für jeden Highscore-Eintrag
                     HStack {
-                        // Anzeigen der Platznummer
+                        // Anzeige der Platznummer
                         Text("\(index + 1).")
                             .font(.headline)
                             .foregroundColor(.primary)
 
-                        // Anzeigen des Benutzernamens
+                        // Anzeige des Benutzernamens
                         Text(highscores[difficultyKey]![index][0])
                             .font(.headline)
                             .foregroundColor(.primary)
 
                         Spacer()
 
-                        // Anzeigen der Zeit oder Aktivitätszählung
+                        // Anzeige der Zeit oder Aktivitätszählung
                         Text(highscores[difficultyKey]![index][1])
                             .font(.subheadline)
                             .foregroundColor(.secondary)

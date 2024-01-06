@@ -4,9 +4,10 @@
 //
 //  Created by Anna Rieckmann on 15.12.23.
 //
+// Struct für die vertikalen und horizontalen Buttons
 
 import SwiftUI
-// Struct für die vertikalen und horizontalen Buttons
+
 struct SelectionView: View {
     var item: Int // Das Element, das in der Ansicht repräsentiert wird
     @Binding var selectedItems: [Int] // Ein Array, das die ausgewählten Elemente enthält (über Binding aktualisiert)
@@ -28,10 +29,10 @@ struct SelectionView: View {
                 if item >= 0 {
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
-                            .frame(
-                                width: axis == .vertical ? fieldSize.width / 4 : fieldSize.width,
-                                height: axis == .vertical ? fieldSize.height : fieldSize.height / 4
-                            )
+                                                   .frame(
+                                                       width: axis == .vertical ? fieldSize.width / 4 : fieldSize.width,
+                                                       height: axis == .vertical ? fieldSize.height : fieldSize.height / 4
+                                                   )
                             .opacity(0.5)
                             .foregroundColor(selectedItems.contains(item) ? Color.blue.opacity(1) : Color.blue.opacity(0.75))
 

@@ -11,58 +11,80 @@ import SwiftUI
 struct PlayView: View {
     @ObservedObject var modelView: ViewModel // Das ViewModel-Objekt, das die Logik der Ansicht steuert
     var buttons: Buttons // Ein Objekt, das verschiedene wiederverwendbare Buttons für die Ansicht bereitstellt
-    var handelDrag: HandelDrag // Ein Objekt, das die Drag-and-Drop-Interaktionen behandelt
+    var handleDrag: HandleDrag // Ein Objekt, das die Drag-and-Drop-Interaktionen behandelt
 
-    // Initialisierer der PlayView, der das ViewModel, ein Buttons-Objekt und ein HandelDrag-Objekt entgegennimmt
+    @State private var parentSize: CGSize = .zero // State, um die Größe des Elternelements zu speichern
+
+    // Initialisierer der PlayView, der das ViewModel, ein Buttons-Objekt und ein HandleDrag-Objekt entgegennimmt
     init(modelView: ViewModel, size: CGSize) {
         self.modelView = modelView
         self.buttons = Buttons(modelView: modelView)
-        self.handelDrag = HandelDrag(modelView: modelView)
+        self.handleDrag = HandleDrag(modelView: modelView)
     }
 
     var body: some View {
-        VStack {
-            HStack {
-                buttons.backButton()
-                Spacer()
+        GeometryReader { geo in
+            VStack {
+               createActionInfoOverlay()
+                    
+//                Spacer()
+                if UIDevice.current.orientation.isLandscape {
+                    // Horizontales Layout
+                    Spacer()
+                    HStack {
+                        matrixView()
+                                                  .frame(width: parentSize.width / 2)
+                                              controller()
+                                                  .frame(width: parentSize.width / 2)
+                                        
+                    }
+                } else {
+                    // Vertikales Layout
+                    VStack {
+                        matrixView()
+                                                  .frame(height: parentSize.height / 6 * 3)
+                                              controller()
+                                                  .frame(height: parentSize.height / 6 * 2)
+                    }
+                }
+//                Spacer()
             }
-            .overlay(
-                VStack {
-                    Text("Anzahl der Aktionen: " + String(modelView.activityCount))
-                    Text("Zeit: " + modelView.time + "min")
-                        .onAppear {
-                            // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
-                            modelView.updateTime()
-                            // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
-                            Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                                modelView.updateTime()
-                            }
+            .padding()
+            .onAppear {
+                            // Aktualisieren Sie die Größe des Elternelements beim Erscheinen der Ansicht
+                            parentSize = geo.size
+            }
+                        .onChange(of: geo.size) { _, newSize in
+                            // Aktualisieren Sie die Größe des Elternelements bei Änderungen der Größe
+                            parentSize = newSize
                         }
-                }
-            )
-            Spacer()
-            if UIDevice.current.orientation.isLandscape {
-                // Horizontales Layout
-                Spacer()
-                HStack {
-                    matrixView()
-                    controller()
-                }
-            } else {
-                // Vertikales Layout
-                VStack {
-                    matrixView()
-                    controller()
-                }
+            // FieldSize wird so besser bestimmt
+            .onChange(of: UIDevice.current.orientation.isLandscape) { _, _ in
+                modelView.fieldSize = .zero
             }
+        }
+    }
+    
+    @ViewBuilder
+    func createActionInfoOverlay() -> some View {
+        HStack {
+            buttons.backButton()
             Spacer()
         }
-
-        //        FieldSize wird so besser bestimmt
-        .onChange(of: UIDevice.current.orientation.isLandscape) { _, _ in
-            //            print("wölfchen")
-            modelView.fieldSize = .zero
-        }
+        .overlay(
+            VStack {
+                Text("Anzahl der Aktionen: " + String(modelView.activityCount))
+                Text("Zeit: " + modelView.time + "min")
+                    .onAppear {
+                        // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
+                        modelView.updateTime()
+                        // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
+                        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+                            modelView.updateTime()
+                        }
+                    }
+            }
+        )
     }
 
     // Erzeugt die Ansicht für die Spielmatrix. Verwendet eine `VStack`, um die Reihen der Matrix zu stapeln.
@@ -127,16 +149,16 @@ struct PlayView: View {
                 axis: axis,
                 fieldSize: modelView.fieldSize,
                 onDragChanged: { value in
-                    // Bei einer Änderung im Drag-and-Drop ruft die entsprechende Funktion in HandelDrag auf.
+                    // Bei einer Änderung im Drag-and-Drop ruft die entsprechende Funktion in HandleDrag auf.
                     if axis == .vertical {
-                        handelDrag.handleDragChangedRow(value: value, row: item, size: modelView.fieldSize)
+                        handleDrag.handleDragChangedRow(value: value, row: item, size: modelView.fieldSize)
                     } else {
-                        handelDrag.handleDragChangedColumn(value: value, column: item, size: modelView.fieldSize)
+                        handleDrag.handleDragChangedColumn(value: value, column: item, size: modelView.fieldSize)
                     }
                 },
                 onDragEnded: {
-                    // Bei Abschluss des Drag-and-Drop ruft die entsprechende Funktion in HandelDrag auf.
-                    handelDrag.handleDragEnded()
+                    // Bei Abschluss des Drag-and-Drop ruft die entsprechende Funktion in HandleDrag auf.
+                    handleDrag.handleDragEnded()
                 }
             )
             // Deaktiviert die SelectionView, wenn sich das Spiel nicht im Status "play" befindet.
@@ -174,8 +196,8 @@ struct PlayView: View {
             .padding(.horizontal)
             HStack {
                 // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
-                buttons.intPicker(size: $modelView.faktor, from: 1, to: 10, label: "Faktor")
-                buttons.positivnegativButton(isChecked: $modelView.positivNegativ)
+                buttons.intPicker(size: $modelView.factor, from: 1, to: 10, label: "Faktor")
+                buttons.positivNegativButton(isChecked: $modelView.positivNegativ)
 
             }.padding(.horizontal)
             // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
@@ -186,8 +208,10 @@ struct PlayView: View {
                 buttons.redo()
                 Spacer()
             }
-            .padding([.leading, .bottom, .trailing])
+
+//            .padding([.leading, .bottom, .trailing])
         }
+//        .padding()
     }
 
     // Konstanten für die PlayView

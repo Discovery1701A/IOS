@@ -5,6 +5,7 @@
 //  Created by Anna Rieckmann on 29.12.23.
 //
 // Die StartView ist eine SwiftUI-Ansicht, die den Startbildschirm der App repräsentiert.
+
 import SwiftUI
 
 struct StartView: View {
@@ -23,22 +24,22 @@ struct StartView: View {
             Text("Start")
                 .font(.largeTitle)
                 .padding(.bottom, 20)
-                
+            
             Spacer()
+
             // Picker für Schwierigkeitsgrad und Größe der Matrix
             buttons.difficutltyPicker(difficulty: $modelView.difficulty, array: modelView.difficultyArray, label: "Schwierigkeitsgrad")
             buttons.intPicker(size: $modelView.rowCount, from: 2, to: 6, label: "Wie viele Reihen")
                 .padding([.leading, .trailing, .bottom])
-                
+
             Spacer()
-                
+            
             // Start-Button für den Spielbeginn
             buttons.startButton()
                 .padding()
-                
+
             Spacer()
-            Spacer()
-                
+            
             // Button für den Zugriff auf die Highscore-Ansicht
             buttons.highScoreButton()
         }

@@ -4,9 +4,10 @@
 //
 //  Created by Anna Rieckmann on 15.12.23.
 //
+// Struct für ein Zahlenfeld
 
 import SwiftUI
-// Struct für ein Zahlenfeld
+
 struct FieldView: View {
     let field: ViewModel.Field
 
@@ -86,7 +87,7 @@ struct FieldSizeModifier: ViewModifier {
                     Color.clear
                         // Aktualisiert die Größenpräferenz mit der aktuellen Größe des Feldes
                         .preference(key: SizePreferenceKey.self, value: geo.size)
-
+                     
                         .onAppear {
                             // Ein Timer wird verwendet, um regelmäßig die Größe des Feldes zu überprüfen
                             Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
@@ -94,7 +95,7 @@ struct FieldSizeModifier: ViewModifier {
                                 if self.fieldSize == .zero {
                                     self.fieldSize = geo.size
                                 }
-//                                print(geo.size, fieldSize, previousSize)
+                                print(geo.size, fieldSize, previousSize)
                                 // Überprüft, ob sich die aktuelle Größe von der vorherigen Feldgröße unterscheidet
                                 if geo.size != self.fieldSize {
 //                                    print("aspera")
@@ -105,7 +106,7 @@ struct FieldSizeModifier: ViewModifier {
 //                                        print("dupdidu")
                                         // Setzt die Feldgröße auf die vorherige Größe zurück
                                         if geo.size.width != 0.0 {
-//                                                print("pikabu")
+                                                print("pikabu")
                                             self.fieldSize = geo.size
                                         }
                                     }

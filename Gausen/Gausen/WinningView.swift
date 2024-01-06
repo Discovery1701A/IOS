@@ -5,6 +5,7 @@
 //  Created by Anna Rieckmann on 29.12.23.
 //
 // Die Ansicht, die angezeigt wird, wenn der Spieler das Spiel gewonnen hat.
+
 import SwiftUI
 
 // Die Ansicht für den Gewinnzustand des Spiels.
@@ -24,7 +25,7 @@ struct WinningView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: ConstantWinning.cornerRadiusRec)
                     .fill(Color(hex: 0xfcbb51, alpha: 0.75))
-                    .frame(maxHeight: ConstantWinning.frameMaxHeight) 
+                    .frame(maxHeight: ConstantWinning.frameMaxHeight)
                     .padding(.horizontal, 20)
                 Text("🎉Gewonnen🎉")
                     .font(.largeTitle)
@@ -32,7 +33,8 @@ struct WinningView: View {
             .padding(.bottom, 20)
             Spacer()
             // Textfeld für die Eingabe des Spielernamens mit abgerundetem Rand.
-            TextField("Name eingeben", text: $modelView.playerName).font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+            TextField("Name eingeben", text: $modelView.playerName)
+                .font(.title)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .background(
                     RoundedRectangle(cornerRadius: ConstantWinning.cornerRadiusText)
@@ -41,7 +43,7 @@ struct WinningView: View {
                 .frame(maxWidth: 400)
                 .padding([.leading, .trailing], 20)
                 .padding(.vertical, 10)
-              
+
             Spacer()
             Spacer()
             // Button zur HighScoreView.
@@ -53,9 +55,9 @@ struct WinningView: View {
     }
 
     func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        UIApplication.shared.endEditing() // Methode umbenannt, um die Aktion zu verdeutlichen
     }
-    
+
     // Konstanten für die WinningView
     enum ConstantWinning {
         static let cornerRadiusRec: CGFloat = 10

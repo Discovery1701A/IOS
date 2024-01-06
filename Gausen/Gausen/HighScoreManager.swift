@@ -4,10 +4,10 @@
 //
 //  Created by Anna Rieckmann on 23.12.23.
 //
+/// Klasse zum Verwalten und Speichern von Highscores
 
 import Foundation
 
-// Klasse zum Verwalten und Speichern von Highscores
 class HighscoreManager: ObservableObject {
     static let shared = HighscoreManager()
     
@@ -70,7 +70,7 @@ class HighscoreManager: ObservableObject {
             
             // Laden der Daten aus dem Dokumentenverzeichnis
             if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName),
-               let data = try? Data(contentsOf: url) {
+                let data = try? Data(contentsOf: url) {
 //                // Dekodieren der Daten basierend auf der Highscore-Kategorie
                 switch category {
                 case .time:
@@ -102,9 +102,10 @@ class HighscoreManager: ObservableObject {
         // Überprüfung, ob der String das erwartete Format (zwei Teile) hat und ob diese Teile in Double umgewandelt werden können
         guard components.count == 2,
               let minutes = Double(components[0]),
-              let seconds = Double(components[1])
+              let seconds = Double(components[1]),
+              minutes >= 0 && seconds >= 0 // Sicherstellen, dass Minuten und Sekunden nicht negativ sind
         else {
-            return nil // Rückgabe von nil im Falle einer fehlerhaften Zeichenkette oder eines falschen Formats
+            return nil
         }
         
         // Berechnung der Gesamtzeit in Sekunden
@@ -129,7 +130,9 @@ class HighscoreManager: ObservableObject {
                 saveScoreRow = saveScoreRow2
             }
             // Füge den neuen Score an der richtigen Stelle ein
-            if convertTimeStringToDouble(time)! < convertTimeStringToDouble(highScoreTime[difficultyKey]![i][1])! && isIn == false {
+            if let convertedTime = convertTimeStringToDouble(time),
+               convertedTime < convertTimeStringToDouble(highScoreTime[difficultyKey]![i][1])!,
+               isIn == false {
                 saveScoreRow = highScoreTime[difficultyKey]![i]
                 highScoreTime[difficultyKey]![i] = [personName, time]
                 isIn = true
@@ -157,7 +160,8 @@ class HighscoreManager: ObservableObject {
                 saveScoreRow = saveScoreRow2
             }
             // Füge den neuen Score an der richtigen Stelle ein
-            if activityCount < Int(highScoreActivityCount[difficultyKey]![i][1])! && isIn == false {
+            if let convertedActivityCount = Int(highScoreActivityCount[difficultyKey]![i][1]),
+               activityCount < convertedActivityCount && isIn == false {
                 saveScoreRow = highScoreActivityCount[difficultyKey]![i]
                 highScoreActivityCount[difficultyKey]![i] = [personName, String(activityCount)]
                 isIn = true

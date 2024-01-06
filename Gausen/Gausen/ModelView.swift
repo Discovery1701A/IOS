@@ -4,13 +4,13 @@
 //
 //  Created by Anna Rieckmann on 23.11.23.
 //
+// Definiere eine ViewModel-Klasse
 
 import Foundation
 import SwiftUI
 
-// Definiere eine ViewModel-Klasse
 class ViewModel: ObservableObject {
-    // Definiere  Typalias
+    // Definiere Typalias
     typealias Field = Model.Field
     typealias Difficulty = Model.Difficulty
     typealias DivOrMulti = Model.DivOrMulti
@@ -29,15 +29,15 @@ class ViewModel: ObservableObject {
     @Published var draggedRow: Int?
     @Published var gameStatus: GameStatus = .start
     @Published var playerName: String = ""
-    @Published var faktor = 1
-    @Published var rowCount = 3
+    @Published var factor: Int = 1
+    @Published var rowCount: Int = 3
     @Published var difficultyArray: [Model.Difficulty] = [.easy, .normal, .hard]
     @Published var difficulty: Model.Difficulty = .normal
     @Published private var model: Model = createSetGame(rowCount: 3, difficulty: .easy)
     @Published var selectedRows: [Int] = []
     @Published var selectedColumns: [Int] = []
     @Published var fieldSize: CGSize = .zero
-    @Published var gradiendColors: [Color] = [Color.cyan, Color.white]
+    @Published var gradientColors: [Color] = [Color.cyan, Color.white]
     var blurRadius: CGFloat = 5
     var positivNegativ = false
     
@@ -57,12 +57,12 @@ class ViewModel: ObservableObject {
     }
 
     // Funktion, um den Wert von positivNegativ abzurufen
-    func getpositivNegativ() -> Bool {
+    func getPositivNegativ() -> Bool {
         return positivNegativ
     }
 
     // Funktion, um den Wert von positivNegativ zu setzen
-    func setpositivNegativ(_ value: Bool) {
+    func setPositivNegativ(_ value: Bool) {
         positivNegativ = value
     }
     
@@ -73,7 +73,7 @@ class ViewModel: ObservableObject {
         }
     }
     
-    // Funktion zum erstellen eines Array
+    // Funktion zum Erstellen eines Arrays
     func valueArray(from value1: Int, to value2: Int) -> [Int] {
         var array: [Int] = []
         for i in value1 ..< value2 + 1 {
@@ -109,20 +109,20 @@ class ViewModel: ObservableObject {
     }
 
     // Funktionen zum Hinzufügen und Skalieren von Zeilen im Modell
-    func addScaleRow(faktor: Int, row1: Int, row2: Int, divOrMulti : Model.DivOrMulti) {
-        model.addScaleRow(faktor: faktor, row1: row1, row2: row2, divOrMulti: divOrMulti, positivNegativ: positivNegativ)
+    func addScaleRow(faktor: Int, row1: Int, row2: Int, divOrMulti: Model.DivOrMulti) {
+        model.addScaledRow(faktor: faktor, row1: row1, row2: row2, divOrMulti: divOrMulti, positivNegativ: positivNegativ)
     }
     
-    func scaleRow(faktor: Int, row: Int, divOrMulti : Model.DivOrMulti) {
+    func scaleRow(faktor: Int, row: Int, divOrMulti: Model.DivOrMulti) {
         model.scaleRow(faktor: faktor, row: row, divOrMulti: divOrMulti, positivNegativ: positivNegativ)
     }
     
     // Funktion zur Überprüfung der Skalierung im Modell
-    func controllScale(row: Int, faktor: Int, divOrMulti : Model.DivOrMulti) -> Bool {
-        model.controllScale(row: row, faktor: faktor, divOrMulti: divOrMulti)
+    func controlScale(row: Int, faktor: Int, divOrMulti: Model.DivOrMulti) -> Bool {
+        model.controlScale(row: row, faktor: faktor, divOrMulti: divOrMulti)
     }
     
-    // Funktion zum Makieren von gezogenen Zeilen oder Spalten im Modell
+    // Funktion zum Markieren von gezogenen Zeilen oder Spalten im Modell
     func drag(item: Int, bool: Bool, rowOrColumn: Model.RowOrColumn) {
         model.drag(item: item, bool: bool, rowOrColumn: rowOrColumn)
     }
@@ -130,7 +130,7 @@ class ViewModel: ObservableObject {
     // Funktion zum Erstellen einer neuen Matrix mit einer bestimmten Zeilenanzahl
     func newMatrix(rowCount: Int, difficulty: Model.Difficulty) {
         model = ViewModel.createSetGame(rowCount: rowCount, difficulty: difficulty)
-        model.generatMatrix()
+        model.generateMatrix()
     }
     
     // Funktion zum Zurücksetzen von Variablen der Fields im Modell
@@ -138,13 +138,13 @@ class ViewModel: ObservableObject {
         model.varReset()
     }
     
-    // Funktionen zum Zurück- und Vorgehen der Matrixen im Modell (undo und redo)
+    // Funktionen zum Zurück- und Vorgehen der Matrizen im Modell (undo und redo)
     func back() {
         model.back()
     }
     
-    func forwart() {
-        model.forwart()
+    func forward() {
+        model.forward()
     }
     
     // Funktion zum Aktualisieren der Matrixknoten im Modell
@@ -167,23 +167,21 @@ class ViewModel: ObservableObject {
         model.updateSelection(item: item, selection: selection, rowOrColumn: rowOrColumn)
     }
 
-    // Funktion zum wechseln der Hintergrundfarbe
+    // Funktion zum Wechseln der Hintergrundfarbe
     func colorSwitchStatus() {
         switch gameStatus {
         case .start:
-     
-            gradiendColors = [colorSwitchDifficulty(), Color.white]
+            gradientColors = [colorSwitchDifficulty(), Color.white]
         case .play:
-    
-            gradiendColors = [Color.white, colorSwitchDifficulty()]
+            gradientColors = [Color.white, colorSwitchDifficulty()]
         case .winning:
-            gradiendColors = [Color.white, Color.yellow]
+            gradientColors = [Color.white, Color.yellow]
         case .highScore:
-            gradiendColors = [colorSwitchDifficulty(), Color.white]
+            gradientColors = [colorSwitchDifficulty(), Color.white]
         }
     }
 
-    // Funktion zum wechseln der Farbe jenach Schwirigkeitsgrad
+    // Funktion zum Wechseln der Farbe je nach Schwierigkeitsgrad
     func colorSwitchDifficulty() -> Color {
         switch difficulty {
         case .easy:

@@ -4,8 +4,10 @@
 //
 //  Created by Anna Rieckmann on 15.12.23.
 //
+// Klasse für einen Linked List, Grundidee aus Algorithmen und Datenstrukturen
+
 import Foundation
-// Klasse für einen Linked List, Grundidee aus Aloritmen und Datenstrukturen
+
 class LinkedList {
     // Innere Klasse für einen Listknoten
     class Node {
@@ -98,7 +100,7 @@ class LinkedList {
     }
     
     // Funktion zum Entfernen aller Knoten hinter einem bestimmten Knoten
-    func removeAllBehinde(currentNode: Node) {
+    func removeAllBehind(currentNode: Node) {
         // Setzen des Nachfolgers des aktuellen Knotens auf nil, um alle nachfolgenden Knoten zu entfernen
         currentNode.successor = nil
         // Der letzte Knoten wird auf den aktuellen Knoten gesetzt
@@ -115,7 +117,7 @@ class LinkedList {
     }
 
     // Funktion zum Vorwärtsgehen zu einem nachfolgenden Knoten in der Liste
-    func forwart(currentNode: Node) -> Node {
+    func forward(currentNode: Node) -> Node {
         // Wenn ein nachfolgender Knoten vorhanden ist, wird er zurückgegeben, sonst der leere Knoten
         if currentNode.successor != nil {
             return currentNode.successor!

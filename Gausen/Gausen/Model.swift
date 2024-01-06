@@ -4,10 +4,10 @@
 //
 //  Created by Anna Rieckmann on 23.11.23.
 //
+// Modellstruktur für das Gausen-Spiel
 
 import Foundation
 
-// Modellstruktur für das Set-Spiel
 struct Model {
     // Struktur für ein Feld im Spiel
     struct Field: Identifiable, Hashable {
@@ -46,7 +46,7 @@ struct Model {
         self.unitMatrix = [] // Initialisierung der Einheitsmatrix
         self.time = 0.0 // Initialisierung der Spielzeit
         self.activityCount = 0 // Initialisierung der Aktionsanzahl
-        self.generatMatrix() // Generierung der Anfangsmatrix
+        self.generateMatrix() // Generierung der Anfangsmatrix
         self.linkedList.add(element: self.matrix) // Hinzufügen der Matrix zum Anfang der verketteten Liste
         self.currentNode = self.linkedList.lastNode // Der aktuelle Knoten wird auf den letzten Knoten gesetzt
     }
@@ -79,7 +79,7 @@ struct Model {
                     // Überprüfen, ob der Inhalt des Feldes unterschiedlich ist
                     if currentNodeMatrix[i][j].content != self.matrix[i][j].content {
                         // Wenn unterschiedlich, lösche den Verlauf ab diesem Punkt  in die Richtung->
-                        self.linkedList.removeAllBehinde(currentNode: self.currentNode)
+                        self.linkedList.removeAllBehind(currentNode: self.currentNode)
                         // Setze Makierungen zurück und speichere den aktuellen Zustand erneut
                         self.varReset()
                         self.linkedList.add(element: self.matrix)
@@ -106,11 +106,11 @@ struct Model {
     }
 
     // Funktion zum Vorwärtsgehen zu einem nachfolgenden Zustand in der verketteten Liste (redo)
-    mutating func forwart() {
+    mutating func forward() {
         // Überprüfen, ob es einen nachfolgenden Zustand gibt
-        if self.linkedList.forwart(currentNode: self.currentNode).element != nil {
+        if self.linkedList.forward(currentNode: self.currentNode).element != nil {
             // Aktualisiere den aktuellen Knoten und die Matrix
-            self.currentNode = self.linkedList.forwart(currentNode: self.currentNode)
+            self.currentNode = self.linkedList.forward(currentNode: self.currentNode)
             self.matrix = self.currentNode.element as! [[Field]]
         }
     }
@@ -118,7 +118,7 @@ struct Model {
     // Funktion zum Vertauschen von zwei Zeilen in der Matrix
     mutating func rowSwitch(row1: Int, row2: Int) {
         // Überprüfen, ob die übergebenen Zeilenindizes gültig sind
-        if self.matrix[0].count > row1 && row1 >= 0 && self.matrix[0].count > row2 && row2 >= 0 {
+        if self.matrix[0].count > row1, row1 >= 0, self.matrix[0].count > row2, row2 >= 0 {
             // Vertausche die Zeilen
             let rowSaver: [Field] = self.matrix[row2]
             self.matrix[row2] = self.matrix[row1]
@@ -132,7 +132,7 @@ struct Model {
     // Funktion zum Vertauschen von zwei Spalten in der Matrix
     mutating func columnSwitch(column1: Int, column2: Int) {
         // Überprüfen, ob die übergebenen Spaltenindizes gültig sind
-        if self.matrix[0].count > column1 && column1 >= 0 && self.matrix[0].count > column2 && column2 >= 0 {
+        if self.matrix[0].count > column1, column1 >= 0, self.matrix[0].count > column2, column2 >= 0 {
             // Vertausche die Spalten
             for i in 0 ..< self.matrix.count {
                 let columnSaver: Field = self.matrix[i][column2]
@@ -146,9 +146,9 @@ struct Model {
     }
 
     // Funktion zum Skalieren einer Zeile in der Matrix
-    mutating func scaleRow(faktor: Int, row: Int, divOrMulti : DivOrMulti, positivNegativ: Bool) {
+    mutating func scaleRow(faktor: Int, row: Int, divOrMulti: DivOrMulti, positivNegativ: Bool) {
         // Überprüfen, ob die Skalierung gültig ist
-        if self.controllScale(row: row, faktor: faktor, divOrMulti : divOrMulti) {
+        if self.controlScale(row: row, faktor: faktor, divOrMulti: divOrMulti) {
             // Skaliere die Zeile
             for i in 0 ..< self.matrix[row].count {
                 if positivNegativ {
@@ -167,9 +167,9 @@ struct Model {
     }
 
     // Funktion zum Hinzufügen und Skalieren einer Zeile zu einer anderen in der Matrix
-    mutating func addScaleRow(faktor: Int, row1: Int, row2: Int, divOrMulti : DivOrMulti, positivNegativ: Bool) {
+    mutating func addScaledRow(faktor: Int, row1: Int, row2: Int, divOrMulti: DivOrMulti, positivNegativ: Bool) {
         // Überprüfen, ob die Skalierung gültig ist
-        if self.controllScale(row: row1, faktor: faktor, divOrMulti : divOrMulti) {
+        if self.controlScale(row: row1, faktor: faktor, divOrMulti: divOrMulti) {
             // Hinzufügen und Skalieren der Zeile zu einer anderen
             var rowSaver: [Int] = []
             for i in 0 ..< self.matrix[row1].count {
@@ -193,7 +193,7 @@ struct Model {
     }
 
     // Funktion zur Überprüfung, ob eine Skalierung in einer Zeile gültig ist
-    mutating func controllScale(row: Int, faktor: Int, divOrMulti : DivOrMulti) -> Bool {
+    mutating func controlScale(row: Int, faktor: Int, divOrMulti: DivOrMulti) -> Bool {
         // Überprüfen, ob der Faktor nicht 0 ist
         if faktor != 0 {
             // Überprüfen, ob die Skalierung in jedem Element der Zeile gültig ist
@@ -217,7 +217,7 @@ struct Model {
     }
 
     // Funktion zur Generierung der Einheitsmatrix
-    mutating func generatMatrix() {
+    mutating func generateMatrix() {
         // Initialisiere eine leere Matrix und eine ID
         var generatedMatrix: [[Field]] = []
         var id = 0
@@ -242,7 +242,7 @@ struct Model {
         self.matrix = generatedMatrix
         self.unitMatrix = generatedMatrix
         self.startTime = Date()
-        switch difficulty {
+        switch self.difficulty {
         case .easy:
             self.mixMatrix(howMany: 1, range: 10)
         case .normal:
@@ -273,7 +273,7 @@ struct Model {
                 var randomDivOrMulti: DivOrMulti = Bool.random() ? .multiply : .divide
 
                 // Überprüfen, ob die Skalierung gültig ist, andernfalls den Multiplikator umkehren
-                if !self.controllScale(row: i, faktor: randomValue, divOrMulti: randomDivOrMulti) {
+                if !self.controlScale(row: i, faktor: randomValue, divOrMulti: randomDivOrMulti) {
                     randomDivOrMulti = .multiply
                 }
                 // Überprüfen, dass die Zeilenindizes unterschiedlich sind
@@ -284,7 +284,7 @@ struct Model {
                 // Skaliere die aktuelle Zeile und füge sie zu einer anderen Zeile hinzu
                 self.scaleRow(faktor: randomValue, row: i, divOrMulti: randomDivOrMulti, positivNegativ: randomPositivNegativ)
                 if randomRow2 != i {
-                    self.addScaleRow(faktor: 1, row1: i, row2: randomRow2, divOrMulti: randomDivOrMulti, positivNegativ: randomPositivNegativ)
+                    self.addScaledRow(faktor: 1, row1: i, row2: randomRow2, divOrMulti: randomDivOrMulti, positivNegativ: randomPositivNegativ)
                 }
             }
 
@@ -331,17 +331,16 @@ struct Model {
     }
 
     // Funktion zum Aktivieren/Deaktivieren des "Drag"-Zustands für eine Zeile oder Spalte
-    mutating func drag(item : Int, bool: Bool, rowOrColumn : RowOrColumn) {
+    mutating func drag(item: Int, bool: Bool, rowOrColumn: RowOrColumn) {
         // Aktiviere/Deaktiviere "Draged"-Zustand für eine Zeile oder Spalte
         if item >= 0, item < self.matrix.count {
             for i in 0 ..< self.matrix.count {
                 switch rowOrColumn {
-                case .row :
+                case .row:
                     self.matrix[item][i].draged = bool
                 case .column:
                     self.matrix[i][item].draged = bool
                 }
-                
             }
         }
         // Aktualisiere den Matrixknoten
@@ -349,8 +348,8 @@ struct Model {
     }
 
     // Funktion zum Aktualisieren des "selection"-Zustands für eine Zeile oder Spalte
-    mutating func updateSelection(item: Int, selection: Bool, rowOrColumn : RowOrColumn) {
-        guard item >= 0 && item < self.matrix.count else {
+    mutating func updateSelection(item: Int, selection: Bool, rowOrColumn: RowOrColumn) {
+        guard item >= 0, item < self.matrix.count else {
             return
         }
         for i in 0 ..< self.matrix.count {
@@ -399,16 +398,17 @@ struct Model {
             }
         }
     }
+
     // enum für Reihe oder Spalte
     enum RowOrColumn {
         case row, column
     }
-    
+
     enum DivOrMulti: String {
         case multiply, divide
-        
+
         func stringValue() -> String {
-               return self.rawValue
-           }
+            return self.rawValue
+        }
     }
 }

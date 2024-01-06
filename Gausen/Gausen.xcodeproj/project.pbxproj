@@ -16,7 +16,7 @@
 		58BECE522B36E54E0020F5E2 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BECE512B36E54E0020F5E2 /* Buttons.swift */; };
 		58BECE542B371D070020F5E2 /* HighScoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BECE532B371D070020F5E2 /* HighScoreManager.swift */; };
 		58BECE562B372A8A0020F5E2 /* HighScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BECE552B372A8A0020F5E2 /* HighScoreView.swift */; };
-		58BECE582B3816650020F5E2 /* HandelDrag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BECE572B3816650020F5E2 /* HandelDrag.swift */; };
+		58BECE582B3816650020F5E2 /* HandleDrag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BECE572B3816650020F5E2 /* HandleDrag.swift */; };
 		58BF9CE42B0FC1DC002D5DCC /* GausenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BF9CE32B0FC1DC002D5DCC /* GausenApp.swift */; };
 		58BF9CE62B0FC1DC002D5DCC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58BF9CE52B0FC1DC002D5DCC /* ContentView.swift */; };
 		58BF9CE82B0FC1DE002D5DCC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58BF9CE72B0FC1DE002D5DCC /* Assets.xcassets */; };
@@ -35,7 +35,7 @@
 		58BECE512B36E54E0020F5E2 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		58BECE532B371D070020F5E2 /* HighScoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighScoreManager.swift; sourceTree = "<group>"; };
 		58BECE552B372A8A0020F5E2 /* HighScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighScoreView.swift; sourceTree = "<group>"; };
-		58BECE572B3816650020F5E2 /* HandelDrag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandelDrag.swift; sourceTree = "<group>"; };
+		58BECE572B3816650020F5E2 /* HandleDrag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandleDrag.swift; sourceTree = "<group>"; };
 		58BF9CE02B0FC1DC002D5DCC /* Gausen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gausen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58BF9CE32B0FC1DC002D5DCC /* GausenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GausenApp.swift; sourceTree = "<group>"; };
 		58BF9CE52B0FC1DC002D5DCC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				58BF9CE32B0FC1DC002D5DCC /* GausenApp.swift */,
-				58BECE572B3816650020F5E2 /* HandelDrag.swift */,
+				58BECE572B3816650020F5E2 /* HandleDrag.swift */,
 				58BF9CE52B0FC1DC002D5DCC /* ContentView.swift */,
 				58AA733C2B3F0A140036D388 /* WinningView.swift */,
 				58AA733A2B3F05900036D388 /* PlayView.swift */,
@@ -208,7 +208,7 @@
 				586A7B232B2C94280034BA36 /* LinkedList.swift in Sources */,
 				58BECE522B36E54E0020F5E2 /* Buttons.swift in Sources */,
 				58BECE562B372A8A0020F5E2 /* HighScoreView.swift in Sources */,
-				58BECE582B3816650020F5E2 /* HandelDrag.swift in Sources */,
+				58BECE582B3816650020F5E2 /* HandleDrag.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

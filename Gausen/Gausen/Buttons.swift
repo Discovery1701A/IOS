@@ -4,20 +4,20 @@
 //
 //  Created by Anna Rieckmann on 23.12.23.
 //
+// Struct verschiedene Buttons beinhält, die Aktionen im Zusammenhang mit dem ModelView auslösen
 
 import SwiftUI
 
-// Struct verschiedene Buttons beinhält, die Aktionen im Zusammenhang mit dem ModelView auslösen
-
 struct Buttons {
     @ObservedObject var modelView: ViewModel
+    
     // Button für das Vorgehen (Redo) im Spiel
     @ViewBuilder
     func redo() -> some View {
         Button(
             action: {
                 // Wechselt zum nächsten Zustand in der Verlaufsliste
-                modelView.forwart()
+                modelView.forward()
                 // Setzt die Auswahl zurück
                 modelView.resetSelection()
             },
@@ -117,7 +117,7 @@ struct Buttons {
             }
         )
         // Deaktiviert den Button, wenn das Spiel nicht im Play Status ist oder sich im Highscore-Status befindet
-        .disabled(modelView.gameStatus != .play && modelView.gameStatus != .highScore)
+        .disabled(modelView.gameStatus == .winning)
     }
 
     // Button zum Hinzufügen von zwei ausgewählten Zeilen mit Division oder Multiplikation
@@ -129,9 +129,9 @@ struct Buttons {
                 modelView.varReset()
                 if let firstRow = modelView.selectedRows.first, let secondRow = modelView.selectedRows.dropFirst().first {
                     // Überprüft, ob die Division durchführbar ist, und fügt dann die beiden ausgewählten Zeilen hinzu
-                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), divOrMulti: divOrMulty) {
+                    if modelView.controlScale(row: firstRow, faktor: modelView.factor, divOrMulti: divOrMulty) {
                         withAnimation {
-                            modelView.addScaleRow(faktor: Int(modelView.faktor), row1: firstRow, row2: secondRow, divOrMulti: divOrMulty)
+                            modelView.addScaleRow(faktor: modelView.factor, row1: firstRow, row2: secondRow, divOrMulti: divOrMulty)
                         }
                     }
                 }
@@ -162,9 +162,9 @@ struct Buttons {
                 modelView.varReset()
                 if let firstRow = modelView.selectedRows.first {
                     // Überprüft, ob die Division durchführbar ist, und skaliert dann die ausgewählte Zeile
-                    if modelView.controllScale(row: firstRow, faktor: Int(modelView.faktor), divOrMulti: divOrMulty) {
+                    if modelView.controlScale(row: firstRow, faktor: modelView.factor, divOrMulti: divOrMulty) {
                         withAnimation {
-                            modelView.scaleRow(faktor: Int(modelView.faktor), row: firstRow, divOrMulti: divOrMulty)
+                            modelView.scaleRow(faktor: modelView.factor, row: firstRow, divOrMulti: divOrMulty)
                         }
                     }
                 }
@@ -181,7 +181,7 @@ struct Buttons {
     }
 
     // Funktion für die Erstellung einer Checkbox, die zwischen positiv (+) und negativ (-) wechselt
-    func positivnegativButton(isChecked: Binding<Bool>) -> some View {
+    func positivNegativButton(isChecked: Binding<Bool>) -> some View {
         Button(
             action: {
                 // Toggle-Funktion für die Umkehrung des aktuellen Zustands der Checkbox

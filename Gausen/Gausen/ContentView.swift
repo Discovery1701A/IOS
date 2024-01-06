@@ -4,18 +4,19 @@
 //
 //  Created by Anna Rieckmann on 23.11.23.
 //
-// Die Hauptansicht, die den Spielstatus verwaltet und die entsprechenden Unteansichten anzeigt.
+// Die Hauptansicht, die den Spielstatus verwaltet und die entsprechenden Unteransichten anzeigt.
+
 import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var modelView: ViewModel
 
-    // Der Body der Ansicht, die die Spiellogik steuert und die entsprechenden Unteransichten anzeigt.
+    // Der Body der Ansicht, der die Spiellogik steuert und die entsprechenden Unteransichten anzeigt.
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 LinearGradient(
-                    gradient: Gradient(colors: modelView.gradiendColors),
+                    gradient: Gradient(colors: modelView.gradientColors), // Korrektur des Schreibfehlers
                     startPoint: .top,
                     endPoint: .bottom
                 )
@@ -24,7 +25,6 @@ struct ContentView: View {
                 switch modelView.gameStatus {
                 case .start:
                     // StartView wird angezeigt, wenn das Spiel im Startstatus ist.
-
                     StartView(modelView: modelView)
 
                 case .play:
@@ -38,7 +38,7 @@ struct ContentView: View {
                         withAnimation(.easeInOut(duration: 2)) {
                             PlayView(modelView: modelView, size: geometry.size)
                                 .ignoresSafeArea(.keyboard)
-                                .blur(radius: modelView.blurRadius) //  Unschärfe
+                                .blur(radius: modelView.blurRadius) // Unschärfe
                         }
                         withAnimation(.spring()) {
                             WinningView(modelView: modelView)
@@ -47,8 +47,9 @@ struct ContentView: View {
 
                 case .highScore:
                     // HighscoreView wird angezeigt, wenn das Spiel im Highscorestatus ist.
-                    HighscoreView(highScoreManager: modelView.highScoreManager, modelView: modelView)
+                    HighscoreView( modelView: modelView)
                 }
+                
             }
             .ignoresSafeArea(.keyboard)
         }
@@ -64,6 +65,7 @@ struct ContentView: View {
                 modelView.colorSwitchStatus()
             }
         }
+        
     }
 }
 
