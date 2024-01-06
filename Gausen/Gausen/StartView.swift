@@ -31,7 +31,9 @@ struct StartView: View {
                 // Picker für Schwierigkeitsgrad und Größe der Matrix
                 buttons.difficutltyPicker(difficulty: $modelView.difficulty, array: modelView.difficultyArray, label: "Schwierigkeitsgrad")
                     .padding([.leading, .trailing, .bottom])
+                
                 Spacer()
+                
                 buttons.intPicker(size: $modelView.rowCount, from: 2, to: 6, label: "Wie viele Reihen")
                     .padding([.leading, .trailing, .bottom])
                 
@@ -41,7 +43,6 @@ struct StartView: View {
                     VStack {
                         // Start-Button für den Spielbeginn
                         buttons.startButton()
-                        //                        .padding()
                         
                         Spacer()
                         
@@ -53,8 +54,8 @@ struct StartView: View {
                     HStack {
                         // Start-Button für den Spielbeginn
                         Spacer()
+                        
                         buttons.startButton()
-                        //                        .padding()
                         
                         Spacer()
                         

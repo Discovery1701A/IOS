@@ -26,6 +26,7 @@ struct WinningView: View {
                 RoundedRectangle(cornerRadius: ConstantWinning.cornerRadiusRec)
                     .fill(Color(hex: 0xfcbb51, alpha: 0.75))
                     .frame(maxHeight: ConstantWinning.frameMaxHeight)
+                    .blur(radius: modelView.blurRadius) // Unschärfe
                     .padding(.horizontal, 20)
                 Text("🎉Gewonnen🎉")
                     .font(.largeTitle)

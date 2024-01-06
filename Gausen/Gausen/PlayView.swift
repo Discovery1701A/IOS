@@ -31,6 +31,7 @@ struct PlayView: View {
                         VStack {
                             matrixView()
                                 .frame(height: modelView.parentSize.height / 5 * 3)
+                                .ignoresSafeArea(.keyboard)
                             controller()
                                 .frame(height: modelView.parentSize.height / 5 * 2)
 //                                .padding(.bottom)
@@ -40,6 +41,7 @@ struct PlayView: View {
                         HStack {
                             matrixView()
                                 .frame(width: modelView.parentSize.width / 2)
+                                .ignoresSafeArea(.keyboard)
                             controller()
                                 .frame(width: modelView.parentSize.width / 2)
                             
@@ -55,8 +57,11 @@ struct PlayView: View {
                 }
                 .onChange(of: geometry.size) { _, newSize in
                     // Aktualisieren Sie die Größe des Elternelements bei Änderungen der Größe
+
                     modelView.parentSize = newSize
+                      
                 }
+                
                 // FieldSize wird so besser bestimmt
                 .onChange(of: UIDevice.current.orientation.isLandscape) { _, _ in
                     modelView.fieldSize = .zero

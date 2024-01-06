@@ -28,6 +28,7 @@ struct FieldView: View {
                         .font(font(in: geometry.size, content: String(field.content)))
                 }
             }
+            .ignoresSafeArea(.keyboard)
         }
     }
 
@@ -95,7 +96,7 @@ struct FieldSizeModifier: ViewModifier {
                                 if self.fieldSize == .zero {
                                     self.fieldSize = geo.size
                                 }
-                                print(geo.size, fieldSize, previousSize)
+//                                print(geo.size, fieldSize, previousSize)
                                 // Überprüft, ob sich die aktuelle Größe von der vorherigen Feldgröße unterscheidet
                                 if geo.size != self.fieldSize {
 //                                    print("aspera")
@@ -106,7 +107,7 @@ struct FieldSizeModifier: ViewModifier {
 //                                        print("dupdidu")
                                         // Setzt die Feldgröße auf die vorherige Größe zurück
                                         if geo.size.width != 0.0 {
-                                                print("pikabu")
+//                                                print("pikabu")
                                             self.fieldSize = geo.size
                                         }
                                     }
