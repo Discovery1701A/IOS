@@ -12,7 +12,7 @@ struct GausenApp: App {
     let modelView = ViewModel()
     var body: some Scene {
         WindowGroup {
-            ContentView(modelView: modelView)
+            ContentView(viewModel: modelView)
         }
     }
 }

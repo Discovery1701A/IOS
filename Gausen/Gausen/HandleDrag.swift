@@ -9,15 +9,15 @@
 import SwiftUI
 
 struct HandleDrag {
-    @ObservedObject var modelView: ViewModel
+    @ObservedObject var viewModel: ViewModel
     
     // Funktion zum Behandeln von Drag-Gesten für das Verschieben von Spalten
     func handleDragChangedColumn(value: DragGesture.Value, column: Int, size: CGSize) {
         // Zurücksetzen aller Zustände im ViewModel, die mit dem Dragging in Verbindung stehen
-        modelView.varReset()
-        modelView.resetSelection()
+        viewModel.varReset()
+        viewModel.resetSelection()
         // Markieren der gezogenen Spalte im ViewModel
-        modelView.drag(item: column, bool: true, rowOrColumn: .column)
+        viewModel.drag(item: column, bool: true, rowOrColumn: .column)
         
         // Berechnen der Translation und der Index der gezogenen Spalte
         let translation = value.translation.width
@@ -35,29 +35,29 @@ struct HandleDrag {
         }
         
         // Markieren der gezogenen Spalte im ViewModel und Begrenzen der Position auf den erlaubten Bereich
-        modelView.drag(item: draggedColumnIndex, bool: true, rowOrColumn: .column)
-        draggedColumnIndex = max(0, min(draggedColumnIndex, modelView.matrix.first?.count ?? 0))
+        viewModel.drag(item: draggedColumnIndex, bool: true, rowOrColumn: .column)
+        draggedColumnIndex = max(0, min(draggedColumnIndex, viewModel.matrix.first?.count ?? 0))
        
         // Überprüfen und Durchführen des Spaltenwechsels im ViewModel
-        if draggedColumnIndex != modelView.draggedColumn {
+        if draggedColumnIndex != viewModel.draggedColumn {
             withAnimation {
-                modelView.columnSwitch(column1: modelView.draggedColumn ?? column, column2: draggedColumnIndex)
+                viewModel.columnSwitch(column1: viewModel.draggedColumn ?? column, column2: draggedColumnIndex)
             }
-            modelView.draggedColumn = draggedColumnIndex
+            viewModel.draggedColumn = draggedColumnIndex
                 
         }
         
         // Zurücksetzen des Drag-Zustands für nicht-gezogene Spalten
-        for i in 0 ..< modelView.matrix.count where i != draggedColumnIndex {
-            modelView.drag(item: i, bool: false, rowOrColumn: .column)
+        for i in 0 ..< viewModel.matrix.count where i != draggedColumnIndex {
+            viewModel.drag(item: i, bool: false, rowOrColumn: .column)
         }
     }
 
     // Funktion zum Behandeln von Drag-Gesten für das Verschieben von Zeilen
     func handleDragChangedRow(value: DragGesture.Value, row: Int, size: CGSize) {
         // Zurücksetzen aller Zustände im ViewModel, die mit dem Dragging in Verbindung stehen
-        modelView.varReset()
-        modelView.resetSelection()
+        viewModel.varReset()
+        viewModel.resetSelection()
         // Berechnen der Translation und des Index der gezogenen Zeile
         let translation = value.translation.height
         let rowHeight = size.height
@@ -74,29 +74,29 @@ struct HandleDrag {
         }
         
         // Markieren der gezogenen Zeile im ViewModel und Begrenzen der Position auf den erlaubten Bereich
-        modelView.drag(item: draggedRowIndex, bool: true, rowOrColumn: .row)
-        draggedRowIndex = max(0, min(draggedRowIndex, modelView.matrix.first?.count ?? 0))
+        viewModel.drag(item: draggedRowIndex, bool: true, rowOrColumn: .row)
+        draggedRowIndex = max(0, min(draggedRowIndex, viewModel.matrix.first?.count ?? 0))
         
         // Überprüfen und Durchführen des Zeilenwechsels im ViewModel
-        if draggedRowIndex != modelView.draggedRow {
+        if draggedRowIndex != viewModel.draggedRow {
             withAnimation {
-                modelView.rowSwitch(row1: modelView.draggedRow ?? row, row2: draggedRowIndex)
+                viewModel.rowSwitch(row1: viewModel.draggedRow ?? row, row2: draggedRowIndex)
             }
-            modelView.draggedRow = draggedRowIndex
+            viewModel.draggedRow = draggedRowIndex
         }
         
         // Zurücksetzen des Drag-Zustands für nicht-gezogene Zeilen
-        for i in 0 ..< modelView.matrix.count where i != draggedRowIndex {
-            modelView.drag(item: i, bool: false, rowOrColumn: .row)
+        for i in 0 ..< viewModel.matrix.count where i != draggedRowIndex {
+            viewModel.drag(item: i, bool: false, rowOrColumn: .row)
         }
     }
     
     // Funktion zum Behandeln des Endes der Drag-Geste
     func handleDragEnded() {
         // Zurücksetzen aller Zustände der Felder, die mit dem Dragging in Verbindung stehen
-        modelView.varReset()
+        viewModel.varReset()
         // Zurücksetzen der gezogenen Spalten- und Zeilenindizes im ViewModel
-        modelView.draggedColumn = nil
-        modelView.draggedRow = nil
+        viewModel.draggedColumn = nil
+        viewModel.draggedRow = nil
     }
 }

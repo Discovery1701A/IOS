@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct Buttons {
-    @ObservedObject var modelView: ViewModel
+    @ObservedObject var viewModel: ViewModel
     
     // Button für das Vorgehen (Redo) im Spiel
     @ViewBuilder
@@ -17,17 +17,17 @@ struct Buttons {
         Button(
             action: {
                 // Wechselt zum nächsten Zustand in der Verlaufsliste
-                modelView.forward()
+                viewModel.forward()
                 // Setzt die Auswahl zurück
-                modelView.resetSelection()
+                viewModel.resetSelection()
             },
             label: {
                 Image(systemName: "arrowshape.turn.up.forward").font(.title)
             }
         )
         // Deaktiviert den Button, wenn es keinen nächsten Zustand gibt oder das Spiel nicht im Play Status ist
-        .disabled(modelView.currentNode.successor == nil)
-        .disabled(modelView.gameStatus != .play)
+        .disabled(viewModel.currentNode.successor == nil)
+        .disabled(viewModel.gameStatus != .play)
     }
 
     // Button für das Rückgängigmachen (Undo) des Spiels
@@ -36,17 +36,17 @@ struct Buttons {
         Button(
             action: {
                 // Wechselt zum vorherigen Zustand in der Verlaufsliste
-                modelView.back()
+                viewModel.back()
                 // Setzt die Auswahl zurück
-                modelView.resetSelection()
+                viewModel.resetSelection()
             },
             label: {
                 Image(systemName: "arrowshape.turn.up.backward").font(.title)
             }
         )
         // Deaktiviert den Button, wenn es keinen vorherigen Zustand gibt oder das Spiel nicht im Play Status ist
-        .disabled(modelView.currentNode.predecessor == nil)
-        .disabled(modelView.gameStatus != .play)
+        .disabled(viewModel.currentNode.predecessor == nil)
+        .disabled(viewModel.gameStatus != .play)
     }
 
     // Button zum Starten eines neuen Spiels
@@ -55,12 +55,12 @@ struct Buttons {
         Button(
             action: {
                 // Erstellt eine neue Matrix basierend auf der angegebenen Zeilenanzahl
-                modelView.newMatrix(rowCount: Int(modelView.rowCount), difficulty: modelView.difficulty)
+                viewModel.newMatrix(rowCount: Int(viewModel.rowCount), difficulty: viewModel.difficulty)
                 // Setzt die Auswahl zurück
-                modelView.resetSelection()
-                modelView.fieldSize = .zero
+                viewModel.resetSelection()
+                viewModel.fieldSize = .zero
                 // Setzt den Spielstatus auf "Spielen"
-                modelView.gameStatus = .play
+                viewModel.gameStatus = .play
             },
             label: {
                 Text("Start")
@@ -77,8 +77,8 @@ struct Buttons {
         Button(
             action: {
                 // Überprüft den Punktestand und wechselt zum Highscore-Bildschirm
-                modelView.checkScore()
-                modelView.gameStatus = .highScore
+                viewModel.checkScore()
+                viewModel.gameStatus = .highScore
             },
             label: {
                 Text("Weiter")
@@ -95,7 +95,7 @@ struct Buttons {
         Button(
             action: {
                 // Wechselt zum Highscore-Bildschirm
-                modelView.gameStatus = .highScore
+                viewModel.gameStatus = .highScore
             },
             label: {
                 Image(systemName: "medal").font(.largeTitle)
@@ -109,15 +109,15 @@ struct Buttons {
         Button(
             action: {
                 // Setzt die Auswahl zurück und wechselt zum Startbildschirm
-                modelView.resetSelection()
-                modelView.gameStatus = .start
+                viewModel.resetSelection()
+                viewModel.gameStatus = .start
             },
             label: {
                 Image(systemName: "house").font(.largeTitle)
             }
         )
         // Deaktiviert den Button, wenn das Spiel nicht im Play Status ist oder sich im Highscore-Status befindet
-        .disabled(modelView.gameStatus == .winning)
+        .disabled(viewModel.gameStatus == .winning)
     }
 
     // Button zum Hinzufügen von zwei ausgewählten Zeilen mit Division oder Multiplikation
@@ -126,31 +126,31 @@ struct Buttons {
         Button(
             action: {
                 // Setzt das Modell zurück und überprüft, ob zwei Zeilen ausgewählt sind
-                modelView.varReset()
-                if let firstRow = modelView.selectedRows.first, let secondRow = modelView.selectedRows.dropFirst().first {
+                viewModel.varReset()
+                if let firstRow = viewModel.selectedRows.first, let secondRow = viewModel.selectedRows.dropFirst().first {
                     // Überprüft, ob die Division durchführbar ist, und fügt dann die beiden ausgewählten Zeilen hinzu
-                    if modelView.controlScale(row: firstRow, faktor: modelView.factor, divOrMulti: divOrMulty) {
+                    if viewModel.controlScale(row: firstRow, faktor: viewModel.factor, divOrMulti: divOrMulty) {
                         withAnimation {
-                            modelView.addScaleRow(faktor: modelView.factor, row1: firstRow, row2: secondRow, divOrMulti: divOrMulty)
+                            viewModel.addScaleRow(faktor: viewModel.factor, row1: firstRow, row2: secondRow, divOrMulti: divOrMulty)
                         }
                     }
                 }
                 // Setzt die Auswahl zurück
-                modelView.resetSelection()
+                viewModel.resetSelection()
             }, label: {
                 // Darstellung des Buttons mit dem Symbol für Division oder Multiplikation und Plus oder Minus
                 roundRecButtonLayout(
                     content:
                     HStack {
                         Image(systemName: divOrMulty.stringValue()).font(.title)
-                        Image(systemName: modelView.positivNegativ ? "minus" : "plus").font(.largeTitle)
+                        Image(systemName: viewModel.positivNegativ ? "minus" : "plus").font(.largeTitle)
                     }
                 )
             }
         )
         // Deaktiviert den Button, wenn nicht genau zwei Zeilen ausgewählt sind oder das Spiel nicht im Play Status ist
-        .disabled(modelView.selectedRows.count != 2)
-        .disabled(modelView.gameStatus != .play)
+        .disabled(viewModel.selectedRows.count != 2)
+        .disabled(viewModel.gameStatus != .play)
     }
 
     // Button zum Skalieren einer ausgewählten Zeile mit Division oder Multiplikation
@@ -159,25 +159,25 @@ struct Buttons {
         Button(
             action: {
                 // Setzt das Modell zurück und überprüft, ob eine Zeile ausgewählt ist
-                modelView.varReset()
-                if let firstRow = modelView.selectedRows.first {
+                viewModel.varReset()
+                if let firstRow = viewModel.selectedRows.first {
                     // Überprüft, ob die Division durchführbar ist, und skaliert dann die ausgewählte Zeile
-                    if modelView.controlScale(row: firstRow, faktor: modelView.factor, divOrMulti: divOrMulty) {
+                    if viewModel.controlScale(row: firstRow, faktor: viewModel.factor, divOrMulti: divOrMulty) {
                         withAnimation {
-                            modelView.scaleRow(faktor: modelView.factor, row: firstRow, divOrMulti: divOrMulty)
+                            viewModel.scaleRow(faktor: viewModel.factor, row: firstRow, divOrMulti: divOrMulty)
                         }
                     }
                 }
                 // Setzt die Auswahl zurück
-                modelView.resetSelection()
+                viewModel.resetSelection()
             }, label: {
                 // Darstellung des Buttons mit dem Symbol für Division oder Multiplikation
                 roundRecButtonLayout(content: Image(systemName: divOrMulty.stringValue()).font(.title))
             }
         )
         // Deaktiviert den Button, wenn nicht genau eine Zeile ausgewählt ist oder das Spiel nicht im Play Status ist
-        .disabled(modelView.selectedRows.count != 1)
-        .disabled(modelView.gameStatus != .play)
+        .disabled(viewModel.selectedRows.count != 1)
+        .disabled(viewModel.gameStatus != .play)
     }
 
     // Funktion für die Erstellung einer Checkbox, die zwischen positiv (+) und negativ (-) wechselt
@@ -202,7 +202,7 @@ struct Buttons {
             Text(label).font(.title)
             Picker(label, selection: size) {
                 // Iteriere durch die Werte von value1 bis value2
-                ForEach(self.modelView.valueArray(from: value1, to: value2), id: \.self) { value in
+                ForEach(self.viewModel.valueArray(from: value1, to: value2), id: \.self) { value in
                     // Benutzerdefinierte Textansicht für jedes Element im Picker
                     Text("\(value)")
                         .tag(value) // Setze den Tag-Wert für jedes Element

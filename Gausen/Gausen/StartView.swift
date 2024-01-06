@@ -9,13 +9,13 @@
 import SwiftUI
 
 struct StartView: View {
-    @ObservedObject var modelView: ViewModel // Das ViewModel-Objekt, das die Logik der Ansicht steuert
+    @ObservedObject var viewModel: ViewModel // Das ViewModel-Objekt, das die Logik der Ansicht steuert
     var buttons: Buttons // Ein Objekt, das verschiedene wiederverwendbare Buttons für die Ansicht bereitstellt
 
     // Initialisierer der StartView, der das ViewModel und ein Buttons-Objekt entgegennimmt
     init(modelView: ViewModel) {
-        self.modelView = modelView
-        self.buttons = Buttons(modelView: modelView)
+        self.viewModel = modelView
+        self.buttons = Buttons(viewModel: modelView)
     }
     
     var body: some View {
@@ -29,12 +29,12 @@ struct StartView: View {
                 Spacer()
                 
                 // Picker für Schwierigkeitsgrad und Größe der Matrix
-                buttons.difficutltyPicker(difficulty: $modelView.difficulty, array: modelView.difficultyArray, label: "Schwierigkeitsgrad")
+                buttons.difficutltyPicker(difficulty: $viewModel.difficulty, array: viewModel.difficultyArray, label: "Schwierigkeitsgrad")
                     .padding([.leading, .trailing, .bottom])
                 
                 Spacer()
                 
-                buttons.intPicker(size: $modelView.rowCount, from: 2, to: 6, label: "Wie viele Reihen")
+                buttons.intPicker(size: $viewModel.rowCount, from: 2, to: 6, label: "Wie viele Reihen")
                     .padding([.leading, .trailing, .bottom])
                 
                 Spacer()

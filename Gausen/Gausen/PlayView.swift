@@ -9,15 +9,15 @@
 import SwiftUI
 
 struct PlayView: View {
-    @ObservedObject var modelView: ViewModel // Das ViewModel-Objekt, das die Logik der Ansicht steuert
+    @ObservedObject var viewModel: ViewModel // Das ViewModel-Objekt, das die Logik der Ansicht steuert
     var buttons: Buttons // Ein Objekt, das verschiedene wiederverwendbare Buttons für die Ansicht bereitstellt
     var handleDrag: HandleDrag // Ein Objekt, das die Drag-and-Drop-Interaktionen behandelt
 
     // Initialisierer der PlayView, der das ViewModel, ein Buttons-Objekt und ein HandleDrag-Objekt entgegennimmt
     init(modelView: ViewModel, size: CGSize) {
-        self.modelView = modelView
-        self.buttons = Buttons(modelView: modelView)
-        self.handleDrag = HandleDrag(modelView: modelView)
+        self.viewModel = modelView
+        self.buttons = Buttons(viewModel: modelView)
+        self.handleDrag = HandleDrag(viewModel: modelView)
     }
 
     var body: some View {
@@ -29,36 +29,36 @@ struct PlayView: View {
                         // Vertikales Layout
                         VStack {
                             matrixView()
-                                .frame(height: modelView.parentSize.height / 5 * 3)
+                                .frame(height: viewModel.parentSize.height / 5 * 3)
 
                             controller(geometry: geometry.size)
-                                .frame(height: modelView.parentSize.height / 5 * 2)
+                                .frame(height: viewModel.parentSize.height / 5 * 2)
                         }
                     } else {
                         // Horizontales Layout
                         HStack {
                             matrixView()
-                                .frame(width: modelView.parentSize.width / 2)
+                                .frame(width: viewModel.parentSize.width / 2)
 
                             controller(geometry: geometry.size)
-                                .frame(width: modelView.parentSize.width / 2)
+                                .frame(width: viewModel.parentSize.width / 2)
                         }
                     }
                 }
 
                 .onAppear {
                     // Aktualisieren Sie die Größe des Elternelements beim Erscheinen der Ansicht
-                    modelView.parentSize = geometry.size
+                    viewModel.parentSize = geometry.size
                 }
                 .onChange(of: geometry.size) { _, newSize in
                     // Aktualisieren Sie die Größe des Elternelements bei Änderungen der Größe
 
-                    modelView.parentSize = newSize
+                    viewModel.parentSize = newSize
                 }
 
                 // FieldSize wird so besser bestimmt
                 .onChange(of: UIDevice.current.orientation.isLandscape) { _, _ in
-                    modelView.fieldSize = .zero
+                    viewModel.fieldSize = .zero
                 }
             }
         }
@@ -72,16 +72,16 @@ struct PlayView: View {
         }
         .overlay(
             VStack {
-                Text("Anzahl der Aktionen: " + String(modelView.activityCount))
+                Text("Anzahl der Aktionen: " + String(viewModel.activityCount))
                     .foregroundStyle(.black)
-                Text("Zeit: " + modelView.time + "min")
+                Text("Zeit: " + viewModel.time + "min")
                     .foregroundStyle(.black)
                     .onAppear {
                         // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
-                        modelView.updateTime()
+                        viewModel.updateTime()
                         // Oder wenn Sie eine regelmäßige Aktualisierung wünschen, können Sie einen Timer verwenden
                         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-                            modelView.updateTime()
+                            viewModel.updateTime()
                         }
                     }
             }
@@ -94,12 +94,12 @@ struct PlayView: View {
     func matrixView() -> some View {
         VStack {
             // Durchläuft die Reihen der Matrix, repräsentiert durch den Index `row`.
-            ForEach(-1 ..< modelView.matrix.count, id: \.self) { row in
+            ForEach(-1 ..< viewModel.matrix.count, id: \.self) { row in
                 // Ruft die Funktion matrixRowView auf, um die Ansicht für die aktuelle Reihe zu erstellen.
                 matrixRowView(row: row)
             }
         }
-        .rotationEffect(Angle.degrees(modelView.matrix[0][0].winning ? 360 : 0)) // Fügt eine Rotation für gewinnende Felder hinzu.
+        .rotationEffect(Angle.degrees(viewModel.matrix[0][0].winning ? 360 : 0)) // Fügt eine Rotation für gewinnende Felder hinzu.
         .padding()
     }
 
@@ -118,24 +118,24 @@ struct PlayView: View {
     func createFieldView(row: Int, column: Int) -> some View {
         // Verwendet die FieldView-Ansicht und konfiguriert sie mit den Daten aus der Matrix.
 
-        FieldView(field: modelView.matrix[row][column])
+        FieldView(field: viewModel.matrix[row][column])
 
-            .fieldSize($modelView.fieldSize) // Bindet die Größe des Feldes an das ViewModel.
+            .fieldSize($viewModel.fieldSize) // Bindet die Größe des Feldes an das ViewModel.
             .ignoresSafeArea(.keyboard) // Ignoriert die sichere Bereichstastatur.
-            .rotationEffect(Angle.degrees(modelView.matrix[row][column].winning ? 360 : 0)) // Fügt eine Rotation für gewinnende Felder hinzu.
-            .onChange(of: modelView.selectedRows.contains(row)) { _, newValue in
+            .rotationEffect(Angle.degrees(viewModel.matrix[row][column].winning ? 360 : 0)) // Fügt eine Rotation für gewinnende Felder hinzu.
+            .onChange(of: viewModel.selectedRows.contains(row)) { _, newValue in
                 // Wenn eine Auswahl in einer Reihe geändert wird, aktualisiert das ViewModel die Auswahl und animiert die Änderung.
 
                 withAnimation {
-                    modelView.updateSelection(item: row, selection: newValue, rowOrColumn: .row)
+                    viewModel.updateSelection(item: row, selection: newValue, rowOrColumn: .row)
                 }
             }
-            .onChange(of: modelView.matrix[row][column].content) { _, _ in
+            .onChange(of: viewModel.matrix[row][column].content) { _, _ in
                 // Wenn sich die Matrix ändert, überprüft das ViewModel den Spielstatus und startet bei einem Gewinn den Timer.
                 withAnimation {
-                    if modelView.check() {
+                    if viewModel.check() {
                         DispatchQueue.main.asyncAfter(deadline: .now() + ConstantPlayView.winningWaitTime) {
-                            modelView.gameStatus = .winning
+                            viewModel.gameStatus = .winning
                         }
                     }
                 }
@@ -148,15 +148,15 @@ struct PlayView: View {
         withAnimation {
             SelectionView(
                 item: item,
-                selectedItems: axis == .vertical ? $modelView.selectedRows : $modelView.selectedColumns,
+                selectedItems: axis == .vertical ? $viewModel.selectedRows : $viewModel.selectedColumns,
                 axis: axis,
-                fieldSize: modelView.fieldSize,
+                fieldSize: viewModel.fieldSize,
                 onDragChanged: { value in
                     // Bei einer Änderung im Drag-and-Drop ruft die entsprechende Funktion in HandleDrag auf.
                     if axis == .vertical {
-                        handleDrag.handleDragChangedRow(value: value, row: item, size: modelView.fieldSize)
+                        handleDrag.handleDragChangedRow(value: value, row: item, size: viewModel.fieldSize)
                     } else {
-                        handleDrag.handleDragChangedColumn(value: value, column: item, size: modelView.fieldSize)
+                        handleDrag.handleDragChangedColumn(value: value, column: item, size: viewModel.fieldSize)
                     }
                 },
                 onDragEnded: {
@@ -165,7 +165,7 @@ struct PlayView: View {
                 }
             )
             // Deaktiviert die SelectionView, wenn sich das Spiel nicht im Status "play" befindet.
-            .disabled(modelView.gameStatus != .play)
+            .disabled(viewModel.gameStatus != .play)
         }
     }
 
@@ -176,7 +176,7 @@ struct PlayView: View {
             createSelectionView(item: row, axis: .vertical)
 
             // Durchläuft die Spalten der Matrix und erstellt die Ansicht für jede Zelle.
-            ForEach(0 ..< modelView.matrix[0].count, id: \.self) { column in
+            ForEach(0 ..< viewModel.matrix[0].count, id: \.self) { column in
                 matrixCellView(row: row, column: column)
             }
 
@@ -201,8 +201,8 @@ struct PlayView: View {
                     .padding(.horizontal)
                     HStack {
                         // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
-                        buttons.intPicker(size: $modelView.factor, from: 1, to: 10, label: "Faktor")
-                        buttons.positivNegativButton(isChecked: $modelView.positivNegativ)
+                        buttons.intPicker(size: $viewModel.factor, from: 1, to: 10, label: "Faktor")
+                        buttons.positivNegativButton(isChecked: $viewModel.positivNegativ)
                         
                     }.padding(.horizontal)
                     // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
@@ -230,8 +230,8 @@ struct PlayView: View {
                     .padding(.horizontal)
                     HStack {
                         // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
-                        buttons.intPicker(size: $modelView.factor, from: 1, to: 10, label: "Faktor")
-                        buttons.positivNegativButton(isChecked: $modelView.positivNegativ)
+                        buttons.intPicker(size: $viewModel.factor, from: 1, to: 10, label: "Faktor")
+                        buttons.positivNegativButton(isChecked: $viewModel.positivNegativ)
                         
                     }.padding(.trailing)
                     // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.

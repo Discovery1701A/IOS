@@ -10,13 +10,13 @@ import SwiftUI
 
 // Die Ansicht für den Gewinnzustand des Spiels.
 struct WinningView: View {
-    @ObservedObject var modelView: ViewModel
+    @ObservedObject var viewModel: ViewModel
     var buttons: Buttons
 
     // Initialisierung der Ansicht mit dem ViewModel und den Buttons.
     init(modelView: ViewModel) {
-        self.modelView = modelView
-        self.buttons = Buttons(modelView: modelView)
+        self.viewModel = modelView
+        self.buttons = Buttons(viewModel: modelView)
     }
 
     // Body der Ansicht, der die Struktur und das Layout definiert.
@@ -26,7 +26,7 @@ struct WinningView: View {
                 RoundedRectangle(cornerRadius: ConstantWinning.cornerRadiusRec)
                     .fill(Color(hex: 0xfcbb51, alpha: 0.75))
                     .frame(maxHeight: ConstantWinning.frameMaxHeight)
-                    .blur(radius: modelView.blurRadius) // Unschärfe
+                    .blur(radius: viewModel.blurRadius) // Unschärfe
                     .padding(.horizontal, 20)
                 Text("🎉Gewonnen🎉")
                     .font(.largeTitle)
@@ -34,7 +34,7 @@ struct WinningView: View {
             .padding(.bottom, 20)
             Spacer()
             // Textfeld für die Eingabe des Spielernamens mit abgerundetem Rand.
-            TextField("Name eingeben", text: $modelView.playerName)
+            TextField("Name eingeben", text: $viewModel.playerName)
                 .font(.title)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .background(

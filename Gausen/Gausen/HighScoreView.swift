@@ -11,21 +11,21 @@ import SwiftUI
 struct HighscoreView: View {
     // Das ObservedObject highscoreManager wird für die Aktualisierung der Ansicht verwendet
     @ObservedObject var highscoreManager = HighscoreManager.shared
-    @ObservedObject var modelView: ViewModel
+    @ObservedObject var viewModel: ViewModel
     var buttons: Buttons
 
     init(modelView: ViewModel) {
-        self.modelView = modelView
-        self.buttons = Buttons(modelView: modelView)
+        self.viewModel = modelView
+        self.buttons = Buttons(viewModel: modelView)
     }
 
     var body: some View {
         VStack {
             HStack {
                 // Anzeige des HighscoreListView für die Zeit
-                HighscoreListView(difficulty: modelView.difficulty, title: "Highscore Zeit", highscores: highscoreManager.highScoreTime)
+                HighscoreListView(difficulty: viewModel.difficulty, title: "Highscore Zeit", highscores: highscoreManager.highScoreTime)
                 // Anzeige des HighscoreListView für die Aktivitätszählung
-                HighscoreListView(difficulty: modelView.difficulty, title: "Highscore Aktion", highscores: highscoreManager.highScoreActivityCount)
+                HighscoreListView(difficulty: viewModel.difficulty, title: "Highscore Aktion", highscores: highscoreManager.highScoreActivityCount)
             }
             buttons.backButton()
         }

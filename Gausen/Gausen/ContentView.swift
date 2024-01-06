@@ -9,46 +9,46 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var modelView: ViewModel
+    @ObservedObject var viewModel: ViewModel
 
     // Der Body der Ansicht, der die Spiellogik steuert und die entsprechenden Unteransichten anzeigt.
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 LinearGradient(
-                    gradient: Gradient(colors: modelView.gradientColors), // Korrektur des Schreibfehlers
+                    gradient: Gradient(colors: viewModel.gradientColors), // Korrektur des Schreibfehlers
                     startPoint: .top,
                     endPoint: .bottom
                 )
                 .edgesIgnoringSafeArea(.all)
                 // Switch-Anweisung, um den aktuellen Spielstatus zu überprüfen und die entsprechende Ansicht anzuzeigen.
-                switch modelView.gameStatus {
+                switch viewModel.gameStatus {
                 case .start:
                     // StartView wird angezeigt, wenn das Spiel im Startstatus ist.
-                    StartView(modelView: modelView)
+                    StartView(modelView: viewModel)
                         .animation(.easeInOut(duration: 1), value: UIDevice.current.orientation.isPortrait)
 
                 case .play:
                     // PlayView wird angezeigt, wenn das Spiel im Playstatus ist.
-                    PlayView(modelView: modelView, size: geometry.size)
-                        .animation(.easeInOut(duration: 1), value: modelView.fieldSize)
+                    PlayView(modelView: viewModel, size: geometry.size)
+                        .animation(.easeInOut(duration: 1), value: viewModel.fieldSize)
 
                 case .winning:
                     // ZStack, um PlayView und WinningView zu überlagern, wenn das Spiel im Winningstatus ist.
                     ZStack {
                         withAnimation(.easeInOut(duration: 2)) {
-                            PlayView(modelView: modelView, size: geometry.size)
+                            PlayView(modelView: viewModel, size: geometry.size)
                                 .ignoresSafeArea(.keyboard)
-                                .blur(radius: modelView.blurRadius) // Unschärfe
+                                .blur(radius: viewModel.blurRadius) // Unschärfe
                         }
                         withAnimation(.spring()) {
-                            WinningView(modelView: modelView)
+                            WinningView(modelView: viewModel)
                         }
                     }
 
                 case .highScore:
                     // HighscoreView wird angezeigt, wenn das Spiel im Highscorestatus ist.
-                    HighscoreView( modelView: modelView)
+                    HighscoreView( modelView: viewModel)
                 }
                 
             }
@@ -56,14 +56,14 @@ struct ContentView: View {
         }
 
         // Farbverlauf ändert sich bei Status- oder Schwierigkeitsänderungen
-        .onChange(of: modelView.gameStatus) { _, _ in
+        .onChange(of: viewModel.gameStatus) { _, _ in
             withAnimation(.easeInOut(duration: 1)) {
-                modelView.colorSwitchStatus()
+                viewModel.colorSwitchStatus()
             }
         }
-        .onChange(of: modelView.difficulty) { _, _ in
+        .onChange(of: viewModel.difficulty) { _, _ in
             withAnimation(.easeInOut(duration: 1)) {
-                modelView.colorSwitchStatus()
+                viewModel.colorSwitchStatus()
             }
         }
         
@@ -73,6 +73,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let modelView = ViewModel()
-        ContentView(modelView: modelView)
+        ContentView(viewModel: modelView)
     }
 }
