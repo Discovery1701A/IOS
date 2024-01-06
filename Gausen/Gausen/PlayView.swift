@@ -25,32 +25,27 @@ struct PlayView: View {
             createActionInfoOverlay()
             GeometryReader { geometry in
                 VStack {
-                    //                Spacer()
-                    if UIDevice.current.orientation.isPortrait {
+                    if geometry.size.width < geometry.size.height {
                         // Vertikales Layout
                         VStack {
                             matrixView()
                                 .frame(height: modelView.parentSize.height / 5 * 3)
-                                .ignoresSafeArea(.keyboard)
-                            controller()
+
+                            controller(geometry: geometry.size)
                                 .frame(height: modelView.parentSize.height / 5 * 2)
-//                                .padding(.bottom)
                         }
                     } else {
                         // Horizontales Layout
                         HStack {
                             matrixView()
                                 .frame(width: modelView.parentSize.width / 2)
-                                .ignoresSafeArea(.keyboard)
-                            controller()
+
+                            controller(geometry: geometry.size)
                                 .frame(width: modelView.parentSize.width / 2)
-                            
                         }
-                        
                     }
-                    //                Spacer()
                 }
-                //            .padding()
+
                 .onAppear {
                     // Aktualisieren Sie die Größe des Elternelements beim Erscheinen der Ansicht
                     modelView.parentSize = geometry.size
@@ -59,9 +54,8 @@ struct PlayView: View {
                     // Aktualisieren Sie die Größe des Elternelements bei Änderungen der Größe
 
                     modelView.parentSize = newSize
-                      
                 }
-                
+
                 // FieldSize wird so besser bestimmt
                 .onChange(of: UIDevice.current.orientation.isLandscape) { _, _ in
                     modelView.fieldSize = .zero
@@ -69,7 +63,7 @@ struct PlayView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     func createActionInfoOverlay() -> some View {
         HStack {
@@ -79,7 +73,9 @@ struct PlayView: View {
         .overlay(
             VStack {
                 Text("Anzahl der Aktionen: " + String(modelView.activityCount))
+                    .foregroundStyle(.black)
                 Text("Zeit: " + modelView.time + "min")
+                    .foregroundStyle(.black)
                     .onAppear {
                         // Aktualisieren Sie die Zeit, wenn die Ansicht erscheint
                         modelView.updateTime()
@@ -103,6 +99,7 @@ struct PlayView: View {
                 matrixRowView(row: row)
             }
         }
+        .rotationEffect(Angle.degrees(modelView.matrix[0][0].winning ? 360 : 0)) // Fügt eine Rotation für gewinnende Felder hinzu.
         .padding()
     }
 
@@ -133,7 +130,7 @@ struct PlayView: View {
                     modelView.updateSelection(item: row, selection: newValue, rowOrColumn: .row)
                 }
             }
-            .onChange(of: modelView.matrix) { _, _ in
+            .onChange(of: modelView.matrix[row][column].content) { _, _ in
                 // Wenn sich die Matrix ändert, überprüft das ViewModel den Spielstatus und startet bei einem Gewinn den Timer.
                 withAnimation {
                     if modelView.check() {
@@ -190,63 +187,64 @@ struct PlayView: View {
 
     // Erzeugt die Ansicht für den Controller (Buttons und Slider).
     @ViewBuilder
-    func controller() -> some View {
-        if UIDevice.current.orientation.isPortrait {
-            VStack {
-                // Erzeugt eine horizontale HStack mit den Buttons für Matrixoperationen.
-                HStack {
-                    buttons.addScaleRow(divOrMulty: .multiply)
-                    buttons.addScaleRow(divOrMulty: .divide)
-                    buttons.scaleRow(divOrMulty: .multiply)
-                    buttons.scaleRow(divOrMulty: .divide)
+    func controller(geometry : CGSize) -> some View {
+     
+            if geometry.width < geometry.height {
+                VStack {
+                    // Erzeugt eine horizontale HStack mit den Buttons für Matrixoperationen.
+                    HStack {
+                        buttons.addScaleRow(divOrMulty: .multiply)
+                        buttons.addScaleRow(divOrMulty: .divide)
+                        buttons.scaleRow(divOrMulty: .multiply)
+                        buttons.scaleRow(divOrMulty: .divide)
+                    }
+                    .padding(.horizontal)
+                    HStack {
+                        // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
+                        buttons.intPicker(size: $modelView.factor, from: 1, to: 10, label: "Faktor")
+                        buttons.positivNegativButton(isChecked: $modelView.positivNegativ)
+                        
+                    }.padding(.horizontal)
+                    // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
+                    HStack {
+                        Spacer()
+                        buttons.undo()
+                        Spacer()
+                        buttons.redo()
+                        Spacer()
+                    }
                 }
-                .padding(.horizontal)
-                HStack {
-                    // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
-                    buttons.intPicker(size: $modelView.factor, from: 1, to: 10, label: "Faktor")
-                    buttons.positivNegativButton(isChecked: $modelView.positivNegativ)
-                    
-                }.padding(.horizontal)
-                // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
-                HStack {
-                    Spacer()
-                    buttons.undo()
-                    Spacer()
-                    buttons.redo()
-                    Spacer()
+                
+                //            .padding([.leading, .bottom, .trailing])
+            } else {
+                VStack {
+                    HStack {
+                        buttons.addScaleRow(divOrMulty: .multiply)
+                        buttons.addScaleRow(divOrMulty: .divide)
+                    }
+                    .padding(.horizontal)
+                    HStack {
+                        buttons.scaleRow(divOrMulty: .multiply)
+                        buttons.scaleRow(divOrMulty: .divide)
+                    }
+                    .padding(.horizontal)
+                    HStack {
+                        // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
+                        buttons.intPicker(size: $modelView.factor, from: 1, to: 10, label: "Faktor")
+                        buttons.positivNegativButton(isChecked: $modelView.positivNegativ)
+                        
+                    }.padding(.trailing)
+                    // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
+                    HStack {
+                        Spacer()
+                        buttons.undo()
+                        Spacer()
+                        buttons.redo()
+                        Spacer()
+                    }.padding(.bottom)
                 }
             }
 
-//            .padding([.leading, .bottom, .trailing])
-        } else {
-            VStack {
-                HStack {
-                    buttons.addScaleRow(divOrMulty: .multiply)
-                    buttons.addScaleRow(divOrMulty: .divide)
-                }
-                .padding(.horizontal)
-                HStack {
-                    buttons.scaleRow(divOrMulty: .multiply)
-                    buttons.scaleRow(divOrMulty: .divide)
-                }
-                .padding(.horizontal)
-                HStack {
-                    // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
-                    buttons.intPicker(size: $modelView.factor, from: 1, to: 10, label: "Faktor")
-                    buttons.positivNegativButton(isChecked: $modelView.positivNegativ)
-                    
-                }.padding(.trailing)
-                // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
-                HStack {
-                    Spacer()
-                    buttons.undo()
-                    Spacer()
-                    buttons.redo()
-                    Spacer()
-                }.padding(.bottom)
-            }
-            }
-        
 //        .padding()
     }
 

@@ -19,16 +19,19 @@ struct HandleDrag {
         // Markieren der gezogenen Spalte im ViewModel
         modelView.drag(item: column, bool: true, rowOrColumn: .column)
         
-        // Berechnen der Translation und des Index der gezogenen Spalte
+        // Berechnen der Translation und der Index der gezogenen Spalte
         let translation = value.translation.width
         let columnWidth = size.width
         var draggedColumnIndex = column + Int((value.startLocation.x + translation) / columnWidth)
         
         // Anpassung des Index, wenn die Translation negativ ist (nach links)
-        if value.startLocation.x + translation < 0 {
-            draggedColumnIndex -= 1
-        } else if value.startLocation.x + translation > 0 {
-            draggedColumnIndex += 1
+        if Int(value.startLocation.x + translation) < 0 {
+            if translation < 0 {
+                draggedColumnIndex -= 1
+            }
+            if translation > 0 {
+                draggedColumnIndex += 1
+            }
         }
         
         // Markieren der gezogenen Spalte im ViewModel und Begrenzen der Position auf den erlaubten Bereich
@@ -45,7 +48,7 @@ struct HandleDrag {
         }
         
         // Zurücksetzen des Drag-Zustands für nicht-gezogene Spalten
-        for i in 0 ..< (modelView.matrix.first?.count ?? 0) where i != draggedColumnIndex {
+        for i in 0 ..< modelView.matrix.count where i != draggedColumnIndex {
             modelView.drag(item: i, bool: false, rowOrColumn: .column)
         }
     }
@@ -61,10 +64,13 @@ struct HandleDrag {
         var draggedRowIndex = row + Int((value.startLocation.y + translation + CGFloat(row)) / rowHeight)
         
         // Anpassung des Index, wenn die Translation negativ ist (nach oben)
-        if value.startLocation.y + translation < 0 {
-            draggedRowIndex -= 1
-        } else if value.startLocation.y + translation > 0 {
-            draggedRowIndex += 1
+        if Int(value.startLocation.y + translation) < 0 {
+            if translation < 0 {
+                draggedRowIndex -= 1
+            }
+            if translation > 0 {
+                draggedRowIndex += 1
+            }
         }
         
         // Markieren der gezogenen Zeile im ViewModel und Begrenzen der Position auf den erlaubten Bereich

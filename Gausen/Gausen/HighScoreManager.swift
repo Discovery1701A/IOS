@@ -4,7 +4,7 @@
 //
 //  Created by Anna Rieckmann on 23.12.23.
 //
-/// Klasse zum Verwalten und Speichern von Highscores
+// Klasse zum Verwalten und Speichern von Highscores
 
 import Foundation
 
