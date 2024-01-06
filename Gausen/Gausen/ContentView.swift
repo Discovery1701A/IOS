@@ -26,11 +26,12 @@ struct ContentView: View {
                 case .start:
                     // StartView wird angezeigt, wenn das Spiel im Startstatus ist.
                     StartView(modelView: modelView)
+                        .animation(.easeInOut(duration: 1), value: UIDevice.current.orientation.isPortrait)
 
                 case .play:
                     // PlayView wird angezeigt, wenn das Spiel im Playstatus ist.
                     PlayView(modelView: modelView, size: geometry.size)
-                        .animation(.easeInOut(duration: 2), value: modelView.fieldSize)
+                        .animation(.easeInOut(duration: 1), value: modelView.fieldSize)
 
                 case .winning:
                     // ZStack, um PlayView und WinningView zu überlagern, wenn das Spiel im Winningstatus ist.

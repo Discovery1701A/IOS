@@ -13,8 +13,6 @@ struct PlayView: View {
     var buttons: Buttons // Ein Objekt, das verschiedene wiederverwendbare Buttons für die Ansicht bereitstellt
     var handleDrag: HandleDrag // Ein Objekt, das die Drag-and-Drop-Interaktionen behandelt
 
-    @State private var parentSize: CGSize = .zero // State, um die Größe des Elternelements zu speichern
-
     // Initialisierer der PlayView, der das ViewModel, ein Buttons-Objekt und ein HandleDrag-Objekt entgegennimmt
     init(modelView: ViewModel, size: CGSize) {
         self.modelView = modelView
@@ -23,44 +21,46 @@ struct PlayView: View {
     }
 
     var body: some View {
-        GeometryReader { geo in
-            VStack {
-               createActionInfoOverlay()
-                    
-//                Spacer()
-                if UIDevice.current.orientation.isLandscape {
-                    // Horizontales Layout
-                    Spacer()
-                    HStack {
-                        matrixView()
-                                                  .frame(width: parentSize.width / 2)
-                                              controller()
-                                                  .frame(width: parentSize.width / 2)
-                                        
-                    }
-                } else {
-                    // Vertikales Layout
-                    VStack {
-                        matrixView()
-                                                  .frame(height: parentSize.height / 6 * 3)
-                                              controller()
-                                                  .frame(height: parentSize.height / 6 * 2)
-                    }
-                }
-//                Spacer()
-            }
-            .padding()
-            .onAppear {
-                            // Aktualisieren Sie die Größe des Elternelements beim Erscheinen der Ansicht
-                            parentSize = geo.size
-            }
-                        .onChange(of: geo.size) { _, newSize in
-                            // Aktualisieren Sie die Größe des Elternelements bei Änderungen der Größe
-                            parentSize = newSize
+        VStack {
+            createActionInfoOverlay()
+            GeometryReader { geometry in
+                VStack {
+                    //                Spacer()
+                    if UIDevice.current.orientation.isPortrait {
+                        // Vertikales Layout
+                        VStack {
+                            matrixView()
+                                .frame(height: modelView.parentSize.height / 5 * 3)
+                            controller()
+                                .frame(height: modelView.parentSize.height / 5 * 2)
+//                                .padding(.bottom)
                         }
-            // FieldSize wird so besser bestimmt
-            .onChange(of: UIDevice.current.orientation.isLandscape) { _, _ in
-                modelView.fieldSize = .zero
+                    } else {
+                        // Horizontales Layout
+                        HStack {
+                            matrixView()
+                                .frame(width: modelView.parentSize.width / 2)
+                            controller()
+                                .frame(width: modelView.parentSize.width / 2)
+                            
+                        }
+                        
+                    }
+                    //                Spacer()
+                }
+                //            .padding()
+                .onAppear {
+                    // Aktualisieren Sie die Größe des Elternelements beim Erscheinen der Ansicht
+                    modelView.parentSize = geometry.size
+                }
+                .onChange(of: geometry.size) { _, newSize in
+                    // Aktualisieren Sie die Größe des Elternelements bei Änderungen der Größe
+                    modelView.parentSize = newSize
+                }
+                // FieldSize wird so besser bestimmt
+                .onChange(of: UIDevice.current.orientation.isLandscape) { _, _ in
+                    modelView.fieldSize = .zero
+                }
             }
         }
     }
@@ -85,6 +85,7 @@ struct PlayView: View {
                     }
             }
         )
+        .padding()
     }
 
     // Erzeugt die Ansicht für die Spielmatrix. Verwendet eine `VStack`, um die Reihen der Matrix zu stapeln.
@@ -185,32 +186,62 @@ struct PlayView: View {
     // Erzeugt die Ansicht für den Controller (Buttons und Slider).
     @ViewBuilder
     func controller() -> some View {
-        VStack {
-            // Erzeugt eine horizontale HStack mit den Buttons für Matrixoperationen.
-            HStack {
-                buttons.addScaleRow(divOrMulty: .multiply)
-                buttons.addScaleRow(divOrMulty: .divide)
-                buttons.scaleRow(divOrMulty: .multiply)
-                buttons.scaleRow(divOrMulty: .divide)
-            }
-            .padding(.horizontal)
-            HStack {
-                // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
-                buttons.intPicker(size: $modelView.factor, from: 1, to: 10, label: "Faktor")
-                buttons.positivNegativButton(isChecked: $modelView.positivNegativ)
-
-            }.padding(.horizontal)
-            // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
-            HStack {
-                Spacer()
-                buttons.undo()
-                Spacer()
-                buttons.redo()
-                Spacer()
+        if UIDevice.current.orientation.isPortrait {
+            VStack {
+                // Erzeugt eine horizontale HStack mit den Buttons für Matrixoperationen.
+                HStack {
+                    buttons.addScaleRow(divOrMulty: .multiply)
+                    buttons.addScaleRow(divOrMulty: .divide)
+                    buttons.scaleRow(divOrMulty: .multiply)
+                    buttons.scaleRow(divOrMulty: .divide)
+                }
+                .padding(.horizontal)
+                HStack {
+                    // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
+                    buttons.intPicker(size: $modelView.factor, from: 1, to: 10, label: "Faktor")
+                    buttons.positivNegativButton(isChecked: $modelView.positivNegativ)
+                    
+                }.padding(.horizontal)
+                // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
+                HStack {
+                    Spacer()
+                    buttons.undo()
+                    Spacer()
+                    buttons.redo()
+                    Spacer()
+                }
             }
 
 //            .padding([.leading, .bottom, .trailing])
-        }
+        } else {
+            VStack {
+                HStack {
+                    buttons.addScaleRow(divOrMulty: .multiply)
+                    buttons.addScaleRow(divOrMulty: .divide)
+                }
+                .padding(.horizontal)
+                HStack {
+                    buttons.scaleRow(divOrMulty: .multiply)
+                    buttons.scaleRow(divOrMulty: .divide)
+                }
+                .padding(.horizontal)
+                HStack {
+                    // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
+                    buttons.intPicker(size: $modelView.factor, from: 1, to: 10, label: "Faktor")
+                    buttons.positivNegativButton(isChecked: $modelView.positivNegativ)
+                    
+                }.padding(.trailing)
+                // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
+                HStack {
+                    Spacer()
+                    buttons.undo()
+                    Spacer()
+                    buttons.redo()
+                    Spacer()
+                }.padding(.bottom)
+            }
+            }
+        
 //        .padding()
     }
 

@@ -19,30 +19,53 @@ struct StartView: View {
     }
     
     var body: some View {
-        VStack {
-            // Titel der Startansicht
-            Text("Start")
-                .font(.largeTitle)
-                .padding(.bottom, 20)
-            
-            Spacer()
-
-            // Picker für Schwierigkeitsgrad und Größe der Matrix
-            buttons.difficutltyPicker(difficulty: $modelView.difficulty, array: modelView.difficultyArray, label: "Schwierigkeitsgrad")
-            buttons.intPicker(size: $modelView.rowCount, from: 2, to: 6, label: "Wie viele Reihen")
-                .padding([.leading, .trailing, .bottom])
-
-            Spacer()
-            
-            // Start-Button für den Spielbeginn
-            buttons.startButton()
-                .padding()
-
-            Spacer()
-            
-            // Button für den Zugriff auf die Highscore-Ansicht
-            buttons.highScoreButton()
+        GeometryReader { geometry in
+            VStack {
+                // Titel der Startansicht
+                Text("Start")
+                    .font(.largeTitle)
+                    .padding(.bottom, 20)
+                
+                Spacer()
+                
+                // Picker für Schwierigkeitsgrad und Größe der Matrix
+                buttons.difficutltyPicker(difficulty: $modelView.difficulty, array: modelView.difficultyArray, label: "Schwierigkeitsgrad")
+                    .padding([.leading, .trailing, .bottom])
+                Spacer()
+                buttons.intPicker(size: $modelView.rowCount, from: 2, to: 6, label: "Wie viele Reihen")
+                    .padding([.leading, .trailing, .bottom])
+                
+                Spacer()
+                if geometry.size.width < geometry.size.height {
+                    // Vertikales Layout
+                    VStack {
+                        // Start-Button für den Spielbeginn
+                        buttons.startButton()
+                        //                        .padding()
+                        
+                        Spacer()
+                        
+                        // Button für den Zugriff auf die Highscore-Ansicht
+                        buttons.highScoreButton()
+                    }
+                } else {
+                    // Horizontales Layout
+                    HStack {
+                        // Start-Button für den Spielbeginn
+                        Spacer()
+                        buttons.startButton()
+                        //                        .padding()
+                        
+                        Spacer()
+                        
+                        // Button für den Zugriff auf die Highscore-Ansicht
+                        buttons.highScoreButton()
+                        Spacer()
+                    }
+                    Spacer()
+                }
+            }
+            .padding() // Einfügeabstand für den gesamten Inhalt der Ansicht
         }
-        .padding() // Einfügeabstand für den gesamten Inhalt der Ansicht
     }
 }
