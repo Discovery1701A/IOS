@@ -1,5 +1,5 @@
 //
-//  HandelDrag.swift
+//  HandleDrag.swift
 //  Gausen
 //
 //  Created by Anna Rieckmann on 24.12.23.
@@ -44,7 +44,6 @@ struct HandleDrag {
                 viewModel.columnSwitch(column1: viewModel.draggedColumn ?? column, column2: draggedColumnIndex)
             }
             viewModel.draggedColumn = draggedColumnIndex
-                
         }
         
         // Zurücksetzen des Drag-Zustands für nicht-gezogene Spalten

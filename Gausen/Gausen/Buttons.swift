@@ -10,7 +10,7 @@ import SwiftUI
 
 struct Buttons {
     @ObservedObject var viewModel: ViewModel
-    
+
     // Button für das Vorgehen (Redo) im Spiel
     @ViewBuilder
     func redo() -> some View {

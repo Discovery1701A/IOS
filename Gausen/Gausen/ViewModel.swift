@@ -1,5 +1,5 @@
 //
-//  ModelView.swift
+//  ViewModel.swift
 //  Gausen
 //
 //  Created by Anna Rieckmann on 23.11.23.
@@ -38,7 +38,7 @@ class ViewModel: ObservableObject {
     @Published var selectedColumns: [Int] = []
     @Published var fieldSize: CGSize = .zero
     @Published var gradientColors: [Color] = [Color.cyan, Color.white]
-    @Published var parentSize: CGSize = .zero // die Größe des Elternelements 
+    @Published var parentSize: CGSize = .zero // die Größe des Elternelements
     var blurRadius: CGFloat = 5
     var positivNegativ = false
     

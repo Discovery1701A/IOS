@@ -48,9 +48,8 @@ struct ContentView: View {
 
                 case .highScore:
                     // HighscoreView wird angezeigt, wenn das Spiel im Highscorestatus ist.
-                    HighscoreView( modelView: viewModel)
+                    HighscoreView(modelView: viewModel)
                 }
-                
             }
             .ignoresSafeArea(.keyboard)
         }
@@ -66,7 +65,6 @@ struct ContentView: View {
                 viewModel.colorSwitchStatus()
             }
         }
-        
     }
 }
 

@@ -187,63 +187,62 @@ struct PlayView: View {
 
     // Erzeugt die Ansicht für den Controller (Buttons und Slider).
     @ViewBuilder
-    func controller(geometry : CGSize) -> some View {
-     
-            if geometry.width < geometry.height {
-                VStack {
-                    // Erzeugt eine horizontale HStack mit den Buttons für Matrixoperationen.
-                    HStack {
-                        buttons.addScaleRow(divOrMulty: .multiply)
-                        buttons.addScaleRow(divOrMulty: .divide)
-                        buttons.scaleRow(divOrMulty: .multiply)
-                        buttons.scaleRow(divOrMulty: .divide)
-                    }
-                    .padding(.horizontal)
-                    HStack {
-                        // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
-                        buttons.intPicker(size: $viewModel.factor, from: 1, to: 10, label: "Faktor")
-                        buttons.positivNegativButton(isChecked: $viewModel.positivNegativ)
-                        
-                    }.padding(.horizontal)
-                    // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
-                    HStack {
-                        Spacer()
-                        buttons.undo()
-                        Spacer()
-                        buttons.redo()
-                        Spacer()
-                    }
+    func controller(geometry: CGSize) -> some View {
+        if geometry.width < geometry.height {
+            VStack {
+                // Erzeugt eine horizontale HStack mit den Buttons für Matrixoperationen.
+                HStack {
+                    buttons.addScaleRow(divOrMulty: .multiply)
+                    buttons.addScaleRow(divOrMulty: .divide)
+                    buttons.scaleRow(divOrMulty: .multiply)
+                    buttons.scaleRow(divOrMulty: .divide)
                 }
-                
-                //            .padding([.leading, .bottom, .trailing])
-            } else {
-                VStack {
-                    HStack {
-                        buttons.addScaleRow(divOrMulty: .multiply)
-                        buttons.addScaleRow(divOrMulty: .divide)
-                    }
-                    .padding(.horizontal)
-                    HStack {
-                        buttons.scaleRow(divOrMulty: .multiply)
-                        buttons.scaleRow(divOrMulty: .divide)
-                    }
-                    .padding(.horizontal)
-                    HStack {
-                        // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
-                        buttons.intPicker(size: $viewModel.factor, from: 1, to: 10, label: "Faktor")
-                        buttons.positivNegativButton(isChecked: $viewModel.positivNegativ)
-                        
-                    }.padding(.trailing)
-                    // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
-                    HStack {
-                        Spacer()
-                        buttons.undo()
-                        Spacer()
-                        buttons.redo()
-                        Spacer()
-                    }.padding(.bottom)
+                .padding(.horizontal)
+                HStack {
+                    // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
+                    buttons.intPicker(size: $viewModel.factor, from: 1, to: 10, label: "Faktor")
+                    buttons.positivNegativButton(isChecked: $viewModel.positivNegativ)
+
+                }.padding(.horizontal)
+                // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
+                HStack {
+                    Spacer()
+                    buttons.undo()
+                    Spacer()
+                    buttons.redo()
+                    Spacer()
                 }
             }
+
+            //            .padding([.leading, .bottom, .trailing])
+        } else {
+            VStack {
+                HStack {
+                    buttons.addScaleRow(divOrMulty: .multiply)
+                    buttons.addScaleRow(divOrMulty: .divide)
+                }
+                .padding(.horizontal)
+                HStack {
+                    buttons.scaleRow(divOrMulty: .multiply)
+                    buttons.scaleRow(divOrMulty: .divide)
+                }
+                .padding(.horizontal)
+                HStack {
+                    // Erzeugt einen Slider für den Faktor mit dem dazugehörigen Label.
+                    buttons.intPicker(size: $viewModel.factor, from: 1, to: 10, label: "Faktor")
+                    buttons.positivNegativButton(isChecked: $viewModel.positivNegativ)
+
+                }.padding(.trailing)
+                // Erzeugt eine horizontale HStack mit den Buttons für Undo und Redo.
+                HStack {
+                    Spacer()
+                    buttons.undo()
+                    Spacer()
+                    buttons.redo()
+                    Spacer()
+                }.padding(.bottom)
+            }
+        }
 
 //        .padding()
     }

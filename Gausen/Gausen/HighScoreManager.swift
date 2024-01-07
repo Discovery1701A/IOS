@@ -70,7 +70,8 @@ class HighscoreManager: ObservableObject {
             
             // Laden der Daten aus dem Dokumentenverzeichnis
             if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName),
-                let data = try? Data(contentsOf: url) {
+               let data = try? Data(contentsOf: url)
+            {
 //                // Dekodieren der Daten basierend auf der Highscore-Kategorie
                 switch category {
                 case .time:
@@ -132,7 +133,8 @@ class HighscoreManager: ObservableObject {
             // Füge den neuen Score an der richtigen Stelle ein
             if let convertedTime = convertTimeStringToDouble(time),
                convertedTime < convertTimeStringToDouble(highScoreTime[difficultyKey]![i][1])!,
-               isIn == false {
+               isIn == false
+            {
                 saveScoreRow = highScoreTime[difficultyKey]![i]
                 highScoreTime[difficultyKey]![i] = [personName, time]
                 isIn = true
@@ -161,7 +163,8 @@ class HighscoreManager: ObservableObject {
             }
             // Füge den neuen Score an der richtigen Stelle ein
             if let convertedActivityCount = Int(highScoreActivityCount[difficultyKey]![i][1]),
-               activityCount < convertedActivityCount && isIn == false {
+               activityCount < convertedActivityCount && isIn == false
+            {
                 saveScoreRow = highScoreActivityCount[difficultyKey]![i]
                 highScoreActivityCount[difficultyKey]![i] = [personName, String(activityCount)]
                 isIn = true
