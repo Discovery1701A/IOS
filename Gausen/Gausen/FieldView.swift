@@ -151,6 +151,7 @@ extension View {
 
 // Erweiterung für die Erstellung von Farbobjekten aus Hexadezimalwerten
 extension Color {
+    // https://stackoverflow.com/questions/24263007/how-to-use-hex-color-values Ideen suche
     // Konstruktor für die Erstellung einer Farbe aus einem Hexadezimalwert und einem optionalen Alpha-Wert
     init(hex: UInt, alpha: Double = 1.0) {
         // Initialisierung der Farbe im sRGB-Farbraum unter Verwendung der RGB-Werte aus dem Hexadezimalwert
