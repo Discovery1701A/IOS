@@ -104,8 +104,7 @@ struct FieldSizeModifier: ViewModifier {
                                     // Überprüft auf signifikante Größenänderungen in Breite oder Höhe
                                     if (geo.size.width > self.fieldSize.width + 0.5)
                                         || (geo.size.width < self.fieldSize.width - 0.5) || geo.size.height > self.fieldSize.height + 0.5
-                                        || geo.size.height < self.fieldSize.height - 0.5
-                                    {
+                                        || geo.size.height < self.fieldSize.height - 0.5 {
                                         //                                        print("dupdidu")
                                         // Setzt die Feldgröße auf die vorherige Größe zurück
                                         if geo.size.width != 0.0 {
