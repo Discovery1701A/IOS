@@ -78,7 +78,7 @@ class HighscoreManager: ObservableObject {
                 case .activityCount:
                     highScoreActivityCount = try PropertyListDecoder().decode([String: [[String]]].self, from: data)
                 }
-                print(highScoreTime)
+//                print(highScoreTime)
             } else {
                 // Verwende Standardwerte, wenn keine gespeicherten Daten gefunden wurden
                 switch category {

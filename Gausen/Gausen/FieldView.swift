@@ -108,7 +108,7 @@ struct FieldSizeModifier: ViewModifier {
                                         //                                        print("dupdidu")
                                         // Setzt die Feldgröße auf die vorherige Größe zurück
                                         if geo.size.width != 0.0 {
-                                            print("pikabu")
+//                                            print("pikabu")
                                             self.fieldSize = geo.size
                                         }
                                     }
@@ -122,7 +122,7 @@ struct FieldSizeModifier: ViewModifier {
             // Reagiert auf Änderungen der Größenpräferenz
             .onPreferenceChange(SizePreferenceKey.self) { size in
                 if size != self.fieldSize {
-                    print("wölfchen")
+//                    print("wölfchen")
                     // Aktualisiert die vorherigen Größen, um den Änderungsverlauf zu verfolgen
                     self.previousSize = size
                 }

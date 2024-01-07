@@ -99,7 +99,7 @@ struct PlayView: View {
                 matrixRowView(row: row)
             }
         }
-        .rotationEffect(Angle.degrees(viewModel.matrix[0][0].winning ? 360 : 0)) // Fügt eine Rotation für gewinnende Felder hinzu.
+        .rotationEffect(Angle.degrees(viewModel.matrix[0][0].winning ? 0 : 0)) // Fügt eine Rotation für gewinnende Felder hinzu.
         .padding()
     }
 
